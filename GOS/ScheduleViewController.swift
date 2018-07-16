@@ -10,10 +10,6 @@ import UIKit
 import Firebase
 
 class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
-//
-//    var passedLocation = [String]()
-//    var passedSchedule = [String]()
-//    var passedPerson = [String]()
 
     @IBOutlet weak var scheduleview_Schedule: UILabel!
     @IBOutlet weak var schedule_Location: UILabel!
@@ -23,11 +19,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     var messages: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         configureDatabase()
     }
 

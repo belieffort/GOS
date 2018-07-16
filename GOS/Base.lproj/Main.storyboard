@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14269.14" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lnv-FG-oPq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14269.14" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="3dm-ye-81C">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -164,7 +164,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PzV-qc-m7s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3660" y="132.68365817091455"/>
+            <point key="canvasLocation" x="4599.1999999999998" y="132.68365817091455"/>
         </scene>
         <!--일정추가-->
         <scene sceneID="bLi-gt-GDf">
@@ -344,9 +344,13 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="itD-dQ-8Nh">
-                                        <rect key="frame" x="109" y="64" width="91" height="30"/>
+                                        <rect key="frame" x="284" y="64" width="91" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="프로필 수정"/>
+                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="15"/>
+                                        <state key="normal" title="로그아웃"/>
+                                        <connections>
+                                            <action selector="btnLogout:" destination="wzL-Uh-BE4" eventType="touchUpInside" id="wEW-wi-jYH"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -484,7 +488,6 @@
                                 </state>
                                 <connections>
                                     <action selector="btnLogin:" destination="lnv-FG-oPq" eventType="touchUpInside" id="ACw-bt-xEY"/>
-                                    <segue destination="iYF-22-wKM" kind="show" identifier="ToMainThroughLogin" id="dAT-G8-PLU"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0rE-ze-6h2">
@@ -494,7 +497,7 @@
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
                                 <connections>
-                                    <segue destination="wFv-fv-2et" kind="show" identifier="Join" id="iLf-kH-Uv8"/>
+                                    <action selector="btnJoin:" destination="lnv-FG-oPq" eventType="touchUpInside" id="rTy-1C-6gE"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GOS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mNJ-Og-Vez">
@@ -508,14 +511,17 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="d9D-mR-cTL"/>
                     </view>
+                    <navigationItem key="navigationItem" id="uB3-t1-UnK"/>
                     <connections>
                         <outlet property="emailTextField" destination="B35-ge-iIY" id="O5i-fh-bex"/>
                         <outlet property="passwordTextField" destination="Ch4-68-n3Y" id="Z9n-36-jwT"/>
+                        <segue destination="iYF-22-wKM" kind="showDetail" identifier="ToMainThroughLogin" id="GMx-nN-QVN"/>
+                        <segue destination="wFv-fv-2et" kind="show" identifier="Join" id="gHP-eV-Xdf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Fa-ET-TLe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1934" y="103"/>
+            <point key="canvasLocation" x="-996" y="102.99850074962519"/>
         </scene>
         <!--Join View Controller-->
         <scene sceneID="A2A-df-ehp">
@@ -560,7 +566,6 @@
                                 </state>
                                 <connections>
                                     <action selector="join_btnPressed:" destination="wFv-fv-2et" eventType="touchUpInside" id="v2c-A4-nU4"/>
-                                    <segue destination="iYF-22-wKM" kind="show" identifier="ToMainThroughJoin" id="2pB-cd-QTH"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="회원가입" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cSQ-KL-Lst">
@@ -577,6 +582,7 @@
                     <connections>
                         <outlet property="join_emailTextField" destination="zgu-3b-QQA" id="ORA-RK-NUW"/>
                         <outlet property="join_passwordTextField" destination="jcK-JT-1Zb" id="vcl-s9-EDz"/>
+                        <segue destination="iYF-22-wKM" kind="showDetail" identifier="ToMainThroughJoin" id="Mj0-Xj-ci3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yzb-Hc-N09" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -602,7 +608,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bis-C4-O1m" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="97" y="133"/>
+            <point key="canvasLocation" x="1036" y="132.68365817091455"/>
         </scene>
         <!--Home-->
         <scene sceneID="Pa7-Um-nPj">
@@ -640,7 +646,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="64H-RQ-k6G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2577" y="133"/>
+            <point key="canvasLocation" x="3516" y="132.68365817091455"/>
         </scene>
         <!--Account-->
         <scene sceneID="f9g-7e-ogR">
@@ -680,6 +686,24 @@
             </objects>
             <point key="canvasLocation" x="2577" y="917"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ICs-b6-3VO">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mzl-uM-aLw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3dm-ye-81C" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="rvG-to-HOp">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="lnv-FG-oPq" kind="relationship" relationship="rootViewController" id="WrM-iq-Oko"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="-1935.2" y="102.99850074962519"/>
+        </scene>
     </scenes>
     <resources>
         <image name="calendar" width="30" height="30"/>
@@ -691,6 +715,6 @@
         <image name="user_male" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dAT-G8-PLU"/>
+        <segue reference="GMx-nN-QVN"/>
     </inferredMetricsTieBreakers>
 </document>

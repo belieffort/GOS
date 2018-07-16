@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -24,9 +25,18 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         time = ["2018년 7월 20일 금요일 오후 8시", "2018년 7월 22일 일요일 오후 2시", "2018년 7월 25일 수요일 오후 8시", "2018년 7월 28일 토요일 오전 10시", "2018년 7월 31일 화요일 오후 8시"]
         location = ["마포구 배드민턴 경기장", "서대문구 풋볼 경기장", "여의도 농구장", "광운대 아이스하키 경기장", "중랑구 야외 테니스 경기장"]
-//        sportsImage = [UIImage(named: "badminton-1"), UIImage(named: "football-1"), UIImage(named: "basketball-1"), UIImage(named: "icehockey-1"), UIImage(named: "tennis-1")] as! [UIImage]
     }
     
+    @IBAction func btnLogout(_ sender: Any) {
+        do {
+            try Auth.auth().signOut()
+            self.navigationController?.popToRootViewController(animated: true)
+            
+            print("로그아웃 되었습니다.")
+        } catch {
+            print("Logout Failed")
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return time.count
