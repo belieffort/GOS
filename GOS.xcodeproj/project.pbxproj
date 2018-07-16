@@ -18,6 +18,10 @@
 		72EDBE6D20FA52ED007E1473 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 72EDBE6C20FA52ED007E1473 /* GoogleService-Info.plist */; };
 		72EDBE6F20FA57F8007E1473 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6E20FA57F8007E1473 /* ScheduleTableViewCell.swift */; };
 		72EDBE7120FA5CC1007E1473 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE7020FA5CC1007E1473 /* AddViewController.swift */; };
+		72EDBE7320FB79B4007E1473 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE7220FB79B4007E1473 /* ProfileViewController.swift */; };
+		72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE7420FB8391007E1473 /* ProfileTableViewCell.swift */; };
+		72EDBE7720FB99C9007E1473 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE7620FB99C9007E1473 /* AuthViewController.swift */; };
+		72EDBE7920FB99E5007E1473 /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE7820FB99E5007E1473 /* JoinViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +38,10 @@
 		72EDBE6C20FA52ED007E1473 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		72EDBE6E20FA57F8007E1473 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		72EDBE7020FA5CC1007E1473 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
+		72EDBE7220FB79B4007E1473 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		72EDBE7420FB8391007E1473 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
+		72EDBE7620FB99C9007E1473 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		72EDBE7820FB99E5007E1473 /* JoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		773601783E3318778AB00FF8 /* Pods-GOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GOS/Pods-GOS.debug.xcconfig"; sourceTree = "<group>"; };
 		99BC1E78F0EF905876FB749B /* Pods-GOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-GOS/Pods-GOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,6 +99,10 @@
 				72EDBE6A20F8A3AD007E1473 /* ScheduleViewController.swift */,
 				72EDBE6E20FA57F8007E1473 /* ScheduleTableViewCell.swift */,
 				72EDBE7020FA5CC1007E1473 /* AddViewController.swift */,
+				72EDBE7220FB79B4007E1473 /* ProfileViewController.swift */,
+				72EDBE7420FB8391007E1473 /* ProfileTableViewCell.swift */,
+				72EDBE7620FB99C9007E1473 /* AuthViewController.swift */,
+				72EDBE7820FB99E5007E1473 /* JoinViewController.swift */,
 			);
 			path = GOS;
 			sourceTree = "<group>";
@@ -198,12 +210,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GOS/Pods-GOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
@@ -221,10 +235,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */,
+				72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */,
 				72EDBE6F20FA57F8007E1473 /* ScheduleTableViewCell.swift in Sources */,
 				72EDBE7120FA5CC1007E1473 /* AddViewController.swift in Sources */,
 				724F9C8520F7710C0098D872 /* AppDelegate.swift in Sources */,
+				72EDBE7320FB79B4007E1473 /* ProfileViewController.swift in Sources */,
 				72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */,
+				72EDBE7720FB99C9007E1473 /* AuthViewController.swift in Sources */,
+				72EDBE7920FB99E5007E1473 /* JoinViewController.swift in Sources */,
 				72EDBE6B20F8A3AD007E1473 /* ScheduleViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
