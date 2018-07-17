@@ -52,6 +52,8 @@ class AuthViewController: UIViewController {
         Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!, completion: { (_, error) in
             if error == nil {
                 self.performSegue(withIdentifier: "ToMainThroughLogin", sender: sender)
+                self.emailTextField.text = nil
+                self.passwordTextField.text = nil
             } else {
                 self.showToast(message: "로그인 정보가 일치하지 않습니다.")
             }

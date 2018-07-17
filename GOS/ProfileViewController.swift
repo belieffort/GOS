@@ -30,8 +30,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBAction func btnLogout(_ sender: Any) {
         do {
             try Auth.auth().signOut()
-            self.navigationController?.popToRootViewController(animated: true)
-            
+            view.window?.rootViewController?.dismiss(animated: true, completion: nil)
             print("로그아웃 되었습니다.")
         } catch {
             print("Logout Failed")
