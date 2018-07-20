@@ -15,17 +15,17 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var ref: DatabaseReference!
     var recruitment: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
-
-    
-//    var playImages = [UIImage(named: "basketball.jpg"), UIImage(named: "tennis.jpg"), UIImage(named: "baseball.jpg"), UIImage(named: "badminton.jpg")]
-//    var playLocation = ["한강시민공원 농구장", "양재 테니스장", "난지 야구장", "성미산 경기장"]
-//    var playSchedule = ["2018년 8월 1일 오후 7시","2018년 7월 30일 오후 8시","2018년 8월 5일 오전 10시","2018년 8월 10일 오후 6시 "]
-//    var recruitPerson = ["2명","1명","5명","3명"]
+    var seletedCollectionViewCell:IndexPath!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         configureDatabase()
+    }
+    //셀 클릭했을 때, 이동할 수 있게 해준다.
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        seletedCollectionViewCell = indexPath
+        performSegue(withIdentifier: "MainDetailSegue", sender: self)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -64,8 +64,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let time = recruit["Time"] ?? "[Time]"
         let location = recruit["Location"] ?? "[Location]"
         let numberOfPeople = recruit["NumberOfPeople"] ?? "[numberOfPeople]"
-//        let position = recruit["Position"] ?? "[Position]"
-//        let detail = recruit["Detail"] ?? "[Detail]"
         
         cell.playSchedule.text = time
         cell.playLocation.text = location
@@ -89,8 +87,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     deinit {
                 if let refHandle = _refHandle {
-                    self.ref.child("Recruitment").removeObserver(withHandle: refHandle)
-                }
+                    self.ref.child("Recruitment").removeObserver(withHandle: refHandle)}
     }
     
     
@@ -101,9 +98,24 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     guard let strongSelf = self else { return }
                     strongSelf.recruitment.append(snapshot)
                     strongSelf.homeCollectionView.insertItems(at: [IndexPath(row: strongSelf.recruitment.count-1, section: 0)])
-//                    strongSelf.homeCollectionView.insertRows(at: [IndexPath(row: strongSelf.messages.count-1, section: 0)], with: .automatic)
                     
                 })
+    }
+    //어떤 데이터를 넘겨줄 것인지
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        
+        let recruitmentSnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell.item]
+        guard let recruit = recruitmentSnapshot.value as? [String:String] else { return }
+        
+        let detailViewController = segue.destination as! DetailViewController
+        detailViewController.userID = recruit["UserID"] ?? "[UserID]"
+        detailViewController.titleBox = recruit["Title"] ?? "[Title]"
+        detailViewController.time = recruit["Time"] ?? "[Time]"
+        detailViewController.location = recruit["Location"] ?? "[Location]"
+        detailViewController.people = recruit["NumberOfPeople"] ?? "[NumberOfPeople]"
+        detailViewController.position = recruit["Position"] ?? "[Position]"
+        detailViewController.notice = recruit["Detail"] ?? "[Detail]"
     }
 
 

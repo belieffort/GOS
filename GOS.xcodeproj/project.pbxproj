@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1A2C98BC72F25E2CB2066E56 /* Pods_GOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4314C6AC64CFF619F684E5 /* Pods_GOS.framework */; };
+		720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720CFDDA21021791002ABF5C /* DetailViewController.swift */; };
 		724F9C8520F7710C0098D872 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 724F9C8420F7710C0098D872 /* AppDelegate.swift */; };
 		724F9C8A20F7710C0098D872 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8820F7710C0098D872 /* Main.storyboard */; };
 		724F9C8C20F7710E0098D872 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8B20F7710E0098D872 /* Assets.xcassets */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		6C4314C6AC64CFF619F684E5 /* Pods_GOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		720CFDDA21021791002ABF5C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		724F9C8120F7710C0098D872 /* GOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		724F9C8420F7710C0098D872 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		724F9C8920F7710C0098D872 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				72EDBE7420FB8391007E1473 /* ProfileTableViewCell.swift */,
 				72EDBE7620FB99C9007E1473 /* AuthViewController.swift */,
 				72EDBE7820FB99E5007E1473 /* JoinViewController.swift */,
+				720CFDDA21021791002ABF5C /* DetailViewController.swift */,
 			);
 			path = GOS;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */,
 				7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */,
 				72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */,
 				72EDBE6F20FA57F8007E1473 /* FavoriteTableViewCell.swift in Sources */,

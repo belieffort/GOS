@@ -19,6 +19,7 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
 
     @IBOutlet weak var listOfSports: UIPickerView!
 
+    @IBOutlet weak var addView_Title: UITextField!
     @IBOutlet weak var addView_Time: UITextField!
     @IBOutlet weak var addView_Loaction: UITextField!
     @IBOutlet weak var addView_Person: UITextField!
@@ -30,6 +31,8 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //        TODO : 게시글 정렬을 최신 글이 가장 상단에 위치하게 해야한다.
         selectedSports = sports[0]
         addView_Detail.layer.borderWidth = 0.5
         addView_Detail.layer.borderColor = UIColor.lightGray.cgColor
@@ -47,12 +50,14 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     @IBAction func btnDone(_ sender: Any) {
         var mdata = [String:String]()
         
+        mdata["Title"] =  addView_Title.text
         mdata["Sports"] =  selectedSports
         mdata["Time"] = addView_Time.text
         mdata["Location"] = addView_Loaction.text
         mdata["NumberOfPeople"] = addView_Person.text
         mdata["Position"] = addView_position.text
         mdata["Detail"] = addView_Detail.text
+        mdata["UserID"] = Auth.auth().currentUser?.email
         
         // Push data to Firebase Database
         self.ref.child("Recruitment").childByAutoId().setValue(mdata)
