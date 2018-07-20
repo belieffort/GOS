@@ -14,9 +14,9 @@
 		724F9C8F20F7710E0098D872 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8D20F7710E0098D872 /* LaunchScreen.storyboard */; };
 		7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7286BD2620F88A19005622CE /* RecruitCellCollectionViewCell.swift */; };
 		72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */; };
-		72EDBE6B20F8A3AD007E1473 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6A20F8A3AD007E1473 /* ScheduleViewController.swift */; };
+		72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */; };
 		72EDBE6D20FA52ED007E1473 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 72EDBE6C20FA52ED007E1473 /* GoogleService-Info.plist */; };
-		72EDBE6F20FA57F8007E1473 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6E20FA57F8007E1473 /* ScheduleTableViewCell.swift */; };
+		72EDBE6F20FA57F8007E1473 /* FavoriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6E20FA57F8007E1473 /* FavoriteTableViewCell.swift */; };
 		72EDBE7120FA5CC1007E1473 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE7020FA5CC1007E1473 /* AddViewController.swift */; };
 		72EDBE7320FB79B4007E1473 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE7220FB79B4007E1473 /* ProfileViewController.swift */; };
 		72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE7420FB8391007E1473 /* ProfileTableViewCell.swift */; };
@@ -34,9 +34,9 @@
 		724F9C9020F7710E0098D872 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7286BD2620F88A19005622CE /* RecruitCellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitCellCollectionViewCell.swift; sourceTree = "<group>"; };
 		72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		72EDBE6A20F8A3AD007E1473 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
+		72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteController.swift; sourceTree = "<group>"; };
 		72EDBE6C20FA52ED007E1473 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		72EDBE6E20FA57F8007E1473 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
+		72EDBE6E20FA57F8007E1473 /* FavoriteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewCell.swift; sourceTree = "<group>"; };
 		72EDBE7020FA5CC1007E1473 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		72EDBE7220FB79B4007E1473 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		72EDBE7420FB8391007E1473 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
@@ -96,8 +96,8 @@
 				724F9C9020F7710E0098D872 /* Info.plist */,
 				7286BD2620F88A19005622CE /* RecruitCellCollectionViewCell.swift */,
 				72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */,
-				72EDBE6A20F8A3AD007E1473 /* ScheduleViewController.swift */,
-				72EDBE6E20FA57F8007E1473 /* ScheduleTableViewCell.swift */,
+				72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */,
+				72EDBE6E20FA57F8007E1473 /* FavoriteTableViewCell.swift */,
 				72EDBE7020FA5CC1007E1473 /* AddViewController.swift */,
 				72EDBE7220FB79B4007E1473 /* ProfileViewController.swift */,
 				72EDBE7420FB8391007E1473 /* ProfileTableViewCell.swift */,
@@ -212,6 +212,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-GOS/Pods-GOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/UITextView+Placeholder/UITextView_Placeholder.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -219,6 +220,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextView_Placeholder.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -236,14 +238,14 @@
 			files = (
 				7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */,
 				72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */,
-				72EDBE6F20FA57F8007E1473 /* ScheduleTableViewCell.swift in Sources */,
+				72EDBE6F20FA57F8007E1473 /* FavoriteTableViewCell.swift in Sources */,
 				72EDBE7120FA5CC1007E1473 /* AddViewController.swift in Sources */,
 				724F9C8520F7710C0098D872 /* AppDelegate.swift in Sources */,
 				72EDBE7320FB79B4007E1473 /* ProfileViewController.swift in Sources */,
 				72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */,
 				72EDBE7720FB99C9007E1473 /* AuthViewController.swift in Sources */,
 				72EDBE7920FB99E5007E1473 /* JoinViewController.swift in Sources */,
-				72EDBE6B20F8A3AD007E1473 /* ScheduleViewController.swift in Sources */,
+				72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

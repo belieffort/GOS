@@ -10,5 +10,8 @@ pod 'Firebase/Core'
 pod 'Firebase/Database'
 pod 'Firebase/Auth'
 
+#textview placeholder
+pod 'UITextView+Placeholder'
+
 
 end

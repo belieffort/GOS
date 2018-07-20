@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ScheduleTableViewCell: UITableViewCell {
+class FavoriteTableViewCell: UITableViewCell {
 
     @IBOutlet weak var schedule_Time: UILabel!
     @IBOutlet weak var schedule_Location: UILabel!

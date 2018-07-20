@@ -35,11 +35,13 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - "UITextView+Placeholder (1.2.1)"
 
 DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
+  - "UITextView+Placeholder"
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -53,6 +55,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - "UITextView+Placeholder"
 
 SPEC CHECKSUMS:
   Firebase: d66f4f29c23f22d96808d9abc174d81d8eee968f
@@ -65,7 +68,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  "UITextView+Placeholder": 0c3efd97f37ea64bde7f34cc6e90fe02e87b3909
 
-PODFILE CHECKSUM: d127c90a5dd9cefff7d498bfb54e02b2ad62a4cf
+PODFILE CHECKSUM: f5867432f7b4ce574ec3d61365decbe38babb801
 
 COCOAPODS: 1.5.3

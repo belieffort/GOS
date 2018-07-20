@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
+class FavoriteController: UIViewController, UITableViewDataSource, UITableViewDelegate{
 
     @IBOutlet weak var scheduleview_Schedule: UILabel!
     @IBOutlet weak var schedule_Location: UILabel!
