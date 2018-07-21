@@ -18,12 +18,6 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var detailPeople: UILabel!
     @IBOutlet weak var detailPosition: UILabel!
     @IBOutlet weak var detailNotice: UITextView!
-    
-    @IBOutlet weak var writerView: UIView!
-    @IBOutlet weak var titleView: UIView!
-    @IBOutlet weak var detailOne: UIView!
-    @IBOutlet weak var detailTwo: UIView!
-
 
     var userID:String!
     var titleBox:String!
@@ -35,7 +29,7 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         writerUserID.text = userID
         detailTitle.text = titleBox
         detailTime.text = time
@@ -43,6 +37,16 @@ class DetailViewController: UIViewController {
         detailPeople.text = people
         detailPosition.text = position
         detailNotice.text = notice
+
+        
+        let likeitButton = UIButton(type: .system)
+        likeitButton.setImage(UIImage(named: "beforeStar")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        likeitButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        likeitButton.contentMode = .scaleAspectFit
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: likeitButton)
+        
+        
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "star.png"), style: UIBarButtonItem.Style.plain, target: self, action: Selector(("pressedSearch")))
 
         // Do any additional setup after loading the view.
     }

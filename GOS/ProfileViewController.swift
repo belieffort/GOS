@@ -7,13 +7,19 @@
 //
 
 import UIKit
+import Firebase
 import FirebaseAuth
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var profileID: UILabel!
+    @IBOutlet weak var profileTableView: UITableView!
     
+    var ref: DatabaseReference!
+//    var myPost: [DataSnapshot]! = []
+    var myRecruitment: [DataSnapshot]! = []
+    var _refHandle: DatabaseHandle?
     
     var time = [String]()
     var location = [String]()
@@ -22,9 +28,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        time = ["2018년 7월 20일 금요일 오후 8시", "2018년 7월 22일 일요일 오후 2시", "2018년 7월 25일 수요일 오후 8시", "2018년 7월 28일 토요일 오전 10시", "2018년 7월 31일 화요일 오후 8시"]
-        location = ["마포구 배드민턴 경기장", "서대문구 풋볼 경기장", "여의도 농구장", "광운대 아이스하키 경기장", "중랑구 야외 테니스 경기장"]
+
+            
+        profileID.text = Auth.auth().currentUser?.email
+        configureDatabase()
+
     }
     
     @IBAction func btnLogout(_ sender: Any) {
@@ -38,19 +46,48 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return time.count
+        return myRecruitment.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as! ProfileTableViewCell
         
-        cell.scheduleTime.text = time[indexPath.row]
-        cell.scheduleLocation.text = location[indexPath.row]
-        cell.sportsImage.image = sportsImage[indexPath.row]
+//        let postSnapshot: DataSnapshot! = self.myPost[indexPath.row]
+//        guard let post = postSnapshot.value as? [String:String] else { return cell }
+        let recruitmentSnapshot: DataSnapshot! = self.myRecruitment[indexPath.row]
+        guard let recruitment = recruitmentSnapshot.value as? [String:String] else {return cell }
+        let postedEmail = recruitment["UserID"] ?? "[UserID]"
+        
+        if Auth.auth().currentUser?.email == postedEmail {
+            
+            cell.scheduleTime.text = recruitment["Time"] ?? "[Time]"
+            cell.scheduleLocation.text = recruitment["Location"] ?? "[Location]"
+        }
         return cell
 
     }
+
     
+    deinit {
+        if let refHandle = _refHandle {
+            self.ref.child("Recruitment").removeObserver(withHandle: refHandle)}
+    }
+    
+    
+    
+    func configureDatabase() {
+        ref = Database.database().reference()
+        // Listen for new messages in the Firebase database
+        _refHandle = self.ref.child("Recruitment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf = self else { return }
+            strongSelf.myRecruitment.append(snapshot)
+            strongSelf.profileTableView.insertRows(at: [IndexPath(row: strongSelf.myRecruitment.count-1, section: 0)], with: .automatic)
+            
+            
+        })
+    }
+    
+    // TODO - Cell 삭제 기능이 필요하다.
     
 
     /*

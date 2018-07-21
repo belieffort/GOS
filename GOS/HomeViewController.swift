@@ -16,6 +16,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var recruitment: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
     var seletedCollectionViewCell:IndexPath!
+    var likeit:Bool?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +61,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
             break
         }
         
-        
         let time = recruit["Time"] ?? "[Time]"
         let location = recruit["Location"] ?? "[Location]"
         let numberOfPeople = recruit["NumberOfPeople"] ?? "[numberOfPeople]"
@@ -84,11 +84,26 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         return cell
     }
     
+    @IBAction func btnFavorite(_ sender: Any) {
+        
+        if likeit == true {
+            
+            
+        } else {
+        
+            
+        }
+        
+        
+        
+        
+    }
     
     deinit {
                 if let refHandle = _refHandle {
                     self.ref.child("Recruitment").removeObserver(withHandle: refHandle)}
-    }
+        }
+    
     
     
     func configureDatabase() {
