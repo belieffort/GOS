@@ -37,8 +37,6 @@ class JoinViewController: UIViewController {
         mdata["email"] = join_emailTextField.text
 
     self.ref.child("Users").childByAutoId().setValue(mdata)
-
-        
     }
     
     deinit {

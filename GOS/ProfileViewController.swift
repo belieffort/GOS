@@ -11,6 +11,8 @@ import Firebase
 import FirebaseAuth
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    
 
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var profileID: UILabel!
