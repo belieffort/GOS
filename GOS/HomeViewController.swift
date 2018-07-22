@@ -15,7 +15,9 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var ref: DatabaseReference!
     var recruitment: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
+    
     var seletedCollectionViewCell:IndexPath!
+    var snapshotIndex:IndexPath!
     var likeit:Bool?
     
     override func viewDidLoad() {
@@ -36,6 +38,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recruitCell", for: indexPath) as! RecruitCellCollectionViewCell
         // Unpack message from Firebase DataSnapshot
+        snapshotIndex = indexPath
         let recruitmentSnapshot: DataSnapshot! = self.recruitment[indexPath.row]
         guard let recruit = recruitmentSnapshot.value as? [String:String] else { return cell }
 
@@ -84,20 +87,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         return cell
     }
     
-    @IBAction func btnFavorite(_ sender: Any) {
-        
-        if likeit == true {
-            
-            
-        } else {
-        
-            
-        }
-        
-        
-        
-        
-    }
+
     
     deinit {
                 if let refHandle = _refHandle {
@@ -119,7 +109,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     //어떤 데이터를 넘겨줄 것인지
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        
         let recruitmentSnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell.item]
         guard let recruit = recruitmentSnapshot.value as? [String:String] else { return }
         
@@ -131,6 +120,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         detailViewController.people = recruit["NumberOfPeople"] ?? "[NumberOfPeople]"
         detailViewController.position = recruit["Position"] ?? "[Position]"
         detailViewController.notice = recruit["Detail"] ?? "[Detail]"
+        detailViewController.passedIndex = snapshotIndex
     }
 
 
