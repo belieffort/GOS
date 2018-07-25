@@ -160,8 +160,8 @@
                                                             <constraint firstAttribute="width" constant="70" id="yub-vy-Aof"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q8m-Sh-Jkj">
-                                                        <rect key="frame" x="93" y="53" width="258" height="21"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q8m-Sh-Jkj">
+                                                        <rect key="frame" x="93" y="53" width="258" height="30"/>
                                                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="15"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -170,7 +170,7 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="yf7-h1-v8h" firstAttribute="top" secondItem="wqW-80-dYs" secondAttribute="top" constant="29" id="A73-93-003"/>
-                                                    <constraint firstItem="yf7-h1-v8h" firstAttribute="centerY" secondItem="Q8m-Sh-Jkj" secondAttribute="centerY" id="ISU-tc-U4H"/>
+                                                    <constraint firstItem="yf7-h1-v8h" firstAttribute="centerY" secondItem="Q8m-Sh-Jkj" secondAttribute="centerY" constant="-4" id="ISU-tc-U4H"/>
                                                     <constraint firstItem="Q8m-Sh-Jkj" firstAttribute="top" secondItem="wqW-80-dYs" secondAttribute="top" constant="53" id="TBs-6f-pRU"/>
                                                     <constraint firstItem="yf7-h1-v8h" firstAttribute="centerY" secondItem="wqW-80-dYs" secondAttribute="centerY" id="ehl-td-oIT"/>
                                                     <constraint firstItem="Q8m-Sh-Jkj" firstAttribute="trailing" secondItem="wqW-80-dYs" secondAttribute="trailingMargin" id="hCN-YD-LLM"/>
@@ -363,9 +363,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BZE-ix-F3e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7484" y="391"/>
+            <point key="canvasLocation" x="7484" y="390.40479760119945"/>
         </scene>
-        <!--일정-->
+        <!--관심 일정-->
         <scene sceneID="1JR-1F-8cQ">
             <objects>
                 <viewController id="rfz-kg-IOh" customClass="FavoriteController" customModule="GOS" customModuleProvider="target" sceneMemberID="viewController">
@@ -378,7 +378,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ScheduleCell" rowHeight="120" id="6VO-rP-Cjp" customClass="ScheduleTableViewCell" customModule="GOS" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="IlikeCell" rowHeight="120" id="6VO-rP-Cjp" customClass="ScheduleTableViewCell" customModule="GOS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6VO-rP-Cjp" id="3DI-jb-fuj">
@@ -424,7 +424,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="CIb-WN-mzd"/>
                     </view>
-                    <navigationItem key="navigationItem" title="일정" id="gA0-I1-yca"/>
+                    <navigationItem key="navigationItem" title="관심 일정" id="gA0-I1-yca"/>
+                    <connections>
+                        <outlet property="likeTableView" destination="YU7-Qn-SpA" id="7GM-6A-Nvo"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PzV-qc-m7s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

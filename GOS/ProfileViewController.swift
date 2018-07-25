@@ -12,14 +12,11 @@ import FirebaseAuth
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    
-
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var profileID: UILabel!
     @IBOutlet weak var profileTableView: UITableView!
     
     var ref: DatabaseReference!
-//    var myPost: [DataSnapshot]! = []
     var myRecruitment: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
     
@@ -30,8 +27,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-            
         profileID.text = Auth.auth().currentUser?.email
         configureDatabase()
 

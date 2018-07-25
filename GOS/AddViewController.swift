@@ -28,9 +28,17 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     
     var selectedSports:String!
     var sports = ["농구","축구","배구","테니스","야구","배드민턴","탁구","아이스 하키"]
+    var countBox:String!
+    var convertCountBox:Int!
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        Database.database().reference().child("Recruitment").observeSingleEvent(of: .value, with: {(snap) in
+            self.countBox = "\(snap.childrenCount)"
+            print(self.countBox!)
+        })
+        viewWillAppear(true)
         
         //        TODO : 게시글 정렬을 최신 글이 가장 상단에 위치하게 해야한다.
         selectedSports = sports[0]
@@ -44,34 +52,69 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
         NotificationCenter.default.addObserver(self, selector: #selector(AddViewController.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(AddViewController.keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         configureDatabase()
-        
     }
     
+    
+    
     @IBAction func btnDone(_ sender: Any) {
+        //TODO - 버튼 눌렀을 때, 홈으로 이동하게 해야한다
+        //TODO - Firebase에 업로드 하자마자, 업로드한 내용을 바로 기기에 적용시키는 방법이 없는지?? 왜냐하면 여러 명이 글을 동시에 쓰면 글이 서로 덮어질 것 같다.
+      
         var mdata = [String:String]()
         
-        mdata["Title"] =  addView_Title.text
-        mdata["Sports"] =  selectedSports
-        mdata["Time"] = addView_Time.text
-        mdata["Location"] = addView_Loaction.text
-        mdata["NumberOfPeople"] = addView_Person.text
-        mdata["Position"] = addView_position.text
-        mdata["Detail"] = addView_Detail.text
-        mdata["UserID"] = Auth.auth().currentUser?.email
-        
-        // Push data to Firebase Database
-        self.ref.child("Recruitment").childByAutoId().setValue(mdata)
-        
+        if Int(countBox) == 0 {
+            mdata["Title"] =  addView_Title.text
+            mdata["Sports"] =  selectedSports
+            mdata["Time"] = addView_Time.text
+            mdata["Location"] = addView_Loaction.text
+            mdata["NumberOfPeople"] = addView_Person.text
+            mdata["Position"] = addView_position.text
+            mdata["Detail"] = addView_Detail.text
+            mdata["Writer"] = Auth.auth().currentUser?.email
+            mdata["WriteNumber"] = "0"
+            
+            convertCountBox = Int(countBox!)
+            print(convertCountBox!)
+            
+            // Push data to Firebase Database
+            self.ref.child("Recruitment").child("\(convertCountBox!)").setValue(mdata)
+            countBox = "1"
+            viewWillAppear(true)
+
+           
+
+        } else {
+            convertCountBox = Int(countBox!)
+            
+            mdata["Title"] =  addView_Title.text
+            mdata["Sports"] =  selectedSports
+            mdata["Time"] = addView_Time.text
+            mdata["Location"] = addView_Loaction.text
+            mdata["NumberOfPeople"] = addView_Person.text
+            mdata["Position"] = addView_position.text
+            mdata["Detail"] = addView_Detail.text
+            mdata["Writer"] = Auth.auth().currentUser?.email
+            mdata["WriteNumber"] = "\(convertCountBox!)"
+
+
+            // Push data to Firebase Database
+            self.ref.child("Recruitment").child("\(convertCountBox!)").setValue(mdata)
+            convertCountBox += 1
+            countBox = "\(convertCountBox!)"
+        }
+    
+//        let refer = self.ref!.child("Recruitment")
+//        let createdId = refer.key   //Your autoID
+//        print(createdId)
     }
+    
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedSports = sports[row]
-        
     }
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return sports.count
     }
@@ -138,7 +181,6 @@ extension AddViewController {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        textField.resignFirstResponder()
         self.view.endEditing(true)
         return true
     }

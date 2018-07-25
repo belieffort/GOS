@@ -17,8 +17,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var _refHandle: DatabaseHandle?
     
     var seletedCollectionViewCell:IndexPath!
-    var snapshotIndex:IndexPath!
-    var likeit:Bool?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +26,9 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     //셀 클릭했을 때, 이동할 수 있게 해준다.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         seletedCollectionViewCell = indexPath
+//        print("==============\(String(describing: seletedCollectionViewCell))=============")
         performSegue(withIdentifier: "MainDetailSegue", sender: self)
+
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -37,11 +37,10 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recruitCell", for: indexPath) as! RecruitCellCollectionViewCell
-        // Unpack message from Firebase DataSnapshot
-        snapshotIndex = indexPath
+
         let recruitmentSnapshot: DataSnapshot! = self.recruitment[indexPath.row]
         guard let recruit = recruitmentSnapshot.value as? [String:String] else { return cell }
-
+                
         let sportsBox = recruit["Sports"] ?? "[Sports]"
         switch sportsBox{
         case "농구":
@@ -86,15 +85,11 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         return cell
     }
-    
 
-    
     deinit {
                 if let refHandle = _refHandle {
                     self.ref.child("Recruitment").removeObserver(withHandle: refHandle)}
         }
-    
-    
     
     func configureDatabase() {
         ref = Database.database().reference()
@@ -112,15 +107,18 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let recruitmentSnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell.item]
         guard let recruit = recruitmentSnapshot.value as? [String:String] else { return }
         
+        // TODO - Recruitment의 child name을 찾으면 된다!!
         let detailViewController = segue.destination as! DetailViewController
-        detailViewController.userID = recruit["UserID"] ?? "[UserID]"
+        detailViewController.userID = recruit["Writer"] ?? "[Writer]"
         detailViewController.titleBox = recruit["Title"] ?? "[Title]"
         detailViewController.time = recruit["Time"] ?? "[Time]"
         detailViewController.location = recruit["Location"] ?? "[Location]"
         detailViewController.people = recruit["NumberOfPeople"] ?? "[NumberOfPeople]"
         detailViewController.position = recruit["Position"] ?? "[Position]"
         detailViewController.notice = recruit["Detail"] ?? "[Detail]"
-        detailViewController.passedIndex = snapshotIndex
+        detailViewController.passedIndex = seletedCollectionViewCell
+        detailViewController.writeNumber = recruit["WriteNumber"] ?? "[WriteNumber]"
+        
     }
 
 
