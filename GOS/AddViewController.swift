@@ -77,7 +77,7 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
             print(convertCountBox!)
             
             // Push data to Firebase Database
-            self.ref.child("Recruitment").child("\(convertCountBox!)").setValue(mdata)
+            self.ref.child("Recruitment").childByAutoId().setValue(mdata)
             countBox = "1"
             viewWillAppear(true)
 
@@ -94,11 +94,11 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
             mdata["Position"] = addView_position.text
             mdata["Detail"] = addView_Detail.text
             mdata["Writer"] = Auth.auth().currentUser?.email
-            mdata["WriteNumber"] = "\(convertCountBox!)"
+//            mdata["WriteNumber"] = "\(convertCountBox!)"
 
 
             // Push data to Firebase Database
-            self.ref.child("Recruitment").child("\(convertCountBox!)").setValue(mdata)
+            self.ref.child("Recruitment").childByAutoId().setValue(mdata)
             convertCountBox += 1
             countBox = "\(convertCountBox!)"
         }

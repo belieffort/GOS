@@ -14,20 +14,34 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var homeCollectionView: UICollectionView!
     var ref: DatabaseReference!
     var recruitment: [DataSnapshot]! = []
+    var keysnap: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
     
     var seletedCollectionViewCell:IndexPath!
+    var keyOfNowView:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         configureDatabase()
+        
+        
     }
+    
     //셀 클릭했을 때, 이동할 수 있게 해준다.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         seletedCollectionViewCell = indexPath
 //        print("==============\(String(describing: seletedCollectionViewCell))=============")
         performSegue(withIdentifier: "MainDetailSegue", sender: self)
+        
+        
+//        let databaseRef = Database.database().reference(withPath: "Recruitment")
+//        databaseRef.observe(.childAdded)
+//        { (snapshot:DataSnapshot) in
+//            self.keyOfNowView = snapshot.key
+//            print(self.keyOfNowView ?? "keyOfNowView")
+//                    }
+
 
     }
     
@@ -82,7 +96,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         cell.layer.masksToBounds = true
         cell.layer.shadowPath =
             UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.contentView.layer.cornerRadius).cgPath
-        
+
         return cell
     }
 
@@ -98,7 +112,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     guard let strongSelf = self else { return }
                     strongSelf.recruitment.append(snapshot)
                     strongSelf.homeCollectionView.insertItems(at: [IndexPath(row: strongSelf.recruitment.count-1, section: 0)])
-                    
                 })
     }
     //어떤 데이터를 넘겨줄 것인지
@@ -116,8 +129,11 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         detailViewController.people = recruit["NumberOfPeople"] ?? "[NumberOfPeople]"
         detailViewController.position = recruit["Position"] ?? "[Position]"
         detailViewController.notice = recruit["Detail"] ?? "[Detail]"
-        detailViewController.passedIndex = seletedCollectionViewCell
-        detailViewController.writeNumber = recruit["WriteNumber"] ?? "[WriteNumber]"
+        
+        let keySnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell.item]
+        keyOfNowView = keySnapshot.key
+        detailViewController.keyofview = keyOfNowView
+//        print(keyOfNowView)
         
     }
 

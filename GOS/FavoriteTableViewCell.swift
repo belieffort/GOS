@@ -10,9 +10,12 @@ import UIKit
 
 class FavoriteTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var schedule_Time: UILabel!
-    @IBOutlet weak var schedule_Location: UILabel!
-    @IBOutlet weak var schedule_Person: UILabel!
+
+    @IBOutlet weak var likeTime: UILabel!
+    @IBOutlet weak var likeLocation: UILabel!
+    @IBOutlet weak var likePeople: UILabel!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

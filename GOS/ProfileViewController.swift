@@ -29,7 +29,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         profileID.text = Auth.auth().currentUser?.email
         configureDatabase()
-
     }
     
     @IBAction func btnLogout(_ sender: Any) {
@@ -49,8 +48,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as! ProfileTableViewCell
         
-//        let postSnapshot: DataSnapshot! = self.myPost[indexPath.row]
-//        guard let post = postSnapshot.value as? [String:String] else { return cell }
         let recruitmentSnapshot: DataSnapshot! = self.myRecruitment[indexPath.row]
         guard let recruitment = recruitmentSnapshot.value as? [String:String] else {return cell }
         let postedEmail = recruitment["UserID"] ?? "[UserID]"

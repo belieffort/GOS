@@ -42,9 +42,22 @@ class DetailViewController: UIViewController {
     var uid = Auth.auth().currentUser?.uid
     var passedIndex:IndexPath!
     var userEmail = Auth.auth().currentUser!.email!
+    var keyBox:[String] = []
+    var keyofview:String?
+    var likeKeyValue:String?
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+//        //Recruitment에 있는 모든 키를 얻었다.
+        Database.database().reference().child("Recruitment").observeSingleEvent(of: .value, with: {(Snapshot) in
+            if let snapDict = Snapshot.value as? [String:AnyObject]{
+                for each in snapDict{
+                    self.keyBox.append(each.key)
+                }
+            }
+        })
+        print("key \(String(describing: keyofview!))")
         
         writerUserID.text = userID
         detailTitle.text = titleBox
@@ -59,34 +72,28 @@ class DetailViewController: UIViewController {
         favoriteBarButtonOFF = UIBarButtonItem(image: UIImage(named: "afterStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOFF))
 
 
-        ref.child("Users").child(uid!).child("Likeit").child("Index\(writeNumber!)").observe(.value, with: { (snapshot) in
-            self.writeNumberBox = snapshot.value as? String
-            
-            if self.writeNumberBox == self.writeNumber {
-                self.navigationItem.rightBarButtonItems = [self.favoriteBarButtonOFF]
+        ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!) 의 Index").observe(.value, with: { (snapshot) in
+            self.likeKeyValue = snapshot.value as? String
 
+            if self.likeKeyValue == self.keyofview {
+                self.navigationItem.rightBarButtonItems = [self.favoriteBarButtonOFF]
             } else {
                 self.navigationItem.rightBarButtonItems = [self.favoriteBarButtonOn]
-
             }
         })
 }
-    
+
     @objc func didTapFavoriteBarButtonOn() {
+//        print(self.keyBox)
+//        print(self.keyBox.count)
         self.navigationItem.setRightBarButtonItems([self.favoriteBarButtonOFF], animated: false)
-        // 음...특정한 값을 갖고 특정한 키만 뽑아낼 수 있다....?
-        // 특정한 값이라는 것은 해당 child 중 하나... 하나밖에 못 넣는가...?
         favoriteStatus = true
         if favoriteStatus == true {
             self.navigationItem.rightBarButtonItem = self.favoriteBarButtonOFF
-            print(writeNumber!)
-            var mdata = [String:[String:String]]()
-            mdata["Likeit"] = [
-                "Index\(writeNumber!)" : "\(writeNumber!)"
-            ]
-
-            self.ref.child("Users").child(uid!).updateChildValues(mdata)
+            
+            self.ref.child("Users").child(uid!).child("Likeit").updateChildValues(["\(keyofview!) 의 Index" : "\(keyofview!)"])
         }
+        
         print("Show Favorites")
     }
     
@@ -94,20 +101,7 @@ class DetailViewController: UIViewController {
         self.navigationItem.setRightBarButtonItems([self.favoriteBarButtonOn], animated: false)
         print("Show All Chat Rooms")
     
-        
-        ref.child("Users").child(uid!).child("Likeit").child("Index\(writeNumber!)").removeValue()
-        //        print("\(writeNumberBox!)")
-
-
-        
-        //TODO - 다시 버튼을 누르면 likeit child가 다시 생긴다.
-//        favoriteStatus = false
-//        if favoriteStatus == false {
-//            var mdata = [String:String]()
-//            mdata["likeit"] = "\(String(describing: favoriteStatus))"
-//            // Push data to Firebase Database
-//            self.ref.child("Users").child("likeit").updateChildValues(mdata)
-//        }
+        ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!) 의 Index").removeValue()
     }
 
          deinit {
