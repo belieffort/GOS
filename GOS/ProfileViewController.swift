@@ -6,6 +6,8 @@
 //  Copyright © 2018년 Byungdoo Han. All rights reserved.
 //
 
+
+//TODO - 현재 로그인한 유저의 이메일과 Recruitment에 있는 이메일과 비교해서 동일한 것만 올리게 한다!
 import UIKit
 import Firebase
 import FirebaseAuth

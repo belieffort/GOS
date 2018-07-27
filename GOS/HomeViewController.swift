@@ -19,6 +19,12 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     var seletedCollectionViewCell:IndexPath!
     var keyOfNowView:String?
+
+//    var uid = Auth.auth().currentUser?.uid
+//    var likeitNumber:[String] = []
+//    var recruitmentKey:[String] = []
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,15 +39,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         seletedCollectionViewCell = indexPath
 //        print("==============\(String(describing: seletedCollectionViewCell))=============")
         performSegue(withIdentifier: "MainDetailSegue", sender: self)
-        
-        
-//        let databaseRef = Database.database().reference(withPath: "Recruitment")
-//        databaseRef.observe(.childAdded)
-//        { (snapshot:DataSnapshot) in
-//            self.keyOfNowView = snapshot.key
-//            print(self.keyOfNowView ?? "keyOfNowView")
-//                    }
-
 
     }
     
@@ -134,6 +131,33 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         keyOfNowView = keySnapshot.key
         detailViewController.keyofview = keyOfNowView
 //        print(keyOfNowView)
+        
+//        let favoriteController = segue.destination as! FavoriteController
+//
+//        Database.database().reference().child("Users").child(self.uid!).child("Likeit").observeSingleEvent(of: .value, with: {(Snapshot) in
+//            if let userSnapDict = Snapshot.value as? [String:AnyObject]{
+//                for each in userSnapDict{
+//                    self.likeitNumber.append(each.value as! String)
+//                    //                    print("numberOfLikeit \(self.numberOfLikeit)")
+//                    favoriteController.numberOfLikeit = self.likeitNumber
+//                    print("HERE \(self.likeitNumber)")
+//
+//                }
+//            }
+//        })
+        
+//        Database.database().reference().child("Recruitment").observeSingleEvent(of: .value, with: {(Snapshot) in
+//            if let snapDict = Snapshot.value as? [String:AnyObject]{
+//                for new in snapDict{
+//                    self.recruitmentKey.append(new.key)
+//                    //                    print("numberOfLikeit \(self.recruitmentOfKey)")
+//                    favoriteController.recruitmentOfKey = self.recruitmentKey
+//
+//                }
+//            }
+//        })
+
+        
         
     }
 

@@ -54,6 +54,7 @@ class DetailViewController: UIViewController {
             if let snapDict = Snapshot.value as? [String:AnyObject]{
                 for each in snapDict{
                     self.keyBox.append(each.key)
+//                    print("keyBox \(self.keyBox)")
                 }
             }
         })
