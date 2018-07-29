@@ -74,7 +74,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func configureDatabase() {
         ref = Database.database().reference()
         // Listen for new messages in the Firebase database
-        _refHandle = self.ref.child("Recruitment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
+            _refHandle = self.ref.child("Recruitment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
             guard let strongSelf = self else { return }
             strongSelf.myRecruitment.append(snapshot)
             strongSelf.profileTableView.insertRows(at: [IndexPath(row: strongSelf.myRecruitment.count-1, section: 0)], with: .automatic)

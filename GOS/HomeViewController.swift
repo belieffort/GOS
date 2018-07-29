@@ -19,12 +19,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     var seletedCollectionViewCell:IndexPath!
     var keyOfNowView:String?
-
-//    var uid = Auth.auth().currentUser?.uid
-//    var likeitNumber:[String] = []
-//    var recruitmentKey:[String] = []
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,6 +102,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 _refHandle = self.ref.child("Recruitment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
                     guard let strongSelf = self else { return }
                     strongSelf.recruitment.append(snapshot)
+//                    print(strongSelf.recruitment)
                     strongSelf.homeCollectionView.insertItems(at: [IndexPath(row: strongSelf.recruitment.count-1, section: 0)])
                 })
     }
@@ -126,39 +121,12 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         detailViewController.people = recruit["NumberOfPeople"] ?? "[NumberOfPeople]"
         detailViewController.position = recruit["Position"] ?? "[Position]"
         detailViewController.notice = recruit["Detail"] ?? "[Detail]"
+        detailViewController.sports = recruit["Sports"] ?? "[Sports]"
         
         let keySnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell.item]
         keyOfNowView = keySnapshot.key
         detailViewController.keyofview = keyOfNowView
-//        print(keyOfNowView)
-        
-//        let favoriteController = segue.destination as! FavoriteController
-//
-//        Database.database().reference().child("Users").child(self.uid!).child("Likeit").observeSingleEvent(of: .value, with: {(Snapshot) in
-//            if let userSnapDict = Snapshot.value as? [String:AnyObject]{
-//                for each in userSnapDict{
-//                    self.likeitNumber.append(each.value as! String)
-//                    //                    print("numberOfLikeit \(self.numberOfLikeit)")
-//                    favoriteController.numberOfLikeit = self.likeitNumber
-//                    print("HERE \(self.likeitNumber)")
-//
-//                }
-//            }
-//        })
-        
-//        Database.database().reference().child("Recruitment").observeSingleEvent(of: .value, with: {(Snapshot) in
-//            if let snapDict = Snapshot.value as? [String:AnyObject]{
-//                for new in snapDict{
-//                    self.recruitmentKey.append(new.key)
-//                    //                    print("numberOfLikeit \(self.recruitmentOfKey)")
-//                    favoriteController.recruitmentOfKey = self.recruitmentKey
-//
-//                }
-//            }
-//        })
-
-        
-        
+    
     }
 
 

@@ -20,122 +20,61 @@ class FavoriteController: UIViewController, UITableViewDataSource, UITableViewDe
     var userLikeit: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
     
+    var writeInfo: [DataSnapshot]! = []
+
+    
     var uid = Auth.auth().currentUser?.uid
-    var numberOfLikeit = [String:AnyObject]()
-    var numberOfWrite = [String:AnyObject]()
-    var userLikeitArray:[String] = []
-    var recruitmentKeyArray:[String] = []
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        configureDatabase()
-        
-        Database.database().reference().child("Users").child(self.uid!).child("Likeit").observeSingleEvent(of: .value, with: {(UserKeysnapshot) in
-            if UserKeysnapshot.exists() {
-                self.numberOfLikeit = UserKeysnapshot.value! as! [String : AnyObject]
-                self.getUserLikeitArray(snapshot: self.numberOfLikeit)
-            }
-        })
-        
-        Database.database().reference().child("Recruitment").observeSingleEvent(of: .value, with: {(WritekeySnapshot) in
-            if WritekeySnapshot.exists() {
-                self.numberOfWrite = WritekeySnapshot.value! as! [String: AnyObject]
-                self.getWriteKeyArray(snapshot: self.numberOfWrite)
-            }
-        })
-        
-        samplePrint()
-        
-        
-//        LIkeit 안에 있는 child 총 개수를 구한다. 단, 배열 형태로 구해야 한다.
-//        Database.database().reference().child("Users").child(self.uid!).child("Likeit").observeSingleEvent(of: .value, with: {(Snapshot) in
-//            if let snapDict = Snapshot.value as? [String:AnyObject]{
-//                for each in snapDict{
-//                    self.numberOfLikeit.append(each.value as! String)
-//                    print("numberOfLikeit \(self.numberOfLikeit)")
-//                }
-//            }
-//        })
-        
-        
-//        Recruitment 안에 있는 child 총 개수를 구한다. 단, 배열 형태로 구해야 한다.
-//        Database.database().reference().child("Recruitment").observeSingleEvent(of: .value, with: {(Snapshot) in
-//            if let snapDict = Snapshot.value as? [String:AnyObject]{
-//                for new in snapDict{
-//                    self.recruitmentKeyArray.append(new.key)
-//                    print("numberOfLikeit \(recruitmentKeyArray)")
-//                }
-//            }
-//        })
+        getUserLikeitArray()
         
     }
-    
-    func getUserLikeitArray(snapshot: [String:AnyObject]) {
-        //data is here
-            for each in numberOfLikeit {
-                self.userLikeitArray.append(each.value as! String)
-            }
-//        print("outer numberOfLikeit \(self.userLikeitArray)")
-//        print(self.userLikeitArray.count)
-    }
-    
-    func getWriteKeyArray(snapshot: [String:AnyObject]) {
-            for new in numberOfWrite{
-                self.recruitmentKeyArray.append(new.key)
-        }
-//        print("outer recruitmentKeyArray \(self.recruitmentKeyArray)")
-//        print(self.recruitmentKeyArray.count)
-    }
-    
-    //TODO - userLikeitArray와 recruitmentKeyArray를 비교하여 공통된 요소로 구성된 배열을 만든다.
-    func samplePrint() {
-        
-        var someHash: [String: Bool] = [:]
-        
-        recruitmentKeyArray.forEach { someHash[$0] = true }
-        
-        var commonItems = [String]()
-        
-        userLikeitArray.forEach { veg in
-            if someHash[veg] ?? false {
-                commonItems.append(veg)
-            }
-        }
-        
-        print(commonItems)
-    }
-    
-    
-    
-    
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfLikeit.count
+        return userLikeit.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "IlikeCell", for: indexPath) as! FavoriteTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userLikeCell", for: indexPath) as! FavoriteTableViewCell
+     
         
+        //큰 틀을 HomeViewController와 동일하게 만들고, 그 안에서 함수를 배치시켜보기!!
+        let likeitSnapshot: DataSnapshot! = self.userLikeit[indexPath.row]
+        guard let userLike = likeitSnapshot.value as? [String:String] else { return cell }
+        
+        let time = userLike["Time"] ?? "[Time]"
+        let location = userLike["Location"] ?? "[Location]"
+        let numberOfPeople = userLike["NumberOfPeople"] ?? "[numberOfPeople]"
 
-        return UITableViewCell()
+        cell.likeTime.text = time
+        cell.likeLocation.text = location
+        cell.likePeople.text = numberOfPeople
+        
+  
+        return cell
     }
-
     
-//    deinit {
-//        if let refHandle = _refHandle {
-//            self.ref.child("Recruitment").removeObserver(withHandle: refHandle)
-//        }
-//    }
-//
-//    func configureDatabase() {
-//        ref = Database.database().reference()
-        // Listen for new messages in the Firebase database
-//        _refHandle = self.ref.child("Recruitment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
-//            guard let strongSelf = self else { return }
-//            strongSelf.userLikeit.append(snapshot)
-//            strongSelf.likeTableView.insertRows(at: [IndexPath(row: strongSelf.userLikeit.count-1, section: 0)], with: .automatic)
-//        })
-//    }
+    deinit {
+        if let refHandle = _refHandle {
+            self.ref.child("Users").removeObserver(withHandle: refHandle)
+        }
+    }
+    
+    func getUserLikeitArray() {
+        ref = Database.database().reference()
+        _refHandle = self.ref.child("Users").child(self.uid!).child("Likeit").observe(.childAdded, with: { [weak self] (snapshot) in
+                guard let strongSelf = self else { return }
+                strongSelf.userLikeit.append(snapshot)
+                strongSelf.likeTableView.insertRows(at: [IndexPath(row: strongSelf.userLikeit.count-1, section: 0)], with: .automatic)
+        })
+    }
+    
+   
+
 
     /*
     // MARK: - Navigation

@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import Firebase
 import FirebaseAuth
+import Firebase
+
 
 class DetailViewController: UIViewController {
 
@@ -32,7 +33,9 @@ class DetailViewController: UIViewController {
     var people:String!
     var position:String!
     var notice:String!
+    var sports:String!
     var writeNumber:String!
+    var nowKey:[String] = []
     
     var writeNumberBox:String!
     
@@ -47,18 +50,13 @@ class DetailViewController: UIViewController {
     var likeKeyValue:String?
     
 
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-//        //Recruitment에 있는 모든 키를 얻었다.
-        Database.database().reference().child("Recruitment").observeSingleEvent(of: .value, with: {(Snapshot) in
-            if let snapDict = Snapshot.value as? [String:AnyObject]{
-                for each in snapDict{
-                    self.keyBox.append(each.key)
-//                    print("keyBox \(self.keyBox)")
-                }
-            }
-        })
-        print("key \(String(describing: keyofview!))")
+        configureDatabase()
+        initialButton()
+
         
         writerUserID.text = userID
         detailTitle.text = titleBox
@@ -71,28 +69,49 @@ class DetailViewController: UIViewController {
         
         favoriteBarButtonOn = UIBarButtonItem(image: UIImage(named: "beforeStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOn))
         favoriteBarButtonOFF = UIBarButtonItem(image: UIImage(named: "afterStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOFF))
+        
+}
+    
 
-
-        ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!) 의 Index").observe(.value, with: { (snapshot) in
-            self.likeKeyValue = snapshot.value as? String
-
-            if self.likeKeyValue == self.keyofview {
+    func initialButton() {
+        
+        ref.child("Users").child(uid!).child("Likeit").observeSingleEvent(of: .value, with: { (snapshot) in
+            if let snapDict = snapshot.value as? [String:AnyObject]{
+                for each in snapDict{
+                    self.nowKey.append(each.key)
+                    print(self.nowKey)
+                }
+            }
+            if self.nowKey.contains("\(self.keyofview!)") {
                 self.navigationItem.rightBarButtonItems = [self.favoriteBarButtonOFF]
             } else {
                 self.navigationItem.rightBarButtonItems = [self.favoriteBarButtonOn]
             }
         })
-}
-
+        
+    }
+    
+    
     @objc func didTapFavoriteBarButtonOn() {
-//        print(self.keyBox)
-//        print(self.keyBox.count)
+        
         self.navigationItem.setRightBarButtonItems([self.favoriteBarButtonOFF], animated: false)
         favoriteStatus = true
         if favoriteStatus == true {
             self.navigationItem.rightBarButtonItem = self.favoriteBarButtonOFF
             
-            self.ref.child("Users").child(uid!).child("Likeit").updateChildValues(["\(keyofview!) 의 Index" : "\(keyofview!)"])
+            var mdata = [String:String]()
+            
+            mdata["Title"] =  titleBox
+            mdata["Sports"] =  sports
+            mdata["Time"] = time
+            mdata["Location"] = location
+            mdata["NumberOfPeople"] = people
+            mdata["Position"] = position
+            mdata["Detail"] = notice
+            mdata["Writer"] = userID
+            
+            self.ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!)").setValue(mdata)
+
         }
         
         print("Show Favorites")
@@ -102,7 +121,8 @@ class DetailViewController: UIViewController {
         self.navigationItem.setRightBarButtonItems([self.favoriteBarButtonOn], animated: false)
         print("Show All Chat Rooms")
     
-        ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!) 의 Index").removeValue()
+        ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!)").removeValue()
+        
     }
 
          deinit {
