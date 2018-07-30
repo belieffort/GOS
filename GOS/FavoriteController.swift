@@ -19,10 +19,7 @@ class FavoriteController: UIViewController, UITableViewDataSource, UITableViewDe
     var ref: DatabaseReference!
     var userLikeit: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
-    
-    var writeInfo: [DataSnapshot]! = []
-
-    
+    var keyBox:String?
     var uid = Auth.auth().currentUser?.uid
     
 
@@ -42,7 +39,7 @@ class FavoriteController: UIViewController, UITableViewDataSource, UITableViewDe
         let cell = tableView.dequeueReusableCell(withIdentifier: "userLikeCell", for: indexPath) as! FavoriteTableViewCell
      
         
-        //큰 틀을 HomeViewController와 동일하게 만들고, 그 안에서 함수를 배치시켜보기!!
+        //큰 틀을 HomeViewController와 동일하게 만들고, 그 안에서 함수를 배치시켜보기
         let likeitSnapshot: DataSnapshot! = self.userLikeit[indexPath.row]
         guard let userLike = likeitSnapshot.value as? [String:String] else { return cell }
         
@@ -57,6 +54,22 @@ class FavoriteController: UIViewController, UITableViewDataSource, UITableViewDe
   
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let deleteSnap : DataSnapshot = self.userLikeit[indexPath.row]
+        keyBox = deleteSnap.key
+        print(keyBox!)
+        
+        let deleteRef = Database.database().reference().child("Users").child(uid!).child("Likeit").child("\(keyBox!)")
+        
+        if editingStyle == .delete {
+
+            deleteRef.removeValue()
+            userLikeit.remove(at: indexPath.row)
+            tableView.reloadData()
+
+            }
+        }
     
     deinit {
         if let refHandle = _refHandle {
