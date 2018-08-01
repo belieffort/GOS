@@ -27,9 +27,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     var userUID = Auth.auth().currentUser?.uid
     var userEmail = Auth.auth().currentUser?.email
     
-    var recruitKey:[String] = []
-    var likeitKey:[String] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         showProfileImage()

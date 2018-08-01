@@ -31,15 +31,18 @@ class LikeDetailViewController: UIViewController {
     var like_position:String!
     var like_notice:String!
     var like_sports:String!
-
     var keyOfUserLike:String!
+
+    var ref: DatabaseReference!
     var uid = Auth.auth().currentUser?.uid
-    
+    var anotherUserUID:String?
+
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        showProfileImage()
+        getUserUID()
+
         
         like_writerUserId.text = like_userId
         like_detailTitle.text = like_titleBox
@@ -63,24 +66,62 @@ class LikeDetailViewController: UIViewController {
     }
     */
     
-    func showProfileImage() {
-        Database.database().reference().child("Users").child(self.uid!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
-            if let url = snapshot.value as? String {
-                URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-                    
-                    if error != nil {
-                        print(error)
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        let image = UIImage(data: data!)
-                        self.writerImage.image = image
-                        
-                    }
-                    }.resume()
+    func getUserUID() {
+        ref = Database.database().reference()
+        ref.child("Users").queryOrdered(byChild: "email").queryEqual(toValue: like_userId).observe(.childAdded, with: {snapshot in
+            let writerUID = snapshot.key
+            print("NOW!!! \(writerUID)")
+            if writerUID != self.like_userId! {
+                self.anotherUserUID = writerUID
+                print("configureDatabase \(self.anotherUserUID!)")
+                self.showProfileImage()
+            } else {
+                print("nope")
+                self.showProfileImage()
             }
         })
     }
+    
+    
+    func showProfileImage() {
+        print("showProfileImage \(self.anotherUserUID!)")
+        if uid != anotherUserUID {
+            Database.database().reference().child("Users").child(anotherUserUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
+                if let url = snapshot.value as? String {
+                    URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
+                        
+                        if error != nil {
+                            print(error as Any)
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            let image = UIImage(data: data!)
+                            self.writerImage.image = image
+                            
+                        }
+                        }.resume()
+                }
+            })
+        } else {
+            Database.database().reference().child("Users").child(self.uid!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
+                if let url = snapshot.value as? String {
+                    URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
+                        
+                        if error != nil {
+                            print(error as Any)
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            let image = UIImage(data: data!)
+                            self.writerImage.image = image
+                            
+                        }
+                        }.resume()
+                }
+            })
+        }
+    }
+   
 
 
 }
