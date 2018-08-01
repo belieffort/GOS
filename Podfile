@@ -9,6 +9,8 @@ target 'GOS' do
 pod 'Firebase/Core'
 pod 'Firebase/Database'
 pod 'Firebase/Auth'
+pod 'Firebase/Storage'
+
 
 #textview placeholder
 pod 'UITextView+Placeholder'

@@ -8,6 +8,9 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
+
 
 class HomeViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
@@ -87,7 +90,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         cell.layer.masksToBounds = true
         cell.layer.shadowPath =
             UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.contentView.layer.cornerRadius).cgPath
-
         return cell
     }
 
@@ -102,7 +104,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 _refHandle = self.ref.child("Recruitment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
                     guard let strongSelf = self else { return }
                     strongSelf.recruitment.append(snapshot)
-//                    print(strongSelf.recruitment)
                     strongSelf.homeCollectionView.insertItems(at: [IndexPath(row: strongSelf.recruitment.count-1, section: 0)])
                 })
     }

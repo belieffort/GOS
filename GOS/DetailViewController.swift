@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 import Firebase
+import FirebaseDatabase
 
 
 class DetailViewController: UIViewController {
@@ -18,6 +19,7 @@ class DetailViewController: UIViewController {
     var _refHandle: DatabaseHandle?
 
     var homeViewController = HomeViewController()
+    @IBOutlet weak var writerImage: UIImageView!
     @IBOutlet weak var writerUserID: UILabel!
     @IBOutlet weak var detailTitle: UILabel!
     @IBOutlet weak var detailTime: UILabel!
@@ -34,8 +36,10 @@ class DetailViewController: UIViewController {
     var position:String!
     var notice:String!
     var sports:String!
-    var writeNumber:String!
     var nowKey:[String] = []
+    var userUIDBox:[String] = []
+   
+    
     
     var writeNumberBox:String!
     
@@ -49,14 +53,12 @@ class DetailViewController: UIViewController {
     var keyofview:String?
     var likeKeyValue:String?
     
-
-    
+    var anotherUserUID:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureDatabase()
         initialButton()
-
+        getUserUID()
         
         writerUserID.text = userID
         detailTitle.text = titleBox
@@ -65,7 +67,7 @@ class DetailViewController: UIViewController {
         detailPeople.text = people
         detailPosition.text = position
         detailNotice.text = notice
-        configureDatabase()
+        detailNotice.isEditable = false
         
         favoriteBarButtonOn = UIBarButtonItem(image: UIImage(named: "beforeStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOn))
         favoriteBarButtonOFF = UIBarButtonItem(image: UIImage(named: "afterStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOFF))
@@ -74,12 +76,11 @@ class DetailViewController: UIViewController {
     
 
     func initialButton() {
-        
         ref.child("Users").child(uid!).child("Likeit").observeSingleEvent(of: .value, with: { (snapshot) in
             if let snapDict = snapshot.value as? [String:AnyObject]{
                 for each in snapDict{
                     self.nowKey.append(each.key)
-                    print(self.nowKey)
+//                    print(self.nowKey)
                 }
             }
             if self.nowKey.contains("\(self.keyofview!)") {
@@ -88,7 +89,6 @@ class DetailViewController: UIViewController {
                 self.navigationItem.rightBarButtonItems = [self.favoriteBarButtonOn]
             }
         })
-        
     }
     
     
@@ -101,8 +101,8 @@ class DetailViewController: UIViewController {
             
             var mdata = [String:String]()
             
-            mdata["Title"] =  titleBox
-            mdata["Sports"] =  sports
+            mdata["Title"] = titleBox
+            mdata["Sports"] = sports
             mdata["Time"] = time
             mdata["Location"] = location
             mdata["NumberOfPeople"] = people
@@ -111,7 +111,6 @@ class DetailViewController: UIViewController {
             mdata["Writer"] = userID
             
             self.ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!)").setValue(mdata)
-
         }
         
         print("Show Favorites")
@@ -124,23 +123,33 @@ class DetailViewController: UIViewController {
         ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!)").removeValue()
         
     }
-
          deinit {
-//                if let refHandle = _refHandle {
-//                    self.ref.child("Users").removeObserver(withHandle: refHandle)
-//                }
+                if let refHandle = _refHandle {
+                    self.ref.child("Users").removeObserver(withHandle: refHandle)
+                }
     }
     
     
-    func configureDatabase() {
+    func getUserUID() {
         ref = Database.database().reference()
-        // Listen for new messages in the Firebase database
-//        _refHandle = self.ref.child("Recruitment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
-//            guard let strongSelf = self else { return }
-//            strongSelf.likeit.append(snapshot)
-//            strongSelf.homeCollectionView.insertItems(at: [IndexPath(row: strongSelf.recruitment.count-1, section: 0)])
-//
-//        })
+//         Listen for new messages in the Firebase database
+        _refHandle = self.ref.child("Users").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf = self else { return }
+
+            let writerSnapshot: DataSnapshot! = snapshot
+            guard let writerInfo = writerSnapshot.value as? [String:String] else { return }
+            print(writerSnapshot.value)
+            let writer = writerInfo["email"]
+            if writer == strongSelf.userID! {
+                strongSelf.anotherUserUID = writerSnapshot.key
+                print("configureDatabase \(strongSelf.anotherUserUID!)")
+                self?.showProfileImage()
+            } else {
+                self?.showProfileImage()
+//                현재 유저의 이미지
+            }
+    })
+
 }
 
 
@@ -158,5 +167,44 @@ class DetailViewController: UIViewController {
 //
 //    }
 
-
+    
+    func showProfileImage() {
+//        print("showProfileImage \(self.anotherUserUID!)")
+        if uid != anotherUserUID {
+        Database.database().reference().child("Users").child(anotherUserUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
+            if let url = snapshot.value as? String {
+                URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
+            
+                        if error != nil {
+                            print(error)
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            let image = UIImage(data: data!)
+                            self.writerImage.image = image
+                            
+                        }
+                        }.resume()
+                }
+            })
+        } else {
+            Database.database().reference().child("Users").child(self.uid!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
+                if let url = snapshot.value as? String {
+                    URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
+                        
+                        if error != nil {
+                            print(error)
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            let image = UIImage(data: data!)
+                            self.writerImage.image = image
+                            
+                        }
+                        }.resume()
+                }
+            })
+        }
+    }
+    
 }

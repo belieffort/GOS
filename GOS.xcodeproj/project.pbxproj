@@ -9,10 +9,13 @@
 /* Begin PBXBuildFile section */
 		1A2C98BC72F25E2CB2066E56 /* Pods_GOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4314C6AC64CFF619F684E5 /* Pods_GOS.framework */; };
 		720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720CFDDA21021791002ABF5C /* DetailViewController.swift */; };
+		721217E2210F04C800BFFC54 /* LikeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721217E1210F04C800BFFC54 /* LikeDetailViewController.swift */; };
 		724F9C8520F7710C0098D872 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 724F9C8420F7710C0098D872 /* AppDelegate.swift */; };
 		724F9C8A20F7710C0098D872 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8820F7710C0098D872 /* Main.storyboard */; };
 		724F9C8C20F7710E0098D872 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8B20F7710E0098D872 /* Assets.xcassets */; };
 		724F9C8F20F7710E0098D872 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8D20F7710E0098D872 /* LaunchScreen.storyboard */; };
+		7260A6A4210F841C00399FC0 /* MyScheduleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7260A6A3210F841C00399FC0 /* MyScheduleDetailViewController.swift */; };
+		7260A6A6210F842F00399FC0 /* MyProfileDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7260A6A5210F842F00399FC0 /* MyProfileDetailViewController.swift */; };
 		7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7286BD2620F88A19005622CE /* RecruitCellCollectionViewCell.swift */; };
 		72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */; };
 		72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */; };
@@ -28,12 +31,15 @@
 /* Begin PBXFileReference section */
 		6C4314C6AC64CFF619F684E5 /* Pods_GOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		720CFDDA21021791002ABF5C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		721217E1210F04C800BFFC54 /* LikeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDetailViewController.swift; sourceTree = "<group>"; };
 		724F9C8120F7710C0098D872 /* GOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		724F9C8420F7710C0098D872 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		724F9C8920F7710C0098D872 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		724F9C8B20F7710E0098D872 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		724F9C8E20F7710E0098D872 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		724F9C9020F7710E0098D872 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7260A6A3210F841C00399FC0 /* MyScheduleDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyScheduleDetailViewController.swift; sourceTree = "<group>"; };
+		7260A6A5210F842F00399FC0 /* MyProfileDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileDetailViewController.swift; sourceTree = "<group>"; };
 		7286BD2620F88A19005622CE /* RecruitCellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitCellCollectionViewCell.swift; sourceTree = "<group>"; };
 		72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteController.swift; sourceTree = "<group>"; };
@@ -106,6 +112,9 @@
 				72EDBE7620FB99C9007E1473 /* AuthViewController.swift */,
 				72EDBE7820FB99E5007E1473 /* JoinViewController.swift */,
 				720CFDDA21021791002ABF5C /* DetailViewController.swift */,
+				721217E1210F04C800BFFC54 /* LikeDetailViewController.swift */,
+				7260A6A3210F841C00399FC0 /* MyScheduleDetailViewController.swift */,
+				7260A6A5210F842F00399FC0 /* MyProfileDetailViewController.swift */,
 			);
 			path = GOS;
 			sourceTree = "<group>";
@@ -240,9 +249,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */,
+				7260A6A6210F842F00399FC0 /* MyProfileDetailViewController.swift in Sources */,
 				7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */,
 				72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */,
 				72EDBE6F20FA57F8007E1473 /* FavoriteTableViewCell.swift in Sources */,
+				721217E2210F04C800BFFC54 /* LikeDetailViewController.swift in Sources */,
 				72EDBE7120FA5CC1007E1473 /* AddViewController.swift in Sources */,
 				724F9C8520F7710C0098D872 /* AppDelegate.swift in Sources */,
 				72EDBE7320FB79B4007E1473 /* ProfileViewController.swift in Sources */,
@@ -250,6 +261,7 @@
 				72EDBE7720FB99C9007E1473 /* AuthViewController.swift in Sources */,
 				72EDBE7920FB99E5007E1473 /* JoinViewController.swift in Sources */,
 				72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */,
+				7260A6A4210F841C00399FC0 /* MyScheduleDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,28 +8,36 @@
 
 
 //TODO - 현재 로그인한 유저의 이메일과 Recruitment에 있는 이메일과 비교해서 동일한 것만 올리게 한다!
+//TODO - 회원가입을 한 유저가 로그아웃을 누르면, 회원가입 화면으로 돌아간다. 또한 아이디와 비밀번호가 그대로 있기 때문에, 초기화를 시켜주어야 한다.
 import UIKit
 import Firebase
 import FirebaseAuth
+import FirebaseStorage
+import FirebaseDatabase
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var profileImage: UIImageView!
-    @IBOutlet weak var profileID: UILabel!
     @IBOutlet weak var profileTableView: UITableView!
+    @IBOutlet weak var profileID: UIButton!
     
     var ref: DatabaseReference!
     var myRecruitment: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
+    var userUID = Auth.auth().currentUser?.uid
+    var userEmail = Auth.auth().currentUser?.email
     
-    var time = [String]()
-    var location = [String]()
-    var sportsImage = [UIImage(named: "badminton-1"), UIImage(named: "football-1"), UIImage(named: "basketball-1"), UIImage(named: "hockey-1"), UIImage(named: "tennis-1")]
-    
+    var recruitKey:[String] = []
+    var likeitKey:[String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        profileID.text = Auth.auth().currentUser?.email
+        showProfileImage()
+        let userID = Auth.auth().currentUser?.email
+        profileID.setTitle("\(userID!)", for: .normal)
+//        view.addSubview(profileImage)
+//        profileImage.layer.cornerRadius = 60
+//        profileImage.layer.masksToBounds = true
         configureDatabase()
     }
     
@@ -52,37 +60,52 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         let recruitmentSnapshot: DataSnapshot! = self.myRecruitment[indexPath.row]
         guard let recruitment = recruitmentSnapshot.value as? [String:String] else {return cell }
-        let postedEmail = recruitment["UserID"] ?? "[UserID]"
         
-        if Auth.auth().currentUser?.email == postedEmail {
-            
-            cell.scheduleTime.text = recruitment["Time"] ?? "[Time]"
-            cell.scheduleLocation.text = recruitment["Location"] ?? "[Location]"
-        }
+            cell.myScheduleTime.text = recruitment["Time"] ?? "[Time]"
+            cell.myScheduleLocation.text = recruitment["Location"] ?? "[Location]"
+        
         return cell
-
     }
 
-    
     deinit {
         if let refHandle = _refHandle {
             self.ref.child("Recruitment").removeObserver(withHandle: refHandle)}
     }
-    
-    
     
     func configureDatabase() {
         ref = Database.database().reference()
         // Listen for new messages in the Firebase database
             _refHandle = self.ref.child("Recruitment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
             guard let strongSelf = self else { return }
-            strongSelf.myRecruitment.append(snapshot)
-            strongSelf.profileTableView.insertRows(at: [IndexPath(row: strongSelf.myRecruitment.count-1, section: 0)], with: .automatic)
             
-            
+            let writerSnapshot: DataSnapshot! = snapshot
+            guard let writerEmail = writerSnapshot.value as? [String:String] else { return }
+            let writer = writerEmail["Writer"]
+                if writer == self?.userEmail! {
+                    strongSelf.myRecruitment.append(snapshot)
+                    strongSelf.profileTableView.insertRows(at: [IndexPath(row: strongSelf.myRecruitment.count-1, section: 0)], with: .automatic)
+                }
         })
     }
     
+    func showProfileImage() {
+        Database.database().reference().child("Users").child(self.userUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
+            if let url = snapshot.value as? String {
+                URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
+                    
+                    if error != nil {
+                        print(error)
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        let image = UIImage(data: data!)
+                        self.profileImage.image = image
+    
+                    }
+                }.resume()
+            }
+        })
+    }
     // TODO - Cell 삭제 기능이 필요하다.
     
 

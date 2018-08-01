@@ -10,9 +10,11 @@ import UIKit
 
 class ProfileTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var sportsImage: UIImageView!
-    @IBOutlet weak var scheduleTime: UILabel!
-    @IBOutlet weak var scheduleLocation: UILabel!
+
+    @IBOutlet weak var myScheduleSports: UIImageView!
+    
+    @IBOutlet weak var myScheduleLocation: UILabel!
+    @IBOutlet weak var myScheduleTime: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
