@@ -73,7 +73,6 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
             mdata["Position"] = addView_position.text
             mdata["Detail"] = addView_Detail.text
             mdata["Writer"] = Auth.auth().currentUser?.email
-//            mdata["WriteNumber"] = "0"
             
             convertCountBox = Int(countBox!)
             print(convertCountBox!)
@@ -105,9 +104,6 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
             countBox = "\(convertCountBox!)"
         }
     
-//        let refer = self.ref!.child("Recruitment")
-//        let createdId = refer.key   //Your autoID
-//        print(createdId)
     }
     
     

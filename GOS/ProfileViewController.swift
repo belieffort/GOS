@@ -7,7 +7,6 @@
 //
 
 
-//TODO - 현재 로그인한 유저의 이메일과 Recruitment에 있는 이메일과 비교해서 동일한 것만 올리게 한다!
 //TODO - 회원가입을 한 유저가 로그아웃을 누르면, 회원가입 화면으로 돌아간다. 또한 아이디와 비밀번호가 그대로 있기 때문에, 초기화를 시켜주어야 한다.
 import UIKit
 import Firebase
@@ -29,14 +28,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureDatabase()
         showProfileImage()
         let userID = Auth.auth().currentUser?.email
         profileID.setTitle("\(userID!)", for: .normal)
 //        view.addSubview(profileImage)
 //        profileImage.layer.cornerRadius = 60
 //        profileImage.layer.masksToBounds = true
-        configureDatabase()
     }
+    
     
     @IBAction func btnLogout(_ sender: Any) {
         do {
@@ -46,6 +46,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         } catch {
             print("Logout Failed")
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        performSegue(withIdentifier: "MyWriteDetail", sender: self)
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -106,14 +111,35 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     // TODO - Cell 삭제 기능이 필요하다.
     
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+        
+        if  segue.identifier == "MyProfileDetail" {
 
+        } else {
+        
+        let myWriteDetail: DataSnapshot! = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
+        guard let writeDetail = myWriteDetail.value as? [String:String] else { return }
+        
+        // TODO - Recruitment의 child name을 찾으면 된다!!
+        let myScheduleDetailViewController = segue.destination as! MyScheduleDetailViewController
+        myScheduleDetailViewController.my_userID = writeDetail["Writer"] ?? "[Writer]"
+        myScheduleDetailViewController.my_titleBox = writeDetail["Title"] ?? "[Title]"
+        myScheduleDetailViewController.my_time = writeDetail["Time"] ?? "[Time]"
+        myScheduleDetailViewController.my_location = writeDetail["Location"] ?? "[Location]"
+        myScheduleDetailViewController.my_people = writeDetail["NumberOfPeople"] ?? "[NumberOfPeople]"
+        myScheduleDetailViewController.my_position = writeDetail["Position"] ?? "[Position]"
+        myScheduleDetailViewController.my_notice = writeDetail["Detail"] ?? "[Detail]"
+        myScheduleDetailViewController.my_sports = writeDetail["Sports"] ?? "[Sports]"
+        myScheduleDetailViewController.passedSelectedIndexpath = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
+        
+//        let keySnapshot: DataSnapshot! = self.userLikeit[profileTableView.indexPathForSelectedRow!.row]
+//        keyOfUserLike = keySnapshot.key
+//        myScheduleDetailViewController.keyOfUserLike = keyOfUserLike
+        
+        }
+    }
 }

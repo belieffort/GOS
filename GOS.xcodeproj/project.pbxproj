@@ -10,6 +10,9 @@
 		1A2C98BC72F25E2CB2066E56 /* Pods_GOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4314C6AC64CFF619F684E5 /* Pods_GOS.framework */; };
 		720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720CFDDA21021791002ABF5C /* DetailViewController.swift */; };
 		721217E2210F04C800BFFC54 /* LikeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721217E1210F04C800BFFC54 /* LikeDetailViewController.swift */; };
+		72478B4D21132B0D00E92378 /* MyWriteEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72478B4C21132B0D00E92378 /* MyWriteEditViewController.swift */; };
+		72478B4F2113410300E92378 /* AttendantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72478B4E2113410300E92378 /* AttendantViewController.swift */; };
+		72478B532113421000E92378 /* AttendantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72478B522113421000E92378 /* AttendantCell.swift */; };
 		724F9C8520F7710C0098D872 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 724F9C8420F7710C0098D872 /* AppDelegate.swift */; };
 		724F9C8A20F7710C0098D872 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8820F7710C0098D872 /* Main.storyboard */; };
 		724F9C8C20F7710E0098D872 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8B20F7710E0098D872 /* Assets.xcassets */; };
@@ -32,6 +35,9 @@
 		6C4314C6AC64CFF619F684E5 /* Pods_GOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		720CFDDA21021791002ABF5C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		721217E1210F04C800BFFC54 /* LikeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDetailViewController.swift; sourceTree = "<group>"; };
+		72478B4C21132B0D00E92378 /* MyWriteEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWriteEditViewController.swift; sourceTree = "<group>"; };
+		72478B4E2113410300E92378 /* AttendantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendantViewController.swift; sourceTree = "<group>"; };
+		72478B522113421000E92378 /* AttendantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendantCell.swift; sourceTree = "<group>"; };
 		724F9C8120F7710C0098D872 /* GOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		724F9C8420F7710C0098D872 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		724F9C8920F7710C0098D872 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -115,6 +121,9 @@
 				721217E1210F04C800BFFC54 /* LikeDetailViewController.swift */,
 				7260A6A3210F841C00399FC0 /* MyScheduleDetailViewController.swift */,
 				7260A6A5210F842F00399FC0 /* MyProfileDetailViewController.swift */,
+				72478B4C21132B0D00E92378 /* MyWriteEditViewController.swift */,
+				72478B4E2113410300E92378 /* AttendantViewController.swift */,
+				72478B522113421000E92378 /* AttendantCell.swift */,
 			);
 			path = GOS;
 			sourceTree = "<group>";
@@ -250,6 +259,7 @@
 			files = (
 				720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */,
 				7260A6A6210F842F00399FC0 /* MyProfileDetailViewController.swift in Sources */,
+				72478B532113421000E92378 /* AttendantCell.swift in Sources */,
 				7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */,
 				72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */,
 				72EDBE6F20FA57F8007E1473 /* FavoriteTableViewCell.swift in Sources */,
@@ -258,6 +268,8 @@
 				724F9C8520F7710C0098D872 /* AppDelegate.swift in Sources */,
 				72EDBE7320FB79B4007E1473 /* ProfileViewController.swift in Sources */,
 				72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */,
+				72478B4F2113410300E92378 /* AttendantViewController.swift in Sources */,
+				72478B4D21132B0D00E92378 /* MyWriteEditViewController.swift in Sources */,
 				72EDBE7720FB99C9007E1473 /* AuthViewController.swift in Sources */,
 				72EDBE7920FB99E5007E1473 /* JoinViewController.swift in Sources */,
 				72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */,

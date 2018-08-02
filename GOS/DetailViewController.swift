@@ -7,16 +7,18 @@
 //
 
 import UIKit
-import FirebaseAuth
 import Firebase
+import FirebaseAuth
 import FirebaseDatabase
-
+import FirebaseStorage
 
 class DetailViewController: UIViewController {
 
+    @IBOutlet var detailViewController: UIView!
     var ref: DatabaseReference!
+    var messages: [DataSnapshot]! = []
+    var _refHandle: DatabaseHandle?
 
-    var homeViewController = HomeViewController()
     @IBOutlet weak var writerImage: UIImageView!
     @IBOutlet weak var writerUserID: UILabel!
     @IBOutlet weak var detailTitle: UILabel!
@@ -40,15 +42,16 @@ class DetailViewController: UIViewController {
     var favoriteBarButtonOn:UIBarButtonItem!
     var favoriteBarButtonOFF:UIBarButtonItem!
     var favoriteStatus:Bool = true
-    var uid = Auth.auth().currentUser?.uid
+    var userUid = Auth.auth().currentUser?.uid
+    var userEmail = Auth.auth().currentUser?.email
     var keyofview:String?
-    
     var anotherUserUID:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initialButton()
         getUserUID()
+        
         writerUserID.text = userID
         detailTitle.text = titleBox
         detailTime.text = time
@@ -64,25 +67,22 @@ class DetailViewController: UIViewController {
         favoriteBarButtonOFF = UIBarButtonItem(image: UIImage(named: "afterStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOFF))
         
 }
-    
     func initialButton() {
         ref = Database.database().reference()
-        ref.child("Users").child(uid!).child("Likeit").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Users").child(userUid!).child("Likeit").observeSingleEvent(of: .value, with: { (snapshot) in
             if let snapDict = snapshot.value as? [String:AnyObject]{
-                for each in snapDict{
+                for each in snapDict {
                     self.nowKey.append(each.key)
-//                    print(self.nowKey)
                 }
             }
+            
             if self.nowKey.contains("\(self.keyofview!)") {
                 self.navigationItem.rightBarButtonItems = [self.favoriteBarButtonOFF]
-            } else {
+                } else {
                 self.navigationItem.rightBarButtonItems = [self.favoriteBarButtonOn]
             }
         })
-
     }
-
 
     @objc func didTapFavoriteBarButtonOn() {
         
@@ -102,7 +102,7 @@ class DetailViewController: UIViewController {
             mdata["Detail"] = notice
             mdata["Writer"] = userID
             
-            self.ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!)").setValue(mdata)
+            self.ref.child("Users").child(userUid!).child("Likeit").child("\(keyofview!)").setValue(mdata)
         }
         
         print("Show Favorites")
@@ -112,7 +112,22 @@ class DetailViewController: UIViewController {
         self.navigationItem.setRightBarButtonItems([self.favoriteBarButtonOn], animated: false)
         print("Show All Chat Rooms")
     
-        ref.child("Users").child(uid!).child("Likeit").child("\(keyofview!)").removeValue()
+        ref.child("Users").child(userUid!).child("Likeit").child("\(keyofview!)").removeValue()
+        
+    }
+    
+    @IBAction func joinSports(_ sender: Any) {
+        //TODO - 버튼을 눌렀을 때, User의 Email을 Recruitment 의 JoinPeople에 추가한다.
+        //누를 때에는 로그인한 사람의 정보를 얻을 수 있다.
+        //error 1. 버튼을 누르면 해당 셀이 흰색으로 변하면서, 해당 셀을 누르면 keyofview에서 오류가 난다.
+        
+        self.ref.child("Recruitment").child("\(keyofview!)").child("Join").setValue(["\(userUid!)" : "\(userEmail!)"])
+        viewWillAppear(true)
+ 
+    }
+    
+    @IBAction func checkAttendant(_ sender: Any) {
+         performSegue(withIdentifier: "AttendantSegue", sender: self)
         
     }
     
@@ -131,23 +146,10 @@ class DetailViewController: UIViewController {
                 }
             })
     }
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "DetailViewController" {
-//            let detailViewController:DetailViewController = segue.destination as! DetailViewController
-//
-//
-//        }
-//
-//    }
-
     
     func showProfileImage() {
         print("showProfileImage \(self.anotherUserUID!)")
-        if uid != anotherUserUID {
+        if userUid != anotherUserUID {
         Database.database().reference().child("Users").child(anotherUserUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
             if let url = snapshot.value as? String {
                 URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
@@ -165,7 +167,7 @@ class DetailViewController: UIViewController {
                 }
             })
         } else {
-            Database.database().reference().child("Users").child(self.uid!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
+            Database.database().reference().child("Users").child(self.userUid!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
                 if let url = snapshot.value as? String {
                     URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
 
@@ -182,6 +184,34 @@ class DetailViewController: UIViewController {
                 }
             })
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "AttendantSegue" {
+            
+            //        let recruitmentSnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell.item]
+            //        guard let recruit = recruitmentSnapshot.value as? [String:String] else { return }
+            //
+            //        // TODO - Recruitment의 child name을 찾으면 된다!!
+            //        let detailViewController = segue.destination as! DetailViewController
+            //        detailViewController.userID = recruit["Writer"] ?? "[Writer]"
+            //        detailViewController.titleBox = recruit["Title"] ?? "[Title]"
+            //        detailViewController.time = recruit["Time"] ?? "[Time]"
+            //        detailViewController.location = recruit["Location"] ?? "[Location]"
+            //        detailViewController.people = recruit["NumberOfPeople"] ?? "[NumberOfPeople]"
+            //        detailViewController.position = recruit["Position"] ?? "[Position]"
+            //        detailViewController.notice = recruit["Detail"] ?? "[Detail]"
+            //        detailViewController.sports = recruit["Sports"] ?? "[Sports]"
+            //
+            //        let keySnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell.item]
+            //        keyOfNowView = keySnapshot.key
+            //        detailViewController.keyofview = keyOfNowView
+
+            
+        }
+        
+        
     }
     
 
