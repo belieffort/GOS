@@ -319,7 +319,7 @@
                                                         <color key="backgroundColor" red="0.0" green="0.35159769239999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="15"/>
                                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <state key="normal" title="참여하기">
+                                                        <state key="normal" title="참석 여부">
                                                             <color key="titleColor" red="1" green="0.50055467393325226" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
@@ -405,6 +405,7 @@
                         <outlet property="detailTime" destination="g7c-Ju-c9w" id="1Et-Ma-oow"/>
                         <outlet property="detailTitle" destination="9Dt-PC-7CE" id="S8j-Mu-cPA"/>
                         <outlet property="detailViewController" destination="82E-Hf-oPu" id="aAi-TX-tjr"/>
+                        <outlet property="joinStatusText" destination="XB8-UA-B1f" id="qyh-7i-huC"/>
                         <outlet property="writerImage" destination="yf7-h1-v8h" id="ECP-cM-Hso"/>
                         <outlet property="writerUserID" destination="Q8m-Sh-Jkj" id="gil-v3-dlZ"/>
                     </connections>
@@ -433,18 +434,28 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="69.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YlA-GG-Y3z">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YlA-GG-Y3z">
                                                     <rect key="frame" x="15" y="10" width="50" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="50" id="REA-CB-LHL"/>
+                                                    </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cXf-dm-yzm">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cXf-dm-yzm">
                                                     <rect key="frame" x="102" y="25" width="244" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="cXf-dm-yzm" firstAttribute="top" secondItem="bSC-z3-WS1" secondAttribute="topMargin" constant="14" id="3ox-f9-w9e"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="cXf-dm-yzm" secondAttribute="trailing" constant="14" id="FAZ-ip-xXh"/>
+                                                <constraint firstItem="cXf-dm-yzm" firstAttribute="leading" secondItem="YlA-GG-Y3z" secondAttribute="trailing" constant="37" id="HdR-jC-hH1"/>
+                                                <constraint firstItem="YlA-GG-Y3z" firstAttribute="leading" secondItem="bSC-z3-WS1" secondAttribute="leadingMargin" id="fA9-qW-Vll"/>
+                                                <constraint firstItem="YlA-GG-Y3z" firstAttribute="centerY" secondItem="cXf-dm-yzm" secondAttribute="centerY" id="gnO-uM-ICb"/>
+                                                <constraint firstItem="YlA-GG-Y3z" firstAttribute="top" secondItem="bSC-z3-WS1" secondAttribute="topMargin" constant="-1" id="hBL-Ih-2ky"/>
+                                                <constraint firstItem="YlA-GG-Y3z" firstAttribute="centerY" secondItem="bSC-z3-WS1" secondAttribute="centerY" id="sML-jb-FEf"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="attendantEmail" destination="cXf-dm-yzm" id="yrz-IA-lyT"/>
@@ -467,6 +478,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="64N-TA-0SP"/>
                     </view>
+                    <connections>
+                        <outlet property="attendantTableView" destination="RWJ-aT-Sa3" id="JVs-9z-ivX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x54-9K-Jjp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1188,7 +1202,6 @@
         <!--My Schedule Detail View Controller-->
         <scene sceneID="cQ1-sz-7HU">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KQe-Al-xNV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="rU3-Hc-K6g" customClass="MyScheduleDetailViewController" customModule="GOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="88M-Dg-pgV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="1000"/>
@@ -1410,6 +1423,7 @@
                         <segue destination="feB-3U-gpK" kind="show" identifier="EditPageSegue" id="eAq-qK-9T8"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KQe-Al-xNV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4944.8000000000002" y="2308.2458770614694"/>
         </scene>

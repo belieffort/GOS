@@ -20,21 +20,19 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var keysnap: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
     
-    var seletedCollectionViewCell:IndexPath!
+    var seletedCollectionViewCell:IndexPath?
     var keyOfNowView:String?
+    var sportsImageNameBox = ["Basketball","Soccer","Volleyball","Tennis","Baseball","Badminton","Table Tennis","Ice Hockey"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         configureDatabase()
-        
-        
     }
     
     //셀 클릭했을 때, 이동할 수 있게 해준다.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         seletedCollectionViewCell = indexPath
-//        print("==============\(String(describing: seletedCollectionViewCell))=============")
+//        print("==============\(String(describing: seletedCollectionViewCell!))=============")
         performSegue(withIdentifier: "MainDetailSegue", sender: self)
 
     }
@@ -47,37 +45,21 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "recruitCell", for: indexPath) as! RecruitCellCollectionViewCell
 
         let recruitmentSnapshot: DataSnapshot! = self.recruitment[indexPath.row]
-        guard let recruit = recruitmentSnapshot.value as? [String:String] else { return cell }
+        guard let recruit = recruitmentSnapshot.value as? [String:AnyObject] else { return cell }
                 
-        let sportsBox = recruit["Sports"] ?? "[Sports]"
-        switch sportsBox{
-        case "농구":
-            cell.playImages.image = UIImage(named: "Main_basketball.jpg")
-        case "축구":
-            cell.playImages.image = UIImage(named: "Main_soccer.jpg")
-        case "배구":
-            cell.playImages.image = UIImage(named: "Main_volleyball.jpg")
-        case "야구":
-            cell.playImages.image = UIImage(named: "Main_baseball.jpg")
-        case "탁구":
-            cell.playImages.image = UIImage(named: "Main_tabletennis.jpg")
-        case "테니스":
-            cell.playImages.image = UIImage(named: "Main_tennis.jpg")
-        case "배드민턴":
-            cell.playImages.image = UIImage(named: "Main_badminton.jpg")
-        case "아이스 하키":
-            cell.playImages.image = UIImage(named: "Main_icehockey.jpg")
-        default:
-            break
+        let sportsBox:AnyObject = recruit["Sports"]!
+        
+        if sportsImageNameBox.contains(sportsBox as! String) {
+            cell.playImages.image = UIImage(named: "\(sportsBox).jpg")
         }
+  
+        let time = recruit["Time"] ?? "[Time]" as AnyObject
+        let location = recruit["Location"] ?? "[Location]" as AnyObject
+        let numberOfPeople = recruit["NumberOfPeople"] ?? "[numberOfPeople]" as AnyObject
         
-        let time = recruit["Time"] ?? "[Time]"
-        let location = recruit["Location"] ?? "[Location]"
-        let numberOfPeople = recruit["NumberOfPeople"] ?? "[numberOfPeople]"
-        
-        cell.playSchedule.text = time
-        cell.playLocation.text = location
-        cell.recruitPerson.text = numberOfPeople
+        cell.playSchedule.text = time as? String
+        cell.playLocation.text = location as? String
+        cell.recruitPerson.text = numberOfPeople as? String
         
         cell.contentView.layer.cornerRadius = 4.0
         cell.contentView.layer.borderWidth = 1.0
@@ -109,26 +91,20 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     //어떤 데이터를 넘겨줄 것인지
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        let recruitmentSnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell.item]
-        guard let recruit = recruitmentSnapshot.value as? [String:String] else { return }
-        
-        // TODO - Recruitment의 child name을 찾으면 된다!!
-        let detailViewController = segue.destination as! DetailViewController
-        detailViewController.userID = recruit["Writer"] ?? "[Writer]"
-        detailViewController.titleBox = recruit["Title"] ?? "[Title]"
-        detailViewController.time = recruit["Time"] ?? "[Time]"
-        detailViewController.location = recruit["Location"] ?? "[Location]"
-        detailViewController.people = recruit["NumberOfPeople"] ?? "[NumberOfPeople]"
-        detailViewController.position = recruit["Position"] ?? "[Position]"
-        detailViewController.notice = recruit["Detail"] ?? "[Detail]"
-        detailViewController.sports = recruit["Sports"] ?? "[Sports]"
-        
-        let keySnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell.item]
-        keyOfNowView = keySnapshot.key
-        detailViewController.keyofview = keyOfNowView
-    
-    }
+        let recruitmentSnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell!.item]
 
+        guard let recruit = recruitmentSnapshot.value as? [String:AnyObject] else {return print("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!")}
+        
+        let detailViewController = segue.destination as! DetailViewController
+        detailViewController.userID = recruit["Writer"] as? String
+        detailViewController.titleBox = recruit["Title"] as? String
+        detailViewController.time = recruit["Time"] as? String
+        detailViewController.location = recruit["Location"] as? String
+        detailViewController.people = recruit["NumberOfPeople"] as? String
+        detailViewController.position = recruit["Position"] as? String
+        detailViewController.notice = recruit["Detail"] as? String
+        detailViewController.sports = recruit["Sports"] as? String
+        detailViewController.keyofview = recruitmentSnapshot.key
+    }
 
 }

@@ -86,7 +86,7 @@ class MyProfileDetailViewController: UIViewController, UIImagePickerControllerDe
                 URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
                 
                     if error != nil {
-                        print(error)
+                        print(error as Any)
                         return
                     }
                     DispatchQueue.main.async {

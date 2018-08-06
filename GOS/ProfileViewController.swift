@@ -7,7 +7,6 @@
 //
 
 
-//TODO - 회원가입을 한 유저가 로그아웃을 누르면, 회원가입 화면으로 돌아간다. 또한 아이디와 비밀번호가 그대로 있기 때문에, 초기화를 시켜주어야 한다.
 import UIKit
 import Firebase
 import FirebaseAuth
@@ -34,11 +33,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         profileID.setTitle("\(userID!)", for: .normal)
 //        view.addSubview(profileImage)
 //        profileImage.layer.cornerRadius = 60
-//        profileImage.layer.masksToBounds = true
-    }
+     }
     
     
     @IBAction func btnLogout(_ sender: Any) {
+        //TODO - 회원가입을 한 유저가 로그아웃을 누르면, 회원가입 화면으로 돌아간다. 또한 아이디와 비밀번호가 그대로 있기 때문에, 초기화를 시켜주어야 한다.
+
         do {
             try Auth.auth().signOut()
             view.window?.rootViewController?.dismiss(animated: true, completion: nil)
@@ -96,7 +96,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
                     
                     if error != nil {
-                        print(error)
+                        print(error as Any)
                         return
                     }
                     DispatchQueue.main.async {
@@ -110,11 +110,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     // TODO - Cell 삭제 기능이 필요하다.
     
-
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if  segue.identifier == "MyProfileDetail" {
@@ -124,7 +121,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         let myWriteDetail: DataSnapshot! = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
         guard let writeDetail = myWriteDetail.value as? [String:String] else { return }
         
-        // TODO - Recruitment의 child name을 찾으면 된다!!
         let myScheduleDetailViewController = segue.destination as! MyScheduleDetailViewController
         myScheduleDetailViewController.my_userID = writeDetail["Writer"] ?? "[Writer]"
         myScheduleDetailViewController.my_titleBox = writeDetail["Title"] ?? "[Title]"
@@ -136,9 +132,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         myScheduleDetailViewController.my_sports = writeDetail["Sports"] ?? "[Sports]"
         myScheduleDetailViewController.passedSelectedIndexpath = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
         
-//        let keySnapshot: DataSnapshot! = self.userLikeit[profileTableView.indexPathForSelectedRow!.row]
-//        keyOfUserLike = keySnapshot.key
-//        myScheduleDetailViewController.keyOfUserLike = keyOfUserLike
         
         }
     }

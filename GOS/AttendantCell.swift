@@ -13,8 +13,6 @@ class AttendantCell: UITableViewCell {
     @IBOutlet weak var attendantImage: UIImageView!
     @IBOutlet weak var attendantEmail: UILabel!
     
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

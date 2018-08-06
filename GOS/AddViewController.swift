@@ -19,6 +19,7 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     var messages: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
 
+    //UIPickerView를 사진으로 보여주고, 가로로 넘겨가면서 선택하게 하기!
     @IBOutlet weak var listOfSports: UIPickerView!
 
     @IBOutlet weak var addView_Title: UITextField!
@@ -29,7 +30,7 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     @IBOutlet weak var addView_Detail: UITextView!
     
     var selectedSports:String!
-    var sports = ["농구","축구","배구","테니스","야구","배드민턴","탁구","아이스 하키"]
+    var sports = ["Basketball","Soccer","Volleyball","Tennis","Baseball","Badminton","Table Tennis","Ice Hockey"]
     var countBox:String!
     var convertCountBox:Int!
     
@@ -81,8 +82,6 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
             self.ref.child("Recruitment").childByAutoId().setValue(mdata)
             countBox = "1"
             viewWillAppear(true)
-
-           
 
         } else {
             convertCountBox = Int(countBox!)
