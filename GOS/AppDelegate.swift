@@ -21,7 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = UIColor.white
         UINavigationBar.appearance().tintColor = UIColor.black
         UINavigationBar.appearance().shadowImage = UIImage()
-
         
         return true
     }
