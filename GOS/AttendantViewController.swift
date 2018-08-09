@@ -8,6 +8,7 @@
 
 
 //TODO DetailViewController에서 Button을 누르면 바로 업데이트 되어 화면에 나타나는 것이 아니라, RootView까지 돌아간 후 다시 참석자를 확인해야 정보를 확인할 수 있다.
+//TODO 글 작성자는 동시에 참가자로 속하도록 한다!
 import UIKit
 import Firebase
 import FirebaseAuth

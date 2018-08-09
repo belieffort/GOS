@@ -48,6 +48,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var favoriteStatus:Bool = true
     var userUid = Auth.auth().currentUser?.uid
     var userEmail = Auth.auth().currentUser?.email
+    var userImageURL:String?
     
     var keyofview:String?
     var anotherUserUID:String?
@@ -59,6 +60,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         configureDatabase()
         getUserUID()
+        getUserImageURL()
         initialButton()
         joinStatus()
         
@@ -171,16 +173,30 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func getUserUID() {
         ref = Database.database().reference()
-            ref.child("Users").queryOrdered(byChild: "email").queryEqual(toValue: userID).observe(.childAdded, with: {snapshot in
-                let writerUID = snapshot.key
-                if writerUID != self.userID! {
-                    self.anotherUserUID = writerUID
-                    self.showProfileImage()
-                } else {
-                    print("nope")
-                    self.showProfileImage()
-                }
-            })
+        ref.child("Users").queryOrdered(byChild: "email").queryEqual(toValue: userID).observe(.childAdded, with: {snapshot in
+            let writerUID = snapshot.key
+            if writerUID != self.userID! {
+                self.anotherUserUID = writerUID
+                self.showProfileImage()
+            } else {
+                print("nope")
+                self.showProfileImage()
+            }
+        })
+    }
+    
+    func getUserImageURL() {
+        ref = Database.database().reference()
+        ref.child("Users").child(userUid!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
+            if let userInfo = snapshot.value as? String {
+            self.userImageURL = userInfo
+                print("IMAGE URLLLLLLLLLLLLLLLLL\(self.userImageURL!)")
+            } else {
+                print("User don't have a profileimage")
+            }
+        })
+            
+        
     }
     
     func showProfileImage() {
@@ -221,8 +237,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("1Comments 개수!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\(comments.count)")
-        replyTableView.endUpdates()
         return comments.count
 
     }
@@ -234,28 +248,38 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let commentSnapshot: DataSnapshot! = self.comments[indexPath.row]
         guard let comment = commentSnapshot.value as? [String:String] else { return cell }
         
-        print("2\(comment["Replier"] ?? "[Replier]")")
         
         cell.reply_UserEmail.text = comment["Replier"] ?? "[Replier]"
         cell.reply_UserComment.text = comment["Comment"] ?? "[Comment]"
-//        cell.reply_UserImage
-    
+        if let url = comment["UserProfileImage"] {
+            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
+                
+                if error != nil {
+                    print(error as Any)
+                    return
+                }
+                DispatchQueue.main.async {
+                    let image = UIImage(data: data!)
+                    cell.reply_UserImage.image = image
+                }
+                }.resume()
+        }
         return cell
 
     }
     
     @IBAction func btnSendReply(_ sender: Any) {
         //TODO - 만약 TextField에 작성된 내용이 있다면, TextField에 작성된 내용을 Firebase에 업로드한다.
+        //TODO - 작성자 User의 image를 함께 넣어 놓는다.
         if replyWriteTextField.text != nil {
         var mdata = [String:String]()
         mdata["Comment"] = replyWriteTextField.text
         mdata["Replier"] = userEmail
+        mdata["UserProfileImage"] = userImageURL
         
         // Push data to Firebase Database
         self.ref.child("Recruitment").child("\(keyofview!)").child("Comment").childByAutoId().setValue(mdata)
             replyWriteTextField.text = nil
-            replyTableView.reloadData()
-
 
         } else {
             //TODO - 토스트 메세지를 보여준다.
@@ -276,19 +300,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         _refHandle = self.ref.child("Recruitment").child("\(keyofview!)").child("Comment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
             guard let strongSelf = self else { return }
 
-//            let writerSnapshot: DataSnapshot! = snapshot
-//            guard let writerEmail = writerSnapshot.value as? [String:String] else { return }
-//            let writer = writerEmail["Writer"]
-//            if writer == self?.userEmail! {
-            print("3Comment's COUNT!!!!  \(self?.comments.count)")
                 strongSelf.comments.append(snapshot)
                 strongSelf.replyTableView.insertRows(at: [IndexPath(row: strongSelf.comments.count-1, section: 0)], with: .automatic)
-//            }
         })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        //TODO - DetailView에서 참석하기 누른 후, 참석자를 확인하면 업데이트가 되어 있지 않아있다.
         if segue.identifier == "AttendantSegue" {
             let attendantViewController = segue.destination as! AttendantViewController
             attendantViewController.passedKey = joinKey
