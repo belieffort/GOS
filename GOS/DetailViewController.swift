@@ -12,7 +12,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DetailViewController: UIViewController {
 
     @IBOutlet weak var replyTableView: UITableView!
     @IBOutlet var detailViewController: UIView!
@@ -30,7 +30,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var detailNotice: UITextView!
     @IBOutlet weak var joinStatusText: UIButton!
     @IBOutlet weak var replyWriteTextField: UITextField!
-    
+
     var userID:String!
     var titleBox:String!
     var time:String!
@@ -52,14 +52,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var keyofview:String?
     var anotherUserUID:String?
+    var commentKey:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        replyTableView.beginUpdates()
+        
         replyTableView.endUpdates()
-
-        configureDatabase()
         getUserUID()
+        configureDatabase()
         getUserImageURL()
         initialButton()
         joinStatus()
@@ -67,7 +67,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         replyTableView.rowHeight = UITableView.automaticDimension
         replyTableView.estimatedRowHeight = 80
         replyTableView.tableFooterView = UIView()
-
 
         writerUserID.text = userID
         detailTitle.text = titleBox
@@ -80,7 +79,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         favoriteBarButtonOn = UIBarButtonItem(image: UIImage(named: "beforeStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOn))
         favoriteBarButtonOFF = UIBarButtonItem(image: UIImage(named: "afterStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOFF))
-        
 }
     
     func joinStatus() {
@@ -118,10 +116,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         })
     }
-    
 
     @objc func didTapFavoriteBarButtonOn() {
-        
         self.navigationItem.setRightBarButtonItems([self.favoriteBarButtonOFF], animated: false)
         if favoriteStatus == true {
             self.navigationItem.rightBarButtonItem = self.favoriteBarButtonOFF
@@ -171,6 +167,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    
     func getUserUID() {
         ref = Database.database().reference()
         ref.child("Users").queryOrdered(byChild: "email").queryEqual(toValue: userID).observe(.childAdded, with: {snapshot in
@@ -190,9 +187,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         ref.child("Users").child(userUid!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
             if let userInfo = snapshot.value as? String {
             self.userImageURL = userInfo
-                print("IMAGE URLLLLLLLLLLLLLLLLL\(self.userImageURL!)")
+//                print("IMAGE URLLLLLLLLLLLLLLLLL\(self.userImageURL!)")
             } else {
-                print("User don't have a profileimage")
+//                print("User don't have a profileimage")
             }
         })
             
@@ -236,40 +233,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return comments.count
-
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        let cell = replyTableView.dequeueReusableCell(withIdentifier: "ReplyCell", for: indexPath) as! ReplyTableViewCell
-        
-        let commentSnapshot: DataSnapshot! = self.comments[indexPath.row]
-        guard let comment = commentSnapshot.value as? [String:String] else { return cell }
-        
-        
-        cell.reply_UserEmail.text = comment["Replier"] ?? "[Replier]"
-        cell.reply_UserComment.text = comment["Comment"] ?? "[Comment]"
-        if let url = comment["UserProfileImage"] {
-            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
-                
-                if error != nil {
-                    print(error as Any)
-                    return
-                }
-                DispatchQueue.main.async {
-                    let image = UIImage(data: data!)
-                    cell.reply_UserImage.image = image
-                }
-                }.resume()
-        }
-        return cell
-
-    }
     
     @IBAction func btnSendReply(_ sender: Any) {
-        //TODO - 만약 TextField에 작성된 내용이 있다면, TextField에 작성된 내용을 Firebase에 업로드한다.
+        //TODO - 만약 TextField에 작성된 내용이 있다면, TextField에 작성된 내용을 Firebase에 업로드한다. ㅇ
         //TODO - 작성자 User의 image를 함께 넣어 놓는다.
         if replyWriteTextField.text != nil {
         var mdata = [String:String]()
@@ -306,10 +272,69 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //TODO - DetailView에서 참석하기 누른 후, 참석자를 확인하면 업데이트가 되어 있지 않아있다.
         if segue.identifier == "AttendantSegue" {
             let attendantViewController = segue.destination as! AttendantViewController
             attendantViewController.passedKey = joinKey
         }
     }
+}
+
+extension DetailViewController:UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return comments.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = replyTableView.dequeueReusableCell(withIdentifier: "ReplyCell", for: indexPath) as! ReplyTableViewCell
+        
+        let commentSnapshot: DataSnapshot! = self.comments[indexPath.row]
+        guard let comment = commentSnapshot.value as? [String:String] else { return cell }
+        
+        cell.delegate = self
+        cell.reply_UserEmail.text = comment["Replier"] ?? "[Replier]"
+        cell.reply_UserComment.text = comment["Comment"] ?? "[Comment]"
+        
+        if userEmail != comment["Replier"] {
+            cell.btnDeleteBackGroundView.isHidden = true
+        }
+        
+        if let url = comment["UserProfileImage"] {
+            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
+                
+                if error != nil {
+                    print(error as Any)
+                    return
+                }
+                DispatchQueue.main.async {
+                    let image = UIImage(data: data!)
+                    cell.reply_UserImage.image = image
+                }
+                }.resume()
+        }
+        return cell
+    }
+}
+
+
+extension DetailViewController:ReplyDeleteDelegate {
+    //댓글 삭제 부분
+    func didTapDelete(_ sender: UIButton) {
+        ref = Database.database().reference()
+
+        let btnPosition = sender.convert(sender.bounds.origin, to: replyTableView)
+        if let indexPath = replyTableView.indexPathForRow(at: btnPosition) {
+            let rowIndex =  indexPath.row
+            let replierSnapshot: DataSnapshot! = self.comments?[rowIndex]
+            commentKey = replierSnapshot.key
+            ref.child("Recruitment").child("\(keyofview!)").child("Comment").child("\(commentKey!)").removeValue()
+            comments.remove(at: rowIndex)
+            replyTableView.reloadData()
+        } else {
+            print("index error")
+        }
+    }
+    
+    
 }

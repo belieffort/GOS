@@ -19,10 +19,12 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     var recruitment: [DataSnapshot]! = []
     var keysnap: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
+    var userEmail = Auth.auth().currentUser?.email
     
     var seletedCollectionViewCell:IndexPath?
-    var keyOfNowView:String?
     var sportsImageNameBox = ["Basketball","Soccer","Volleyball","Tennis","Baseball","Badminton","Table Tennis","Ice Hockey"]
+    
+    var keyBox = [AnyObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +34,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     //셀 클릭했을 때, 이동할 수 있게 해준다.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         seletedCollectionViewCell = indexPath
-//        print("==============\(String(describing: seletedCollectionViewCell!))=============")
         performSegue(withIdentifier: "MainDetailSegue", sender: self)
 
     }
@@ -93,7 +94,8 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let recruitmentSnapshot: DataSnapshot! = self.recruitment[seletedCollectionViewCell!.item]
 
-        guard let recruit = recruitmentSnapshot.value as? [String:AnyObject] else {return print("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!")}
+        guard let recruit = recruitmentSnapshot.value as? [String:AnyObject] else
+        {return print("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!") }
         
         let detailViewController = segue.destination as! DetailViewController
         detailViewController.userID = recruit["Writer"] as? String
@@ -105,6 +107,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         detailViewController.notice = recruit["Detail"] as? String
         detailViewController.sports = recruit["Sports"] as? String
         detailViewController.keyofview = recruitmentSnapshot.key
+        
     }
-
+    
 }

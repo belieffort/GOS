@@ -12,7 +12,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-class MyScheduleDetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MyScheduleDetailViewController: UIViewController {
 
     @IBOutlet weak var my_ReplyTextField: UITextField!
     @IBOutlet weak var my_ReplyTableView: UITableView!
@@ -46,6 +46,7 @@ class MyScheduleDetailViewController: UIViewController, UITableViewDataSource, U
     var anotherUserUID:String?
     var isJoin:Bool?
     var joinKey:[String] = []
+    var commentKey:String?
 
 
     
@@ -196,36 +197,7 @@ class MyScheduleDetailViewController: UIViewController, UITableViewDataSource, U
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return comments.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = my_ReplyTableView.dequeueReusableCell(withIdentifier: "MyWriteReplyCell", for: indexPath) as! MyReplyTableViewCell
-        
-        let commentSnapshot: DataSnapshot! = self.comments[indexPath.row]
-        guard let comment = commentSnapshot.value as? [String:String] else { return cell }
-        
-        cell.my_ReplyUserEmail.text = comment["Replier"] ?? "[Replier]"
-        cell.my_ReplyUserComment.text = comment["Comment"] ?? "[Comment]"
-        cell.my_ReplyUserComment.sizeToFit()
-        if let url = comment["UserProfileImage"] {
-            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
-                
-                if error != nil {
-                    print(error as Any)
-                    return
-                }
-                DispatchQueue.main.async {
-                    let image = UIImage(data: data!)
-                    cell.my_ReplyUserImge.image = image
-                }
-                }.resume()
-        }
-        return cell
-        
-        }
+   
     
     deinit {
         if let refHandle = _refHandle {
@@ -261,4 +233,61 @@ class MyScheduleDetailViewController: UIViewController, UITableViewDataSource, U
         }
     
     }
+}
+
+extension MyScheduleDetailViewController:UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return comments.count
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = my_ReplyTableView.dequeueReusableCell(withIdentifier: "MyWriteReplyCell", for: indexPath) as! MyReplyTableViewCell
+        
+        let commentSnapshot: DataSnapshot! = self.comments[indexPath.row]
+        guard let comment = commentSnapshot.value as? [String:String] else { return cell }
+
+        cell.delegate = self
+        cell.my_ReplyUserEmail.text = comment["Replier"] ?? "[Replier]"
+        cell.my_ReplyUserComment.text = comment["Comment"] ?? "[Comment]"
+        if userEmail != comment["Replier"] {
+            cell.btnDeleteBackGroundView.isHidden = true
+        }
+        cell.my_ReplyUserComment.sizeToFit()
+        if let url = comment["UserProfileImage"] {
+            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
+                
+                if error != nil {
+                    print(error as Any)
+                    return
+                }
+                DispatchQueue.main.async {
+                    let image = UIImage(data: data!)
+                    cell.my_ReplyUserImge.image = image
+                }
+                }.resume()
+        }
+        return cell
+        
+    }
+    
+}
+
+extension MyScheduleDetailViewController:My_ReplyDeleteDelegate {
+    
+    func didTapDelete(_ sender: UIButton) {
+        ref = Database.database().reference()
+        
+        let btnPosition = sender.convert(sender.bounds.origin, to: my_ReplyTableView)
+        if let indexPath = my_ReplyTableView.indexPathForRow(at: btnPosition) {
+            let rowIndex =  indexPath.row
+            let replierSnapshot: DataSnapshot! = self.comments?[rowIndex]
+            commentKey = replierSnapshot.key
+            ref.child("Recruitment").child("\(my_PostKey!)").child("Comment").child("\(commentKey!)").removeValue()
+            comments.remove(at: rowIndex)
+            my_ReplyTableView.reloadData()
+        } else {
+            print("index error")
+        }
+    }
+    
 }

@@ -12,7 +12,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-class LikeDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class LikeDetailViewController: UIViewController {
 
     @IBOutlet weak var like_ReplyTableView: UITableView!
     @IBOutlet weak var writerImage: UIImageView!
@@ -45,6 +45,8 @@ class LikeDetailViewController: UIViewController, UITableViewDelegate, UITableVi
     var isJoin:Bool?
     var userImageURL:String?
     var joinKey:[String] = []
+    var commentKey:String?
+
 
 
     
@@ -183,37 +185,7 @@ class LikeDetailViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return comments.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = like_ReplyTableView.dequeueReusableCell(withIdentifier: "LikeReplyCell", for: indexPath) as! LikeReplyTableViewCell
-        
-        let commentSnapshot: DataSnapshot! = self.comments[indexPath.row]
-        guard let comment = commentSnapshot.value as? [String:String] else { return cell }
-        
-        cell.like_ReplyUserEmail.text = comment["Replier"] ?? "[Replier]"
-        cell.like_ReplyUserComment.text = comment["Comment"] ?? "[Comment]"
-        cell.like_ReplyUserComment.sizeToFit()
-        if let url = comment["UserProfileImage"] {
-            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
-                
-                if error != nil {
-                    print(error as Any)
-                    return
-                }
-                DispatchQueue.main.async {
-                    let image = UIImage(data: data!)
-                    cell.like_ReplyUserImage.image = image
-                }
-                }.resume()
-        }
-        return cell
-        
-    }
-    
+   
     deinit {
         if let refHandle = _refHandle {
             self.ref.child("Recruitment").removeObserver(withHandle: refHandle)}
@@ -243,4 +215,64 @@ class LikeDetailViewController: UIViewController, UITableViewDelegate, UITableVi
    
 
 
+}
+
+extension LikeDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return comments.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = like_ReplyTableView.dequeueReusableCell(withIdentifier: "LikeReplyCell", for: indexPath) as! LikeReplyTableViewCell
+        
+        let commentSnapshot: DataSnapshot! = self.comments[indexPath.row]
+        guard let comment = commentSnapshot.value as? [String:String] else { return cell }
+
+        cell.delegate = self
+        cell.like_ReplyUserEmail.text = comment["Replier"] ?? "[Replier]"
+        cell.like_ReplyUserComment.text = comment["Comment"] ?? "[Comment]"
+
+        if userEmail != comment["Replier"] {
+            cell.btnDeleteBackGroundView.isHidden = true
+        }
+
+        cell.like_ReplyUserComment.sizeToFit()
+        if let url = comment["UserProfileImage"] {
+            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
+                
+                if error != nil {
+                    print(error as Any)
+                    return
+                }
+                DispatchQueue.main.async {
+                    let image = UIImage(data: data!)
+                    cell.like_ReplyUserImage.image = image
+                }
+                }.resume()
+        }
+        return cell
+    }
+}
+
+extension LikeDetailViewController:Like_ReplyDeleteDelegate {
+    //댓글 삭제 부분
+    func didTapDelete(_ sender: UIButton) {
+        ref = Database.database().reference()
+        
+        let btnPosition = sender.convert(sender.bounds.origin, to: like_ReplyTableView)
+        if let indexPath = like_ReplyTableView.indexPathForRow(at: btnPosition) {
+            let rowIndex =  indexPath.row
+            let replierSnapshot: DataSnapshot! = self.comments?[rowIndex]
+            commentKey = replierSnapshot.key
+            ref.child("Recruitment").child("\(like_ReplyTableView!)").child("Comment").child("\(commentKey!)").removeValue()
+            comments.remove(at: rowIndex)
+            like_ReplyTableView.reloadData()
+        } else {
+            print("index error")
+        }
+    }
+    
+    
 }

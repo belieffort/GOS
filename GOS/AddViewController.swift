@@ -64,45 +64,19 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
         //TODO - Firebase에 업로드 하자마자, 업로드한 내용을 바로 기기에 적용시키는 방법이 없는지?? 왜냐하면 여러 명이 글을 동시에 쓰면 글이 서로 덮어질 것 같다.
       
         var mdata = [String:String]()
-        
-        if Int(countBox) == 0 {
-            mdata["Title"] =  addView_Title.text
-            mdata["Sports"] =  selectedSports
-            mdata["Time"] = addView_Time.text
-            mdata["Location"] = addView_Loaction.text
-            mdata["NumberOfPeople"] = addView_Person.text
-            mdata["Position"] = addView_position.text
-            mdata["Detail"] = addView_Detail.text
-            mdata["Writer"] = Auth.auth().currentUser?.email
-            
-            convertCountBox = Int(countBox!)
-            print(convertCountBox!)
-            
-            // Push data to Firebase Database
-            self.ref.child("Recruitment").childByAutoId().setValue(mdata)
-            countBox = "1"
-            viewWillAppear(true)
 
-        } else {
-            convertCountBox = Int(countBox!)
-            
-            mdata["Title"] =  addView_Title.text
-            mdata["Sports"] =  selectedSports
-            mdata["Time"] = addView_Time.text
-            mdata["Location"] = addView_Loaction.text
-            mdata["NumberOfPeople"] = addView_Person.text
-            mdata["Position"] = addView_position.text
-            mdata["Detail"] = addView_Detail.text
-            mdata["Writer"] = Auth.auth().currentUser?.email
-//            mdata["WriteNumber"] = "\(convertCountBox!)"
+        mdata["Title"] =  addView_Title.text
+        mdata["Sports"] =  selectedSports
+        mdata["Time"] = addView_Time.text
+        mdata["Location"] = addView_Loaction.text
+        mdata["NumberOfPeople"] = addView_Person.text
+        mdata["Position"] = addView_position.text
+        mdata["Detail"] = addView_Detail.text
+        mdata["Writer"] = Auth.auth().currentUser?.email
 
-
-            // Push data to Firebase Database
-            self.ref.child("Recruitment").childByAutoId().setValue(mdata)
-            convertCountBox += 1
-            countBox = "\(convertCountBox!)"
-        }
-    
+        // Push data to Firebase Database
+        self.ref.child("Recruitment").childByAutoId().setValue(mdata)
+        viewWillAppear(true)
     }
     
     

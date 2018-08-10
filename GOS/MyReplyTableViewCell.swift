@@ -8,11 +8,27 @@
 
 import UIKit
 
+protocol My_ReplyDeleteDelegate {
+    func didTapDelete(_ sender: UIButton)
+}
+
+
 class MyReplyTableViewCell: UITableViewCell {
 
     @IBOutlet weak var my_ReplyUserImge: UIImageView!
     @IBOutlet weak var my_ReplyUserEmail: UILabel!
     @IBOutlet weak var my_ReplyUserComment: UILabel!
+    @IBOutlet weak var btnDeleteBackGroundView: UIVisualEffectView!
+    @IBOutlet weak var btnDelete: UIButton!
+    
+    var delegate:My_ReplyDeleteDelegate?
+
+    
+    @IBAction func myReply_btnDelete(_ sender: Any) {
+        delegate?.didTapDelete(btnDelete)
+        print("Delete")
+    }
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
