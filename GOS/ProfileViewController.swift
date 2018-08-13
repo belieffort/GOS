@@ -13,7 +13,7 @@ import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
 
-class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ProfileViewController: UIViewController {
     
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var profileTableView: UITableView!
@@ -35,6 +35,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
 //        view.addSubview(profileImage)
 //        profileImage.layer.cornerRadius = 60
      }
+
     
     @IBAction func btnLogout(_ sender: Any) {
         //TODO - 회원가입을 한 유저가 로그아웃을 누르면, 회원가입 화면으로 돌아간다. 또한 아이디와 비밀번호가 그대로 있기 때문에, 초기화를 시켜주어야 한다.
@@ -48,28 +49,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        performSegue(withIdentifier: "MyWriteDetail", sender: self)
-
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        print("What's the matter!!!!!!!!!!!\(myRecruitment.count)")
-
-        return myRecruitment.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as! ProfileTableViewCell
-        
-        let recruitmentSnapshot: DataSnapshot! = self.myRecruitment[indexPath.row]
-        guard let recruitment = recruitmentSnapshot.value as? [String:AnyObject] else {return cell }
-        
-        cell.myScheduleTime.text = recruitment["Time"] as! String
-        cell.myScheduleLocation.text = recruitment["Location"] as! String
-        
-        return cell
-    }
+  
 
     deinit {
         if let refHandle = _refHandle {
@@ -121,22 +101,47 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         if  segue.identifier == "MyProfileDetail" {
 
         } else {
-        
-        let myWriteDetail: DataSnapshot! = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
-        guard let writeDetail = myWriteDetail.value as? [String:AnyObject] else { return }
-        
-        let myScheduleDetailViewController = segue.destination as! MyScheduleDetailViewController
-        myScheduleDetailViewController.my_userID = writeDetail["Writer"] as? String
-        myScheduleDetailViewController.my_titleBox = writeDetail["Title"] as? String
-        myScheduleDetailViewController.my_time = writeDetail["Time"] as? String
-        myScheduleDetailViewController.my_location = writeDetail["Location"] as? String
-        myScheduleDetailViewController.my_people = writeDetail["NumberOfPeople"] as? String
-        myScheduleDetailViewController.my_position = writeDetail["Position"] as? String
-        myScheduleDetailViewController.my_notice = writeDetail["Detail"] as? String
-        myScheduleDetailViewController.my_sports = writeDetail["Sports"] as? String
-        myScheduleDetailViewController.passedSelectedIndexpath = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
-        myScheduleDetailViewController.my_PostKey = myWriteDetail.key
-        
+            
+            let myWriteDetail: DataSnapshot! = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
+            guard let writeDetail = myWriteDetail.value as? [String:AnyObject] else { return }
+            
+            let myScheduleDetailViewController = segue.destination as! MyScheduleDetailViewController
+            myScheduleDetailViewController.my_userID = writeDetail["Writer"] as? String
+            myScheduleDetailViewController.my_titleBox = writeDetail["Title"] as? String
+            myScheduleDetailViewController.my_time = writeDetail["Time"] as? String
+            myScheduleDetailViewController.my_location = writeDetail["Location"] as? String
+            myScheduleDetailViewController.my_people = writeDetail["NumberOfPeople"] as? String
+            myScheduleDetailViewController.my_position = writeDetail["Position"] as? String
+            myScheduleDetailViewController.my_notice = writeDetail["Detail"] as? String
+            myScheduleDetailViewController.my_sports = writeDetail["Sports"] as? String
+            myScheduleDetailViewController.passedSelectedIndexpath = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
+            myScheduleDetailViewController.my_PostKey = myWriteDetail.key
+            
         }
+    }
+}
+
+extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //        performSegue(withIdentifier: "MyWriteDetail", sender: self)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //        print("What's the matter!!!!!!!!!!!\(myRecruitment.count)")
+        
+        return myRecruitment.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as! ProfileTableViewCell
+        
+        let recruitmentSnapshot: DataSnapshot! = self.myRecruitment[indexPath.row]
+        guard let recruitment = recruitmentSnapshot.value as? [String:AnyObject] else {return cell }
+        
+        cell.myScheduleTime.text = recruitment["Time"] as! String
+        cell.myScheduleLocation.text = recruitment["Location"] as! String
+        
+        return cell
     }
 }

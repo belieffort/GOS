@@ -71,8 +71,15 @@ class MyScheduleDetailViewController: UIViewController {
         
         let edit = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped))
         let delete = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashTapped))
+        my_writerImage.isUserInteractionEnabled = true
+        my_writerImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
 
         navigationItem.rightBarButtonItems = [delete, edit]
+    }
+    
+    @objc private func imageTapped(_ recognizer: UITapGestureRecognizer) {
+        print("image tapped")
+        performSegue(withIdentifier: "MyToUserProfileDetail", sender: self)
     }
     
     @objc func editTapped() {
@@ -230,6 +237,10 @@ class MyScheduleDetailViewController: UIViewController {
         
         let myWriteEditViewController = segue.destination as! MyWriteEditViewController
         myWriteEditViewController.passedBox = writeEdit["Location"] ?? "[Location]"
+        } else if segue.identifier == "MyToUserProfileDetail" {
+            let myToUserProfileDetail = segue.destination as! ProfileUserInfoViewController
+//            myToUserProfileDetail.passedBox = "마이 페이지에서 온 데이터"
+            
         }
     
     }

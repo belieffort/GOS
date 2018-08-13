@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 
-class FavoriteController: UIViewController, UITableViewDataSource, UITableViewDelegate{
+class FavoriteController: UIViewController {
     
     @IBOutlet weak var likeTableView: UITableView!
     @IBOutlet weak var scheduleview_Schedule: UILabel!
@@ -26,58 +26,14 @@ class FavoriteController: UIViewController, UITableViewDataSource, UITableViewDe
     var uid = Auth.auth().currentUser?.uid
     var seletedTableViewCell:IndexPath!
     var keyOfUserLike:String?
-
-    
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserLikeitArray()
-        
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "LikeDetailSegue", sender: self)
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userLikeit.count
-    }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "userLikeCell", for: indexPath) as! FavoriteTableViewCell
-     
-        let likeitSnapshot: DataSnapshot! = self.userLikeit[indexPath.row]
-        guard let userLike = likeitSnapshot.value as? [String:String] else { return cell }
-        
-        let time = userLike["Time"] ?? "[Time]"
-        let location = userLike["Location"] ?? "[Location]"
-        let numberOfPeople = userLike["NumberOfPeople"] ?? "[numberOfPeople]"
 
-        cell.likeTime.text = time
-        cell.likeLocation.text = location
-        cell.likePeople.text = numberOfPeople
-        
-  
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let deleteSnap : DataSnapshot = self.userLikeit[indexPath.row]
-        keyBox = deleteSnap.key
-        print(keyBox!)
-        
-        let deleteRef = Database.database().reference().child("Users").child(uid!).child("Likeit").child("\(keyBox!)")
-        
-        if editingStyle == .delete {
-
-            deleteRef.removeValue()
-            userLikeit.remove(at: indexPath.row)
-            tableView.reloadData()
-
-            }
-        }
-    
     deinit {
         if let refHandle = _refHandle {
             self.ref.child("Users").removeObserver(withHandle: refHandle)
@@ -86,9 +42,12 @@ class FavoriteController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func getUserLikeitArray() {
         ref = Database.database().reference()
-        _refHandle = self.ref.child("Users").child(self.uid!).child("Likeit").observe(.childAdded, with: { [weak self] (snapshot) in
+        _refHandle = self.ref.child("Users").child(self.uid!).child("Likeit")
+            .queryOrdered(byChild: "writeTime")
+            .observe(.childAdded, with: { [weak self] (snapshot) in
                 guard let strongSelf = self else { return }
-                strongSelf.userLikeit.append(snapshot)
+//                strongSelf.userLikeit.append(snapshot)
+                strongSelf.userLikeit.insert(snapshot, at: 0)
                 strongSelf.likeTableView.insertRows(at: [IndexPath(row: strongSelf.userLikeit.count-1, section: 0)], with: .automatic)
         })
     }
@@ -117,8 +76,53 @@ class FavoriteController: UIViewController, UITableViewDataSource, UITableViewDe
         likeDetailViewController.keyOfUserLike = keyOfUserLike
 
     }
+}
+
+extension FavoriteController:UITableViewDataSource, UITableViewDelegate {
     
-  
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "LikeDetailSegue", sender: self)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return userLikeit.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userLikeCell", for: indexPath) as! FavoriteTableViewCell
+        
+        let likeitSnapshot: DataSnapshot! = self.userLikeit[indexPath.row]
+        guard let userLike = likeitSnapshot.value as? [String:AnyObject] else { return cell }
+        
+        let time = userLike["Time"] as? String
+        let location = userLike["Location"] as? String
+        let numberOfPeople = userLike["NumberOfPeople"] as? String
+        
+        cell.likeTime.text = time
+        cell.likeLocation.text = location
+        cell.likePeople.text = numberOfPeople
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let deleteSnap : DataSnapshot = self.userLikeit[indexPath.row]
+        keyBox = deleteSnap.key
+        print(keyBox!)
+        
+        let deleteRef = Database.database().reference().child("Users").child(uid!).child("Likeit").child("\(keyBox!)")
+        
+        if editingStyle == .delete {
+            
+            deleteRef.removeValue()
+            userLikeit.remove(at: indexPath.row)
+            tableView.reloadData()
+            
+        }
+    }
     
     
 }
+
+
+

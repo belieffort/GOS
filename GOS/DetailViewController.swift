@@ -76,10 +76,19 @@ class DetailViewController: UIViewController {
         detailPosition.text = position
         detailNotice.text = notice
         detailNotice.isEditable = false
+        self.hideKeyboardTappedAround()
         
         favoriteBarButtonOn = UIBarButtonItem(image: UIImage(named: "beforeStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOn))
         favoriteBarButtonOFF = UIBarButtonItem(image: UIImage(named: "afterStar"), style: .plain, target: self, action: #selector(didTapFavoriteBarButtonOFF))
+        
+        writerImage.isUserInteractionEnabled = true
+        writerImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
 }
+    
+    @objc private func imageTapped(_ recognizer: UITapGestureRecognizer) {
+        print("image tapped")
+        performSegue(withIdentifier: "MainToUserProfileDetail", sender: self)
+    }
     
     func joinStatus() {
         ref = Database.database().reference()
@@ -275,6 +284,9 @@ class DetailViewController: UIViewController {
         if segue.identifier == "AttendantSegue" {
             let attendantViewController = segue.destination as! AttendantViewController
             attendantViewController.passedKey = joinKey
+        } else if segue.identifier == "MainToUserProfileDetail" {
+            let mainToUserProfileDetail = segue.destination as! ProfileUserInfoViewController
+//            mainToUserProfileDetail.passedBox = "메인 화면에서 온 데이터"
         }
     }
 }
@@ -335,6 +347,21 @@ extension DetailViewController:ReplyDeleteDelegate {
             print("index error")
         }
     }
+}
+
+extension DetailViewController {
+    func hideKeyboardTappedAround() {
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(DetailViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
     
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
 }

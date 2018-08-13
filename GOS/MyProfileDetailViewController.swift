@@ -32,7 +32,6 @@ class MyProfileDetailViewController: UIViewController, UIImagePickerControllerDe
         myImage.layer.masksToBounds = true
         
     
-        
         // create tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(gesture:)))
         // add it to the image view;

@@ -11,9 +11,18 @@ pod 'Firebase/Database'
 pod 'Firebase/Auth'
 pod 'Firebase/Storage'
 
-
 #textview placeholder
 pod 'UITextView+Placeholder'
+
+#TagListView
+pod 'TagListView', '~> 1.0'
+
+post_install do |installer|
+    installer.pods_project.build_configurations.each do |config|
+        config.build_settings.delete('CODE_SIGNING_ALLOWED')
+        config.build_settings.delete('CODE_SIGNING_REQUIRED')
+    end
+end
 
 
 end

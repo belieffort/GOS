@@ -18,10 +18,13 @@
 		724F9C8A20F7710C0098D872 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8820F7710C0098D872 /* Main.storyboard */; };
 		724F9C8C20F7710E0098D872 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8B20F7710E0098D872 /* Assets.xcassets */; };
 		724F9C8F20F7710E0098D872 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 724F9C8D20F7710E0098D872 /* LaunchScreen.storyboard */; };
+		7256BFF72120896600D14950 /* ProfileUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7256BFF62120896600D14950 /* ProfileUserInfoViewController.swift */; };
 		7260A6A4210F841C00399FC0 /* MyScheduleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7260A6A3210F841C00399FC0 /* MyScheduleDetailViewController.swift */; };
 		7260A6A6210F842F00399FC0 /* MyProfileDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7260A6A5210F842F00399FC0 /* MyProfileDetailViewController.swift */; };
 		7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7286BD2620F88A19005622CE /* RecruitCellCollectionViewCell.swift */; };
 		7293721E211982F300C5A372 /* ReplyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7293721D211982F300C5A372 /* ReplyTableViewCell.swift */; };
+		72B75BAF212099DC00827CB2 /* ProfileInterestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B75BAE212099DB00827CB2 /* ProfileInterestViewController.swift */; };
+		72B75BB1212099EC00827CB2 /* ProfilePlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B75BB0212099EC00827CB2 /* ProfilePlanViewController.swift */; };
 		72E83B6F211B0B4C00045AA0 /* MyReplyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E83B6E211B0B4C00045AA0 /* MyReplyTableViewCell.swift */; };
 		72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */; };
 		72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */; };
@@ -48,10 +51,13 @@
 		724F9C8B20F7710E0098D872 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		724F9C8E20F7710E0098D872 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		724F9C9020F7710E0098D872 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7256BFF62120896600D14950 /* ProfileUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserInfoViewController.swift; sourceTree = "<group>"; };
 		7260A6A3210F841C00399FC0 /* MyScheduleDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyScheduleDetailViewController.swift; sourceTree = "<group>"; };
 		7260A6A5210F842F00399FC0 /* MyProfileDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileDetailViewController.swift; sourceTree = "<group>"; };
 		7286BD2620F88A19005622CE /* RecruitCellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitCellCollectionViewCell.swift; sourceTree = "<group>"; };
 		7293721D211982F300C5A372 /* ReplyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyTableViewCell.swift; sourceTree = "<group>"; };
+		72B75BAE212099DB00827CB2 /* ProfileInterestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInterestViewController.swift; sourceTree = "<group>"; };
+		72B75BB0212099EC00827CB2 /* ProfilePlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePlanViewController.swift; sourceTree = "<group>"; };
 		72E83B6E211B0B4C00045AA0 /* MyReplyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReplyTableViewCell.swift; sourceTree = "<group>"; };
 		72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteController.swift; sourceTree = "<group>"; };
@@ -133,6 +139,9 @@
 				7293721D211982F300C5A372 /* ReplyTableViewCell.swift */,
 				72144829211AE2A50040F7F3 /* LikeReplyTableViewCell.swift */,
 				72E83B6E211B0B4C00045AA0 /* MyReplyTableViewCell.swift */,
+				7256BFF62120896600D14950 /* ProfileUserInfoViewController.swift */,
+				72B75BAE212099DB00827CB2 /* ProfileInterestViewController.swift */,
+				72B75BB0212099EC00827CB2 /* ProfilePlanViewController.swift */,
 			);
 			path = GOS;
 			sourceTree = "<group>";
@@ -241,7 +250,8 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GOS/Pods-GOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/TagListView/TagListView.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextView+Placeholder/UITextView_Placeholder.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
@@ -249,7 +259,8 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TagListView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextView_Placeholder.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
@@ -268,12 +279,15 @@
 			files = (
 				720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */,
 				7260A6A6210F842F00399FC0 /* MyProfileDetailViewController.swift in Sources */,
+				72B75BAF212099DC00827CB2 /* ProfileInterestViewController.swift in Sources */,
 				72478B532113421000E92378 /* AttendantCell.swift in Sources */,
 				7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */,
+				72B75BB1212099EC00827CB2 /* ProfilePlanViewController.swift in Sources */,
 				72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */,
 				72EDBE6F20FA57F8007E1473 /* FavoriteTableViewCell.swift in Sources */,
 				721217E2210F04C800BFFC54 /* LikeDetailViewController.swift in Sources */,
 				72EDBE7120FA5CC1007E1473 /* AddViewController.swift in Sources */,
+				7256BFF72120896600D14950 /* ProfileUserInfoViewController.swift in Sources */,
 				724F9C8520F7710C0098D872 /* AppDelegate.swift in Sources */,
 				7214482A211AE2A50040F7F3 /* LikeReplyTableViewCell.swift in Sources */,
 				72EDBE7320FB79B4007E1473 /* ProfileViewController.swift in Sources */,
@@ -439,6 +453,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HBD.GOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -458,6 +474,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.HBD.GOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

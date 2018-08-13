@@ -33,6 +33,8 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     var sports = ["Basketball","Soccer","Volleyball","Tennis","Baseball","Badminton","Table Tennis","Ice Hockey"]
     var countBox:String!
     var convertCountBox:Int!
+    var writeTime:String?
+    
     
 
     override func viewDidLoad() {
@@ -62,7 +64,12 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     @IBAction func btnDone(_ sender: Any) {
         //TODO - 버튼 눌렀을 때, 홈으로 이동하게 해야한다
         //TODO - Firebase에 업로드 하자마자, 업로드한 내용을 바로 기기에 적용시키는 방법이 없는지?? 왜냐하면 여러 명이 글을 동시에 쓰면 글이 서로 덮어질 것 같다.
-      
+//        let now = Date()
+//        let date = DateFormatter()
+//        date.locale = Locale(identifier: "ko_kr")
+//        date.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//        writeTime = date.string(from: now)
+        
         var mdata = [String:String]()
 
         mdata["Title"] =  addView_Title.text
@@ -73,6 +80,7 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
         mdata["Position"] = addView_position.text
         mdata["Detail"] = addView_Detail.text
         mdata["Writer"] = Auth.auth().currentUser?.email
+        mdata["writeTime"] = writeTime!
 
         // Push data to Firebase Database
         self.ref.child("Recruitment").childByAutoId().setValue(mdata)

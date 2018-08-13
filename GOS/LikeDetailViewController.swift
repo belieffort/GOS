@@ -47,9 +47,6 @@ class LikeDetailViewController: UIViewController {
     var joinKey:[String] = []
     var commentKey:String?
 
-
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         like_ReplyTableView.endUpdates()
@@ -67,8 +64,15 @@ class LikeDetailViewController: UIViewController {
         like_detailPosition.text = like_position
         like_detailNotice.text = like_notice
         like_detailNotice.isEditable = false
+        self.hideKeyboardTappedAround()
         
-
+        writerImage.isUserInteractionEnabled = true
+        writerImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
+    }
+    
+    @objc private func imageTapped(_ recognizer: UITapGestureRecognizer) {
+        print("image tapped")
+        performSegue(withIdentifier: "LikeToUserProfileDetail", sender: self)
     }
     
     func joinStatus() {
@@ -131,7 +135,7 @@ class LikeDetailViewController: UIViewController {
     
     func getUserUID() {
         ref = Database.database().reference()
-        ref.child("Users").queryOrdered(byChild: "email").queryEqual(toValue: like_userId).observe(.childAdded, with: {snapshot in
+        ref.child("Users").queryOrdered(byChild:"email").queryEqual(toValue: like_userId).observe(.childAdded, with: {snapshot in
             let writerUID = snapshot.key
             print("NOW!!! \(writerUID)")
             if writerUID != self.like_userId! {
@@ -210,11 +214,13 @@ class LikeDetailViewController: UIViewController {
         if segue.identifier == "AttendantSegue" {
             let attendantViewController = segue.destination as! AttendantViewController
             attendantViewController.passedKey = joinKey
+        } else if segue.identifier == "LikeToUserProfileDetail" {
+            let likeToUserProfileDetailVC = segue.destination as! ProfileUserInfoViewController
+//            likeToUserProfileDetailVC.passedBox = "관심일정에서 온 데이터"
         }
+        
+        
     }
-   
-
-
 }
 
 extension LikeDetailViewController: UITableViewDelegate, UITableViewDataSource {
@@ -228,13 +234,13 @@ extension LikeDetailViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = like_ReplyTableView.dequeueReusableCell(withIdentifier: "LikeReplyCell", for: indexPath) as! LikeReplyTableViewCell
         
         let commentSnapshot: DataSnapshot! = self.comments[indexPath.row]
-        guard let comment = commentSnapshot.value as? [String:String] else { return cell }
+        guard let comment = commentSnapshot.value as? [String:AnyObject] else { return cell }
 
         cell.delegate = self
-        cell.like_ReplyUserEmail.text = comment["Replier"] ?? "[Replier]"
-        cell.like_ReplyUserComment.text = comment["Comment"] ?? "[Comment]"
+        cell.like_ReplyUserEmail.text = comment["Replier"] as? String
+        cell.like_ReplyUserComment.text = comment["Comment"] as? String
 
-        if userEmail != comment["Replier"] {
+        if userEmail != comment["Replier"] as? String {
             cell.btnDeleteBackGroundView.isHidden = true
         }
 
@@ -266,13 +272,29 @@ extension LikeDetailViewController:Like_ReplyDeleteDelegate {
             let rowIndex =  indexPath.row
             let replierSnapshot: DataSnapshot! = self.comments?[rowIndex]
             commentKey = replierSnapshot.key
-            ref.child("Recruitment").child("\(like_ReplyTableView!)").child("Comment").child("\(commentKey!)").removeValue()
+            ref.child("Recruitment").child("\(keyOfUserLike!)")
+                .child("Comment").child("\(commentKey!)").removeValue()
             comments.remove(at: rowIndex)
             like_ReplyTableView.reloadData()
         } else {
             print("index error")
         }
     }
+}
+
+extension LikeDetailViewController {
+    func hideKeyboardTappedAround() {
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LikeDetailViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
     
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
 }
