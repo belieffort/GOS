@@ -15,6 +15,7 @@ import FirebaseDatabase
 class HomeViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
     @IBOutlet weak var homeCollectionView: UICollectionView!
+    
     var ref: DatabaseReference!
     var recruitment: [DataSnapshot]! = []
     var keysnap: [DataSnapshot]! = []
@@ -29,10 +30,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDatabase()
-        
-        
-        
-        
     }
     
     //셀 클릭했을 때, 이동할 수 있게 해준다.
@@ -89,11 +86,11 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         ref = Database.database().reference()
         // Listen for new messages in the Firebase database
                 _refHandle = self.ref.child("Recruitment")
-                    .queryOrdered(byChild: "writeTime")
+//                    .queryOrdered(byChild: "writeTime")
                     .observe(.childAdded, with: { [weak self] (snapshot) -> Void in
                     guard let strongSelf = self else { return }
-//                    strongSelf.recruitment.append(snapshot)
-                    strongSelf.recruitment.insert(snapshot, at: 0)
+                    strongSelf.recruitment.append(snapshot)
+//                    strongSelf.recruitment.insert(snapshot, at: 0)
                     strongSelf.homeCollectionView.insertItems(at: [IndexPath(row: strongSelf.recruitment.count-1, section: 0)])
                 })
     }
@@ -105,7 +102,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         {return print("!!!!!!!!!!!!!!!!!error!!!!!!!!!!!!!!!!!") }
         
         let detailViewController = segue.destination as! DetailViewController
-        detailViewController.userID = recruit["Writer"] as? String
+        detailViewController.userID = recruit["WriterEmail"] as? String
         detailViewController.titleBox = recruit["Title"] as? String
         detailViewController.time = recruit["Time"] as? String
         detailViewController.location = recruit["Location"] as? String
@@ -114,7 +111,6 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         detailViewController.notice = recruit["Detail"] as? String
         detailViewController.sports = recruit["Sports"] as? String
         detailViewController.keyofview = recruitmentSnapshot.key
-        
     }
     
 }

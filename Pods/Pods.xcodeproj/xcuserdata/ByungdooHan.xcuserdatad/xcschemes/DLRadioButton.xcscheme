@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AEAD937BE3F81B0C81608F0E7A6ECE71"
-               BlueprintName = "TagListView"
+               BlueprintIdentifier = "F6A77E2753C279F67F70C5C21D6FAE15"
+               BlueprintName = "DLRadioButton"
                ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "TagListView.framework">
+               BuildableName = "DLRadioButton.framework">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

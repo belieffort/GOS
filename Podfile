@@ -17,6 +17,9 @@ pod 'UITextView+Placeholder'
 #TagListView
 pod 'TagListView', '~> 1.0'
 
+#Radio Button
+pod 'DLRadioButton', '~> 1.4'
+
 post_install do |installer|
     installer.pods_project.build_configurations.each do |config|
         config.build_settings.delete('CODE_SIGNING_ALLOWED')

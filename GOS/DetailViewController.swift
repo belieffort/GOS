@@ -30,7 +30,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var detailNotice: UITextView!
     @IBOutlet weak var joinStatusText: UIButton!
     @IBOutlet weak var replyWriteTextField: UITextField!
-
+    
     var userID:String!
     var titleBox:String!
     var time:String!
@@ -39,6 +39,7 @@ class DetailViewController: UIViewController {
     var position:String!
     var notice:String!
     var sports:String!
+    var postKey:[String] = []
     var nowKey:[String] = []
     var joinKey:[String] = []
     var isJoin:Bool?
@@ -54,9 +55,10 @@ class DetailViewController: UIViewController {
     var anotherUserUID:String?
     var commentKey:String?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        ref = Database.database().reference()
         replyTableView.endUpdates()
         getUserUID()
         configureDatabase()
@@ -67,7 +69,7 @@ class DetailViewController: UIViewController {
         replyTableView.rowHeight = UITableView.automaticDimension
         replyTableView.estimatedRowHeight = 80
         replyTableView.tableFooterView = UIView()
-
+        
         writerUserID.text = userID
         detailTitle.text = titleBox
         detailTime.text = time
@@ -83,6 +85,7 @@ class DetailViewController: UIViewController {
         
         writerImage.isUserInteractionEnabled = true
         writerImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
+        
 }
     
     @objc private func imageTapped(_ recognizer: UITapGestureRecognizer) {
@@ -92,8 +95,9 @@ class DetailViewController: UIViewController {
     
     func joinStatus() {
         ref = Database.database().reference()
-        ref.child("Recruitment").child("\(keyofview!)").child("Join").observeSingleEvent(of: .value, with: { (snapshot) in
-            
+        ref.child("Join").child("\(keyofview!)").child("UserInfo")
+            .observeSingleEvent(of: .value, with: { (snapshot) in
+
             if let snapDict = snapshot.value as? [String:AnyObject]{
                 for each in snapDict {
                     self.joinKey.append(each.key)
@@ -140,7 +144,7 @@ class DetailViewController: UIViewController {
             mdata["NumberOfPeople"] = people
             mdata["Position"] = position
             mdata["Detail"] = notice
-            mdata["Writer"] = userID
+            mdata["WriterEmail"] = userID
             
             ref.child("Users").child(userUid!).child("Likeit").child("\(keyofview!)").setValue(mdata)
         }
@@ -155,25 +159,39 @@ class DetailViewController: UIViewController {
     }
     
     @IBAction func joinSports(_ sender: Any) {
+        var mdata = [String:String]()
         
         if isJoin! == true {
-            //삭제
-            ref.child("Recruitment").child("\(keyofview!)").child("Join").child("\(userUid!)").removeValue()
+//            //삭제
+//            ref.child("Recruitment").child("\(keyofview!)").child("Join").child("\(userUid!)").removeValue()
+//            ref.child("Users").child("\(userUid!)").child("Join").child("\(keyofview!)").removeValue()
+            ref.child("Join").child("\(keyofview!)").child("UserInfo").child("\(userUid!)").removeValue()
             self.joinStatusText.setTitle("참석하기", for: .normal)
             self.isJoin = false
 
         } else if isJoin! == false {
             //업로드
-            ref.child("Recruitment").child("\(keyofview!)").child("Join").updateChildValues(["\(userUid!)" : "\(userEmail!)"])
+//            ref.child("Recruitment").child("\(keyofview!)").child("Join").updateChildValues(["\(userUid!)" : "\(userEmail!)"])
+            
+            mdata["Email"] = userEmail
+            mdata["ProfileImage"] = userImageURL
+            mdata["Title"] = titleBox
+            mdata["Time"] = time
+            mdata["Location"] = location
+            
+//            ref.child("Users").child("\(userUid!)").child("Join").child("\(keyofview!)").setValue(mdata)
+            
+            ref.child("Join").child("\(keyofview!)").child("UserInfo").child("\(userUid!)").setValue(mdata)
+
             self.joinStatusText.setTitle("참석 취소하기", for: .normal)
             self.isJoin = true
 
+            
         }
     }
     
     @IBAction func checkAttendant(_ sender: Any) {
 //         performSegue(withIdentifier: "AttendantSegue", sender: self)
-        
     }
     
     
@@ -196,13 +214,9 @@ class DetailViewController: UIViewController {
         ref.child("Users").child(userUid!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
             if let userInfo = snapshot.value as? String {
             self.userImageURL = userInfo
-//                print("IMAGE URLLLLLLLLLLLLLLLLL\(self.userImageURL!)")
             } else {
-//                print("User don't have a profileimage")
             }
         })
-            
-        
     }
     
     func showProfileImage() {
@@ -283,10 +297,19 @@ class DetailViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "AttendantSegue" {
             let attendantViewController = segue.destination as! AttendantViewController
-            attendantViewController.passedKey = joinKey
+            attendantViewController.passedKey = keyofview!
         } else if segue.identifier == "MainToUserProfileDetail" {
             let mainToUserProfileDetail = segue.destination as! ProfileUserInfoViewController
-//            mainToUserProfileDetail.passedBox = "메인 화면에서 온 데이터"
+            mainToUserProfileDetail.passEmail = userID
+            ref.child("Recruitment").observeSingleEvent(of: .value, with: { (snapshot) in
+                if let snapDict = snapshot.value as? [String:AnyObject]{
+                    for each in snapDict {
+                        self.postKey.append(each.key)
+                    }
+                    mainToUserProfileDetail.passKeyBox = self.postKey
+                }
+            })
+            
         }
     }
 }
@@ -330,16 +353,14 @@ extension DetailViewController:UITableViewDelegate, UITableViewDataSource {
 }
 
 
+//댓글 삭제 부분
 extension DetailViewController:ReplyDeleteDelegate {
-    //댓글 삭제 부분
     func didTapDelete(_ sender: UIButton) {
-        ref = Database.database().reference()
 
         let btnPosition = sender.convert(sender.bounds.origin, to: replyTableView)
         if let indexPath = replyTableView.indexPathForRow(at: btnPosition) {
             let rowIndex =  indexPath.row
             let replierSnapshot: DataSnapshot! = self.comments?[rowIndex]
-            commentKey = replierSnapshot.key
             ref.child("Recruitment").child("\(keyofview!)").child("Comment").child("\(commentKey!)").removeValue()
             comments.remove(at: rowIndex)
             replyTableView.reloadData()
@@ -349,6 +370,7 @@ extension DetailViewController:ReplyDeleteDelegate {
     }
 }
 
+//키보드
 extension DetailViewController {
     func hideKeyboardTappedAround() {
         let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(DetailViewController.dismissKeyboard))
@@ -363,5 +385,6 @@ extension DetailViewController {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return true
+        }
     }
-}
+

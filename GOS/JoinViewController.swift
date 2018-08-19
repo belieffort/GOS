@@ -28,18 +28,17 @@ class JoinViewController: UIViewController {
     }
     
     @IBAction func join_btnPressed(_ sender: Any) {
-        Auth.auth().createUser(withEmail: join_emailTextField.text!, password: join_passwordTextField.text!, completion: {_, error in
+        Auth.auth().createUser(withEmail: join_emailTextField.text!, password: join_passwordTextField.text!, completion: {user, error in
             if (error == nil) {
                 self.performSegue(withIdentifier: "ToMainThroughJoin", sender: sender)
+                var mdata = [String:String]()
                 
+                mdata["email"] = self.join_emailTextField.text
+                
+                self.ref.child("Users").child("\(user!.user.uid)").setValue(mdata)
             }
         })
         
-        var mdata = [String:String]()
-
-        mdata["email"] = join_emailTextField.text
-
-    self.ref.child("Users").childByAutoId().setValue(mdata)
     }
     
     deinit {

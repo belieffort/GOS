@@ -7,7 +7,7 @@
 //
 
 
-//TODO DetailViewController에서 Button을 누르면 바로 업데이트 되어 화면에 나타나는 것이 아니라, RootView까지 돌아간 후 다시 참석자를 확인해야 정보를 확인할 수 있다.
+//TODO DetailViewController에서 Button을 누르면 바로 업데이트 되어 화면에 나타나는 것이 아니라, RootView(HomeView)까지 돌아간 후 다시 참석자를 확인해야 정보를 확인할 수 있다. > Handler를 다시 잡아주어야 한다.
 //TODO 글 작성자는 동시에 참가자로 속하도록 한다!
 import UIKit
 import Firebase
@@ -24,27 +24,29 @@ class AttendantViewController: UIViewController, UITableViewDelegate, UITableVie
     var attendants: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
 
-    var passedKey:[String] = []
-    var usersUIDBox:[String] = []
+    var passedKey:String?
     var usersUID:String?
+    
+    var tempUID = Auth.auth().currentUser?.uid
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDatabase()
     }
-    
+  
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return attendants.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AttendantCell", for: indexPath) as! AttendantCell
-        
+
         let attendantSnapshot: DataSnapshot! = self.attendants[indexPath.row]
         guard let attendant = attendantSnapshot.value as? [String:AnyObject] else { return cell }
         
-        cell.attendantEmail.text = attendant["email"] as! String
-        if let url = attendant["profileImage"] {
+        cell.attendantEmail.text = attendant["Email"] as! String
+        
+        if let url = attendant["ProfileImage"] {
             URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
             
             if error != nil {
@@ -67,18 +69,21 @@ class AttendantViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func configureDatabase() {
+        
+        
         ref = Database.database().reference()
-            _refHandle = self.ref.child("Users").observe(.childAdded, with: { [weak self] (snapshot) in
-            let userSnapshot: DataSnapshot! = snapshot
-            guard let strongSelf = self else { return }
-                self?.usersUID = userSnapshot.key
-                if (self?.passedKey.contains((self?.usersUID)!))! {
-                strongSelf.attendants.append(snapshot)
-                strongSelf.attendantTableView.insertRows(at: [IndexPath(row: strongSelf.attendants.count-1, section: 0)], with: .automatic)
-                }
+//        _refHandle = self.ref.child("Users").child("\(tempUID!)").child("Join")
+        _refHandle = self.ref.child("Join").child("\(passedKey!)").child("UserInfo")
+            .observe(.childAdded, with: { [weak self] (snapshot) in
+//                print(snapshot.value)
+//                    let userSnapshot: DataSnapshot! = snapshot
+                    guard let strongSelf = self else { return }
+                    strongSelf.attendants.append(snapshot)
+                    strongSelf.attendantTableView.insertRows(at: [IndexPath(row: strongSelf.attendants.count-1, section: 0)], with: .automatic)
             })
     }
-
+    
+  
     /*
     // MARK: - Navigation
 

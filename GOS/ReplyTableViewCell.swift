@@ -22,13 +22,11 @@ class ReplyTableViewCell: UITableViewCell {
     
     var delegate:ReplyDeleteDelegate?
     
-    
     @IBAction func reply_btnDelete(_ sender: Any) {
+        delegate?.didTapDelete(btnDelete)
         //ref.child("Recruitment").child("AutoKey").child("Comment").child("AutoKey")
         //ref.romoValue()
-        delegate?.didTapDelete(btnDelete)
-        print("Delete")
-        
+
     }
     override func awakeFromNib() {
         super.awakeFromNib()

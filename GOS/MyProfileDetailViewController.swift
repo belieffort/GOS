@@ -14,100 +14,144 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-class MyProfileDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+class MyProfileDetailViewController: UIViewController {
     
-    @IBOutlet weak var myImage: UIImageView!
-    @IBOutlet weak var myID: UILabel!
+    @IBOutlet weak var myAccountView: UIView!
+    @IBOutlet weak var myPreferenceSportsView: UIView!
+    
+    @IBOutlet weak var segmentCheck: UISegmentedControl!
+    var ref: DatabaseReference!
+    var myIntroduce: [DataSnapshot]! = []
+    var _refHandle: DatabaseHandle?
+    
     let userUID = Auth.auth().currentUser?.uid
-    let ref = Database.database().reference()
     let storageRef = Storage.storage().reference()
-
-
+    
+    var btnStore:UIBarButtonItem!
+    var throughPath:String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        myID.text = Auth.auth().currentUser?.email
-        showImage()
-        view.addSubview(myImage)
-        myImage.layer.cornerRadius = 90
-        myImage.layer.masksToBounds = true
+//        configureDatabase()
+        btnStore = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(addTapped))
+        self.navigationItem.rightBarButtonItem = self.btnStore
+//        myID.text = Auth.auth().currentUser?.email
+//        showImage()
+//        view.addSubview(myImage)
+//        myImage.layer.cornerRadius = 90
+//        myImage.layer.masksToBounds = true
+//        btnOne.isMultipleSelectionEnabled = true
+    }
+    
+    
+    @objc func addTapped() {
+        if segmentCheck.selectedSegmentIndex == 0 {
         
-    
-        // create tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped(gesture:)))
-        // add it to the image view;
-        myImage.addGestureRecognizer(tapGesture)
-        // make sure imageView can be interacted with by user
-        myImage.isUserInteractionEnabled = true
-    }
-    
-    @objc func imageTapped(gesture: UIGestureRecognizer) {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.sourceType = UIImagePickerController.SourceType.photoLibrary
-        imagePickerController.allowsEditing = false
-        self.present(imagePickerController, animated: true, completion: nil)
-
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            myImage.image = image
-            dismiss(animated: true, completion: nil)
-            uploading(img: myImage!) { (url) in
-                print(url)
-                self.ref.child("Users").child(self.userUID!).updateChildValues(["profileImage":url])
-                print(self.userUID!)
-            }
+        let name = Notification.Name(rawValue: notificationKey)
+        NotificationCenter.default.post(name: name, object: nil)
+//        print("??")
+        } else if segmentCheck.selectedSegmentIndex == 1 {
+            
+            
         }
     }
     
-    func uploading( img : UIImageView, completion: @escaping ((String) -> Void)) {
-        var strURL = ""
-        let imageName = NSUUID().uuidString
-        let storeImage = self.storageRef.child(imageName)
-        
-        if let uploadImageData = (img.image)!.pngData(){
-            storeImage.putData(uploadImageData, metadata: nil, completion: { (metaData, error) in
-                storeImage.downloadURL(completion: { (url, error) in
-                    if let urlText = url?.absoluteString {
-                        strURL = urlText
-                        completion(strURL)
-
-                    }
-                })
-            })
+    
+    @IBAction func switchViews(_ sender:UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            myAccountView.alpha = 1
+            myPreferenceSportsView.alpha = 0
+        } else {
+            myAccountView.alpha = 0
+            myPreferenceSportsView.alpha = 1
         }
     }
     
-    func showImage() {
-        Database.database().reference().child("Users").child(self.userUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
-            if let url = snapshot.value as? String {
-                URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-                
-                    if error != nil {
-                        print(error as Any)
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        let image = UIImage(data: data!)
-                        self.myImage.image = image
-                    }
-                }.resume()
-            }
-        })
-    }
+//    @IBAction func btnCheck(_ sender: DLRadioButton) {
+//        if btnOne.isSelected {
+//            print("true")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Basketball":true])
+//        } else {
+//            print("false")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Basketball").removeValue()
+//        }
+//        if btnTwo.isSelected {
+//            print("true")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Badminton":true])
+//        } else {
+//            print("false")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Badminton").removeValue()
+//        }
+//        if btnThree.isSelected {
+//            print("true")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Soccer":true])
+//        } else {
+//            print("false")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Soccer").removeValue()
+//        }
+//        if btnFour.isSelected {
+//            print("true")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Ice Hockey":true])
+//        } else {
+//            print("false")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Ice Hockey").removeValue()
+//        }
+//        if btnFive.isSelected {
+//            print("true")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Tennis":true])
+//        } else {
+//            print("false")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Tennis").removeValue()
+//        }
+//        if btnSix.isSelected {
+//            print("true")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Baseball":true])
+//        } else {
+//            print("false")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Baseball").removeValue()
+//        }
+//        if btnSeven.isSelected {
+//            print("true")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Volleyball":true])
+//        } else {
+//            print("false")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Volleyball").removeValue()
+//        }
+//        if btnEight.isSelected {
+//            print("true")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Table Tennis":true])
+//        } else {
+//            print("false")
+//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Table Tennis").removeValue()
+//        }
+//    }
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if  segue.identifier == "IntroduceVC" {
+            let introduceVC = segue.destination as! IntroduceVC
+            introduceVC.introduceText = throughPath!
+        }
     }
-    */
 
-
-
+    
+//    deinit {
+//        if let refHandle = _refHandle {
+//            self.ref.child("Users").removeObserver(withHandle: refHandle)}
+//    }
+//
+//    func configureDatabase() {
+//        ref = Database.database().reference()
+//        // Listen for new messages in the Firebase database
+//        _refHandle = self.ref.child("Users").child(userUID!)
+//            .child("Introduce")
+//            .observe(.childAdded, with: { [weak self] (snapshot) -> Void in
+//                let vc = self?.storyboard?.instantiateViewController(withIdentifier: "IntroduceVC") as! IntroduceVC
+//                vc.introduceText = snapshot.value! as! String
+//                print(snapshot.value! as! String)
+//        })
 }
-

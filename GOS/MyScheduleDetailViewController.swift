@@ -71,16 +71,16 @@ class MyScheduleDetailViewController: UIViewController {
         
         let edit = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped))
         let delete = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashTapped))
-        my_writerImage.isUserInteractionEnabled = true
-        my_writerImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
+//        my_writerImage.isUserInteractionEnabled = true
+//        my_writerImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
 
         navigationItem.rightBarButtonItems = [delete, edit]
     }
     
-    @objc private func imageTapped(_ recognizer: UITapGestureRecognizer) {
-        print("image tapped")
-        performSegue(withIdentifier: "MyToUserProfileDetail", sender: self)
-    }
+//    @objc private func imageTapped(_ recognizer: UITapGestureRecognizer) {
+//        print("image tapped")
+//        performSegue(withIdentifier: "MyToUserProfileDetail", sender: self)
+//    }
     
     @objc func editTapped() {
         self.performSegue(withIdentifier: "EditPageSegue", sender: self)
@@ -92,7 +92,8 @@ class MyScheduleDetailViewController: UIViewController {
     
     func joinStatus() {
         ref = Database.database().reference()
-        ref.child("Recruitment").child("\(my_PostKey!)").child("Join").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Join").child("\(my_PostKey!)").child("UserInfo")
+            .observeSingleEvent(of: .value, with: { (snapshot) in
 
             if let snapDict = snapshot.value as? [String:AnyObject]{
                 for each in snapDict {
@@ -111,15 +112,30 @@ class MyScheduleDetailViewController: UIViewController {
     
     
     @IBAction func my_JoinSports(_ sender: Any) {
+        var mdata = [String:String]()
+
         if isJoin! == true {
             //삭제
-            ref.child("Recruitment").child("\(my_PostKey!)").child("Join").child("\(userUid!)").removeValue()
+            
+            ref.child("Join").child("\(my_PostKey!)").child("UserInfo").child("\(userUid!)").removeValue()
             self.my_btnJoinText.setTitle("참석하기", for: .normal)
             self.isJoin = false
+
             
         } else if isJoin! == false {
             //업로드
             ref.child("Recruitment").child("\(my_PostKey!)").child("Join").updateChildValues(["\(userUid!)" : "\(userEmail!)"])
+            self.my_btnJoinText.setTitle("참석 취소하기", for: .normal)
+            self.isJoin = true
+            
+            mdata["Email"] = userEmail
+            mdata["ProfileImage"] = userImageURL
+            mdata["Title"] = my_titleBox
+            mdata["Time"] = my_time
+            mdata["Location"] = my_location
+            
+            ref.child("Join").child("\(my_PostKey!)").child("UserInfo").child("\(userUid!)").setValue(mdata)
+            
             self.my_btnJoinText.setTitle("참석 취소하기", for: .normal)
             self.isJoin = true
         }
@@ -230,19 +246,14 @@ class MyScheduleDetailViewController: UIViewController {
         
         if segue.identifier == "AttendantSegue" {
             let attendantViewController = segue.destination as! AttendantViewController
-            attendantViewController.passedKey = joinKey
+            attendantViewController.passedKey = my_PostKey!
         } else if segue.identifier == "EditPageSegue" {
         let myWriteEdit: DataSnapshot! = passedSelectedIndexpath
         guard let writeEdit = myWriteEdit.value as? [String:String] else { return }
         
         let myWriteEditViewController = segue.destination as! MyWriteEditViewController
         myWriteEditViewController.passedBox = writeEdit["Location"] ?? "[Location]"
-        } else if segue.identifier == "MyToUserProfileDetail" {
-            let myToUserProfileDetail = segue.destination as! ProfileUserInfoViewController
-//            myToUserProfileDetail.passedBox = "마이 페이지에서 온 데이터"
-            
         }
-    
     }
 }
 

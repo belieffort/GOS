@@ -77,7 +77,9 @@ class LikeDetailViewController: UIViewController {
     
     func joinStatus() {
         ref = Database.database().reference()
-        ref.child("Recruitment").child("\(keyOfUserLike!)").child("Join").observeSingleEvent(of: .value, with: { (snapshot) in
+
+        ref.child("Join").child("\(keyOfUserLike!)").child("UserInfo")
+            .observeSingleEvent(of: .value, with: { (snapshot) in
             
             if let snapDict = snapshot.value as? [String:AnyObject]{
                 for each in snapDict {
@@ -96,17 +98,32 @@ class LikeDetailViewController: UIViewController {
     
     
     @IBAction func like_JoinSports(_ sender: Any) {
+        var mdata = [String:String]()
+
         if isJoin! == true {
             //삭제
-            ref.child("Recruitment").child("\(keyOfUserLike!)").child("Join").child("\(userUid!)").removeValue()
+            ref.child("Join").child("\(keyOfUserLike!)").child("UserInfo").child("\(userUid!)").removeValue()
             self.like_BtnJoinText.setTitle("참석하기", for: .normal)
             self.isJoin = false
             
+            
         } else if isJoin! == false {
             //업로드
-            ref.child("Recruitment").child("\(keyOfUserLike!)").child("Join").updateChildValues(["\(userUid!)" : "\(userEmail!)"])
+      
+            mdata["Email"] = userEmail
+            mdata["ProfileImage"] = userImageURL
+            mdata["Title"] = like_titleBox
+            mdata["Time"] = like_time
+            mdata["Location"] = like_location
+            
+            ref.child("Join").child("\(keyOfUserLike!)").child("UserInfo").child("\(userUid!)").setValue(mdata)
+            
             self.like_BtnJoinText.setTitle("참석 취소하기", for: .normal)
             self.isJoin = true
+
+            
+            
+            
         }
     }
     
@@ -213,10 +230,10 @@ class LikeDetailViewController: UIViewController {
         
         if segue.identifier == "AttendantSegue" {
             let attendantViewController = segue.destination as! AttendantViewController
-            attendantViewController.passedKey = joinKey
+            attendantViewController.passedKey = keyOfUserLike!
         } else if segue.identifier == "LikeToUserProfileDetail" {
             let likeToUserProfileDetailVC = segue.destination as! ProfileUserInfoViewController
-//            likeToUserProfileDetailVC.passedBox = "관심일정에서 온 데이터"
+            likeToUserProfileDetailVC.passEmail = like_userId
         }
         
         

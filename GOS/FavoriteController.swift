@@ -29,10 +29,9 @@ class FavoriteController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        likeTableView.tableFooterView = UIView()
         getUserLikeitArray()
     }
-    
-
 
     deinit {
         if let refHandle = _refHandle {
@@ -43,11 +42,11 @@ class FavoriteController: UIViewController {
     func getUserLikeitArray() {
         ref = Database.database().reference()
         _refHandle = self.ref.child("Users").child(self.uid!).child("Likeit")
-            .queryOrdered(byChild: "writeTime")
+//            .queryOrdered(byChild: "writeTime")
             .observe(.childAdded, with: { [weak self] (snapshot) in
                 guard let strongSelf = self else { return }
-//                strongSelf.userLikeit.append(snapshot)
-                strongSelf.userLikeit.insert(snapshot, at: 0)
+                strongSelf.userLikeit.append(snapshot)
+//                strongSelf.userLikeit.insert(snapshot, at: 0)
                 strongSelf.likeTableView.insertRows(at: [IndexPath(row: strongSelf.userLikeit.count-1, section: 0)], with: .automatic)
         })
     }
@@ -62,7 +61,7 @@ class FavoriteController: UIViewController {
         
         // TODO - Recruitment의 child name을 찾으면 된다!!
         let likeDetailViewController = segue.destination as! LikeDetailViewController
-        likeDetailViewController.like_userId = likeData["Writer"] ?? "[Writer]"
+        likeDetailViewController.like_userId = likeData["WriterEmail"] ?? "[WriterEmail]"
         likeDetailViewController.like_titleBox = likeData["Title"] ?? "[Title]"
         likeDetailViewController.like_time = likeData["Time"] ?? "[Time]"
         likeDetailViewController.like_location = likeData["Location"] ?? "[Location]"

@@ -29,11 +29,13 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     @IBOutlet weak var addView_position: UITextField!
     @IBOutlet weak var addView_Detail: UITextView!
     
+    var userUID = Auth.auth().currentUser?.uid
+    var userEmail = Auth.auth().currentUser?.email
     var selectedSports:String!
     var sports = ["Basketball","Soccer","Volleyball","Tennis","Baseball","Badminton","Table Tennis","Ice Hockey"]
     var countBox:String!
     var convertCountBox:Int!
-    var writeTime:String?
+//    var writeTime:String?
     
     
 
@@ -41,11 +43,9 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
         super.viewDidLoad()
         Database.database().reference().child("Recruitment").observeSingleEvent(of: .value, with: {(snap) in
             self.countBox = "\(snap.childrenCount)"
-            print(self.countBox!)
         })
-        viewWillAppear(true)
         
-        //        TODO : 게시글 정렬을 최신 글이 가장 상단에 위치하게 해야한다.
+        //TODO : 게시글 정렬을 최신 글이 가장 상단에 위치하게 해야한다.
         selectedSports = sports[0]
         addView_Detail.layer.borderWidth = 0.5
         addView_Detail.layer.borderColor = UIColor.lightGray.cgColor
@@ -79,12 +79,11 @@ class AddViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
         mdata["NumberOfPeople"] = addView_Person.text
         mdata["Position"] = addView_position.text
         mdata["Detail"] = addView_Detail.text
-        mdata["Writer"] = Auth.auth().currentUser?.email
-        mdata["writeTime"] = writeTime!
+        mdata["WriterUID"] = userUID
+        mdata["WriterEmail"] = userEmail
 
         // Push data to Firebase Database
         self.ref.child("Recruitment").childByAutoId().setValue(mdata)
-        viewWillAppear(true)
     }
     
     

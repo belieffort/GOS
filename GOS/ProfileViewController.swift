@@ -25,8 +25,12 @@ class ProfileViewController: UIViewController {
     var userUID = Auth.auth().currentUser?.uid
     var userEmail = Auth.auth().currentUser?.email
     
+    var introduceText:String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        passIntroduce()
 
         configureDatabase()
         showProfileImage()
@@ -35,6 +39,20 @@ class ProfileViewController: UIViewController {
 //        view.addSubview(profileImage)
 //        profileImage.layer.cornerRadius = 60
      }
+    
+    
+    func passIntroduce() {
+        ref = Database.database().reference()
+        // Listen for new messages in the Firebase database
+        _refHandle = self.ref.child("Users").child(userUID!)
+            .child("Introduce")
+            .observe(.childAdded, with: { [weak self] (snapshot) -> Void in
+//                let vc = self?.storyboard?.instantiateViewController(withIdentifier: "IntroduceVC") as! IntroduceVC
+//                vc.introduceText = snapshot.value! as! String
+                self?.introduceText = snapshot.value! as! String
+//                print(snapshot.value! as! String)
+            })
+        }
 
     
     @IBAction func btnLogout(_ sender: Any) {
@@ -53,7 +71,9 @@ class ProfileViewController: UIViewController {
 
     deinit {
         if let refHandle = _refHandle {
-            self.ref.child("Recruitment").removeObserver(withHandle: refHandle)}
+            self.ref.child("Recruitment").removeObserver(withHandle: refHandle)
+            self.ref.child("Users").removeObserver(withHandle: refHandle)
+        }
     }
     
     func configureDatabase() {
@@ -65,12 +85,12 @@ class ProfileViewController: UIViewController {
 
             let writerSnapshot: DataSnapshot! = snapshot
             guard let writerEmail = writerSnapshot.value as? [String:AnyObject] else { return }
-            let writer = writerEmail["Writer"]
+            let writer = writerEmail["WriterEmail"]
 
                 if writer! as! String == self!.userEmail! {
                     strongSelf.myRecruitment.append(snapshot)
                     strongSelf.profileTableView.insertRows(at: [IndexPath(row: strongSelf.myRecruitment.count-1, section: 0)], with: .automatic)
-                }
+            }
         })
     }
     
@@ -86,7 +106,6 @@ class ProfileViewController: UIViewController {
                     DispatchQueue.main.async {
                         let image = UIImage(data: data!)
                         self.profileImage.image = image
-    
                     }
                 }.resume()
             }
@@ -99,14 +118,15 @@ class ProfileViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if  segue.identifier == "MyProfileDetail" {
-
-        } else {
+            let myProfileDetailViewController = segue.destination as! MyProfileDetailViewController
+            myProfileDetailViewController.throughPath = introduceText
             
+        } else {
             let myWriteDetail: DataSnapshot! = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
             guard let writeDetail = myWriteDetail.value as? [String:AnyObject] else { return }
             
             let myScheduleDetailViewController = segue.destination as! MyScheduleDetailViewController
-            myScheduleDetailViewController.my_userID = writeDetail["Writer"] as? String
+            myScheduleDetailViewController.my_userID = writeDetail["WriterEmail"] as? String
             myScheduleDetailViewController.my_titleBox = writeDetail["Title"] as? String
             myScheduleDetailViewController.my_time = writeDetail["Time"] as? String
             myScheduleDetailViewController.my_location = writeDetail["Location"] as? String
@@ -117,6 +137,8 @@ class ProfileViewController: UIViewController {
             myScheduleDetailViewController.passedSelectedIndexpath = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
             myScheduleDetailViewController.my_PostKey = myWriteDetail.key
             
+          
+
         }
     }
 }
@@ -125,6 +147,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //        performSegue(withIdentifier: "MyWriteDetail", sender: self)
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

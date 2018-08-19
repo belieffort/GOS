@@ -11,6 +11,9 @@
 		720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720CFDDA21021791002ABF5C /* DetailViewController.swift */; };
 		721217E2210F04C800BFFC54 /* LikeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721217E1210F04C800BFFC54 /* LikeDetailViewController.swift */; };
 		7214482A211AE2A50040F7F3 /* LikeReplyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72144829211AE2A50040F7F3 /* LikeReplyTableViewCell.swift */; };
+		723F6565212697DF00E5C1D0 /* ProfilePreferenceSportsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723F6564212697DF00E5C1D0 /* ProfilePreferenceSportsVC.swift */; };
+		723F65692126BF8100E5C1D0 /* SSRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723F65672126BF8100E5C1D0 /* SSRadioButton.swift */; };
+		723F656A2126BF8100E5C1D0 /* SSRadioButtonsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723F65682126BF8100E5C1D0 /* SSRadioButtonsController.swift */; };
 		72478B4D21132B0D00E92378 /* MyWriteEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72478B4C21132B0D00E92378 /* MyWriteEditViewController.swift */; };
 		72478B4F2113410300E92378 /* AttendantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72478B4E2113410300E92378 /* AttendantViewController.swift */; };
 		72478B532113421000E92378 /* AttendantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72478B522113421000E92378 /* AttendantCell.swift */; };
@@ -25,6 +28,10 @@
 		7293721E211982F300C5A372 /* ReplyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7293721D211982F300C5A372 /* ReplyTableViewCell.swift */; };
 		72B75BAF212099DC00827CB2 /* ProfileInterestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B75BAE212099DB00827CB2 /* ProfileInterestViewController.swift */; };
 		72B75BB1212099EC00827CB2 /* ProfilePlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B75BB0212099EC00827CB2 /* ProfilePlanViewController.swift */; };
+		72B8E94B2126CC2300677750 /* ProfilePreferenceSportsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B8E9492126CC2300677750 /* ProfilePreferenceSportsCell.swift */; };
+		72B8E94C2126CC2300677750 /* ProfilePreferenceSportsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B8E94A2126CC2300677750 /* ProfilePreferenceSportsCell.xib */; };
+		72C58FB721248BAA00C41246 /* IntroduceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C58FB621248BAA00C41246 /* IntroduceVC.swift */; };
+		72C622962121C5E300BF926B /* ProfileUserPlanTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C622952121C5E300BF926B /* ProfileUserPlanTableViewCell.swift */; };
 		72E83B6F211B0B4C00045AA0 /* MyReplyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E83B6E211B0B4C00045AA0 /* MyReplyTableViewCell.swift */; };
 		72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */; };
 		72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */; };
@@ -42,6 +49,9 @@
 		720CFDDA21021791002ABF5C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		721217E1210F04C800BFFC54 /* LikeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDetailViewController.swift; sourceTree = "<group>"; };
 		72144829211AE2A50040F7F3 /* LikeReplyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeReplyTableViewCell.swift; sourceTree = "<group>"; };
+		723F6564212697DF00E5C1D0 /* ProfilePreferenceSportsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePreferenceSportsVC.swift; sourceTree = "<group>"; };
+		723F65672126BF8100E5C1D0 /* SSRadioButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButton.swift; sourceTree = "<group>"; };
+		723F65682126BF8100E5C1D0 /* SSRadioButtonsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButtonsController.swift; sourceTree = "<group>"; };
 		72478B4C21132B0D00E92378 /* MyWriteEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWriteEditViewController.swift; sourceTree = "<group>"; };
 		72478B4E2113410300E92378 /* AttendantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendantViewController.swift; sourceTree = "<group>"; };
 		72478B522113421000E92378 /* AttendantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendantCell.swift; sourceTree = "<group>"; };
@@ -58,6 +68,10 @@
 		7293721D211982F300C5A372 /* ReplyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyTableViewCell.swift; sourceTree = "<group>"; };
 		72B75BAE212099DB00827CB2 /* ProfileInterestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInterestViewController.swift; sourceTree = "<group>"; };
 		72B75BB0212099EC00827CB2 /* ProfilePlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePlanViewController.swift; sourceTree = "<group>"; };
+		72B8E9492126CC2300677750 /* ProfilePreferenceSportsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePreferenceSportsCell.swift; sourceTree = "<group>"; };
+		72B8E94A2126CC2300677750 /* ProfilePreferenceSportsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfilePreferenceSportsCell.xib; sourceTree = "<group>"; };
+		72C58FB621248BAA00C41246 /* IntroduceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceVC.swift; sourceTree = "<group>"; };
+		72C622952121C5E300BF926B /* ProfileUserPlanTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserPlanTableViewCell.swift; sourceTree = "<group>"; };
 		72E83B6E211B0B4C00045AA0 /* MyReplyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReplyTableViewCell.swift; sourceTree = "<group>"; };
 		72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteController.swift; sourceTree = "<group>"; };
@@ -93,6 +107,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		723F65662126BF7600E5C1D0 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				723F65672126BF8100E5C1D0 /* SSRadioButton.swift */,
+				723F65682126BF8100E5C1D0 /* SSRadioButtonsController.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
 		724F9C7820F7710C0098D872 = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +137,7 @@
 		724F9C8320F7710C0098D872 /* GOS */ = {
 			isa = PBXGroup;
 			children = (
+				723F65662126BF7600E5C1D0 /* Library */,
 				72EDBE6C20FA52ED007E1473 /* GoogleService-Info.plist */,
 				724F9C8420F7710C0098D872 /* AppDelegate.swift */,
 				724F9C8820F7710C0098D872 /* Main.storyboard */,
@@ -142,6 +166,11 @@
 				7256BFF62120896600D14950 /* ProfileUserInfoViewController.swift */,
 				72B75BAE212099DB00827CB2 /* ProfileInterestViewController.swift */,
 				72B75BB0212099EC00827CB2 /* ProfilePlanViewController.swift */,
+				72C622952121C5E300BF926B /* ProfileUserPlanTableViewCell.swift */,
+				72C58FB621248BAA00C41246 /* IntroduceVC.swift */,
+				723F6564212697DF00E5C1D0 /* ProfilePreferenceSportsVC.swift */,
+				72B8E9492126CC2300677750 /* ProfilePreferenceSportsCell.swift */,
+				72B8E94A2126CC2300677750 /* ProfilePreferenceSportsCell.xib */,
 			);
 			path = GOS;
 			sourceTree = "<group>";
@@ -217,6 +246,7 @@
 				724F9C8F20F7710E0098D872 /* LaunchScreen.storyboard in Resources */,
 				72EDBE6D20FA52ED007E1473 /* GoogleService-Info.plist in Resources */,
 				724F9C8C20F7710E0098D872 /* Assets.xcassets in Resources */,
+				72B8E94C2126CC2300677750 /* ProfilePreferenceSportsCell.xib in Resources */,
 				724F9C8A20F7710C0098D872 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,6 +279,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GOS/Pods-GOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DLRadioButton/DLRadioButton.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/TagListView/TagListView.framework",
@@ -258,6 +289,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DLRadioButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TagListView.framework",
@@ -279,14 +311,18 @@
 			files = (
 				720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */,
 				7260A6A6210F842F00399FC0 /* MyProfileDetailViewController.swift in Sources */,
+				723F6565212697DF00E5C1D0 /* ProfilePreferenceSportsVC.swift in Sources */,
 				72B75BAF212099DC00827CB2 /* ProfileInterestViewController.swift in Sources */,
 				72478B532113421000E92378 /* AttendantCell.swift in Sources */,
 				7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */,
 				72B75BB1212099EC00827CB2 /* ProfilePlanViewController.swift in Sources */,
 				72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */,
+				72C622962121C5E300BF926B /* ProfileUserPlanTableViewCell.swift in Sources */,
 				72EDBE6F20FA57F8007E1473 /* FavoriteTableViewCell.swift in Sources */,
 				721217E2210F04C800BFFC54 /* LikeDetailViewController.swift in Sources */,
+				72C58FB721248BAA00C41246 /* IntroduceVC.swift in Sources */,
 				72EDBE7120FA5CC1007E1473 /* AddViewController.swift in Sources */,
+				723F656A2126BF8100E5C1D0 /* SSRadioButtonsController.swift in Sources */,
 				7256BFF72120896600D14950 /* ProfileUserInfoViewController.swift in Sources */,
 				724F9C8520F7710C0098D872 /* AppDelegate.swift in Sources */,
 				7214482A211AE2A50040F7F3 /* LikeReplyTableViewCell.swift in Sources */,
@@ -294,8 +330,10 @@
 				72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */,
 				72478B4F2113410300E92378 /* AttendantViewController.swift in Sources */,
 				72478B4D21132B0D00E92378 /* MyWriteEditViewController.swift in Sources */,
+				72B8E94B2126CC2300677750 /* ProfilePreferenceSportsCell.swift in Sources */,
 				72EDBE7720FB99C9007E1473 /* AuthViewController.swift in Sources */,
 				7293721E211982F300C5A372 /* ReplyTableViewCell.swift in Sources */,
+				723F65692126BF8100E5C1D0 /* SSRadioButton.swift in Sources */,
 				72EDBE7920FB99E5007E1473 /* JoinViewController.swift in Sources */,
 				72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */,
 				72E83B6F211B0B4C00045AA0 /* MyReplyTableViewCell.swift in Sources */,
