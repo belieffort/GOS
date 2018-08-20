@@ -21,6 +21,9 @@ class JoinViewController: UIViewController {
     var messages: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
     
+    var sampleSports = ["Badminton", "Baseball", "Basketball", "Ice Hockey", "Soccer", "Table Tennis", "Tennis", "Volleyball"]
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDatabase()
@@ -32,14 +35,19 @@ class JoinViewController: UIViewController {
             if (error == nil) {
                 self.performSegue(withIdentifier: "ToMainThroughJoin", sender: sender)
                 var mdata = [String:String]()
-                
                 mdata["email"] = self.join_emailTextField.text
-                
                 self.ref.child("Users").child("\(user!.user.uid)").setValue(mdata)
+                
+                var sportsData = [String:String]()
+                
+                for i in 0..<(self.sampleSports.count) {
+                    sportsData = ["\(self.sampleSports[i])":"false"]
+                    self.ref.child("Users").child("\(user!.user.uid)").child("PreferenceSports")
+                        .updateChildValues(sportsData)
+                }
             }
-        })
-        
-    }
+        }
+    )}
     
     deinit {
         //        if let refHandle = _refHandle {

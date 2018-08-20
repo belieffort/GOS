@@ -14,7 +14,6 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-
 class MyProfileDetailViewController: UIViewController {
     
     @IBOutlet weak var myAccountView: UIView!
@@ -33,7 +32,6 @@ class MyProfileDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        configureDatabase()
         btnStore = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(addTapped))
         self.navigationItem.rightBarButtonItem = self.btnStore
 //        myID.text = Auth.auth().currentUser?.email
@@ -47,13 +45,12 @@ class MyProfileDetailViewController: UIViewController {
     
     @objc func addTapped() {
         if segmentCheck.selectedSegmentIndex == 0 {
-        
-        let name = Notification.Name(rawValue: notificationKey)
-        NotificationCenter.default.post(name: name, object: nil)
-//        print("??")
+        let nameOfIntroduce = Notification.Name(rawValue: notificationKey)
+        NotificationCenter.default.post(name: nameOfIntroduce, object: nil)
+
         } else if segmentCheck.selectedSegmentIndex == 1 {
-            
-            
+            let nameOfSports = Notification.Name(rawValue: sportsNotificationKey)
+            NotificationCenter.default.post(name: nameOfSports, object: nil)
         }
     }
     
@@ -67,65 +64,6 @@ class MyProfileDetailViewController: UIViewController {
             myPreferenceSportsView.alpha = 1
         }
     }
-    
-//    @IBAction func btnCheck(_ sender: DLRadioButton) {
-//        if btnOne.isSelected {
-//            print("true")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Basketball":true])
-//        } else {
-//            print("false")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Basketball").removeValue()
-//        }
-//        if btnTwo.isSelected {
-//            print("true")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Badminton":true])
-//        } else {
-//            print("false")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Badminton").removeValue()
-//        }
-//        if btnThree.isSelected {
-//            print("true")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Soccer":true])
-//        } else {
-//            print("false")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Soccer").removeValue()
-//        }
-//        if btnFour.isSelected {
-//            print("true")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Ice Hockey":true])
-//        } else {
-//            print("false")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Ice Hockey").removeValue()
-//        }
-//        if btnFive.isSelected {
-//            print("true")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Tennis":true])
-//        } else {
-//            print("false")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Tennis").removeValue()
-//        }
-//        if btnSix.isSelected {
-//            print("true")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Baseball":true])
-//        } else {
-//            print("false")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Baseball").removeValue()
-//        }
-//        if btnSeven.isSelected {
-//            print("true")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Volleyball":true])
-//        } else {
-//            print("false")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Volleyball").removeValue()
-//        }
-//        if btnEight.isSelected {
-//            print("true")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").updateChildValues(["Table Tennis":true])
-//        } else {
-//            print("false")
-//            ref.child("Users").child("\(userUID!)").child("PreferenceSports").child("Table Tennis").removeValue()
-//        }
-//    }
 
     
     // MARK: - Navigation
@@ -134,24 +72,11 @@ class MyProfileDetailViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if  segue.identifier == "IntroduceVC" {
             let introduceVC = segue.destination as! IntroduceVC
+            if throughPath != nil {
             introduceVC.introduceText = throughPath!
+            } else {
+                print("User가 Introduce를 입력하지 않았습니다.")
+            }
         }
     }
-
-    
-//    deinit {
-//        if let refHandle = _refHandle {
-//            self.ref.child("Users").removeObserver(withHandle: refHandle)}
-//    }
-//
-//    func configureDatabase() {
-//        ref = Database.database().reference()
-//        // Listen for new messages in the Firebase database
-//        _refHandle = self.ref.child("Users").child(userUID!)
-//            .child("Introduce")
-//            .observe(.childAdded, with: { [weak self] (snapshot) -> Void in
-//                let vc = self?.storyboard?.instantiateViewController(withIdentifier: "IntroduceVC") as! IntroduceVC
-//                vc.introduceText = snapshot.value! as! String
-//                print(snapshot.value! as! String)
-//        })
 }

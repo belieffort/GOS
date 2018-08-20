@@ -36,8 +36,6 @@ class ProfileViewController: UIViewController {
         showProfileImage()
 
         profileID.setTitle("\(userEmail!)", for: .normal)
-//        view.addSubview(profileImage)
-//        profileImage.layer.cornerRadius = 60
      }
     
     
@@ -47,10 +45,7 @@ class ProfileViewController: UIViewController {
         _refHandle = self.ref.child("Users").child(userUID!)
             .child("Introduce")
             .observe(.childAdded, with: { [weak self] (snapshot) -> Void in
-//                let vc = self?.storyboard?.instantiateViewController(withIdentifier: "IntroduceVC") as! IntroduceVC
-//                vc.introduceText = snapshot.value! as! String
                 self?.introduceText = snapshot.value! as! String
-//                print(snapshot.value! as! String)
             })
         }
 
@@ -67,7 +62,6 @@ class ProfileViewController: UIViewController {
         }
     }
     
-  
 
     deinit {
         if let refHandle = _refHandle {
@@ -113,13 +107,16 @@ class ProfileViewController: UIViewController {
     }
     // TODO - Cell 삭제 기능이 필요하다.
     
-    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if  segue.identifier == "MyProfileDetail" {
             let myProfileDetailViewController = segue.destination as! MyProfileDetailViewController
+            if introduceText != nil {
             myProfileDetailViewController.throughPath = introduceText
+            } else {
+                print("User가 Introduce를 입력하지 않았습니다.")
+            }
             
         } else {
             let myWriteDetail: DataSnapshot! = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
@@ -136,8 +133,6 @@ class ProfileViewController: UIViewController {
             myScheduleDetailViewController.my_sports = writeDetail["Sports"] as? String
             myScheduleDetailViewController.passedSelectedIndexpath = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
             myScheduleDetailViewController.my_PostKey = myWriteDetail.key
-            
-          
 
         }
     }
