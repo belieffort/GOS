@@ -24,6 +24,7 @@
 		7256BFF72120896600D14950 /* ProfileUserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7256BFF62120896600D14950 /* ProfileUserInfoViewController.swift */; };
 		7260A6A4210F841C00399FC0 /* MyScheduleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7260A6A3210F841C00399FC0 /* MyScheduleDetailViewController.swift */; };
 		7260A6A6210F842F00399FC0 /* MyProfileDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7260A6A5210F842F00399FC0 /* MyProfileDetailViewController.swift */; };
+		72836946213034AD004399E7 /* ChatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72836945213034AC004399E7 /* ChatVC.swift */; };
 		7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7286BD2620F88A19005622CE /* RecruitCellCollectionViewCell.swift */; };
 		7293721E211982F300C5A372 /* ReplyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7293721D211982F300C5A372 /* ReplyTableViewCell.swift */; };
 		72B75BAF212099DC00827CB2 /* ProfileInterestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B75BAE212099DB00827CB2 /* ProfileInterestViewController.swift */; };
@@ -64,6 +65,7 @@
 		7256BFF62120896600D14950 /* ProfileUserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserInfoViewController.swift; sourceTree = "<group>"; };
 		7260A6A3210F841C00399FC0 /* MyScheduleDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyScheduleDetailViewController.swift; sourceTree = "<group>"; };
 		7260A6A5210F842F00399FC0 /* MyProfileDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileDetailViewController.swift; sourceTree = "<group>"; };
+		72836945213034AC004399E7 /* ChatVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatVC.swift; sourceTree = "<group>"; };
 		7286BD2620F88A19005622CE /* RecruitCellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitCellCollectionViewCell.swift; sourceTree = "<group>"; };
 		7293721D211982F300C5A372 /* ReplyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyTableViewCell.swift; sourceTree = "<group>"; };
 		72B75BAE212099DB00827CB2 /* ProfileInterestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInterestViewController.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				723F6564212697DF00E5C1D0 /* ProfilePreferenceSportsVC.swift */,
 				72B8E9492126CC2300677750 /* ProfilePreferenceSportsCell.swift */,
 				72B8E94A2126CC2300677750 /* ProfilePreferenceSportsCell.xib */,
+				72836945213034AC004399E7 /* ChatVC.swift */,
 			);
 			path = GOS;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				7214482A211AE2A50040F7F3 /* LikeReplyTableViewCell.swift in Sources */,
 				72EDBE7320FB79B4007E1473 /* ProfileViewController.swift in Sources */,
 				72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */,
+				72836946213034AD004399E7 /* ChatVC.swift in Sources */,
 				72478B4F2113410300E92378 /* AttendantViewController.swift in Sources */,
 				72478B4D21132B0D00E92378 /* MyWriteEditViewController.swift in Sources */,
 				72B8E94B2126CC2300677750 /* ProfilePreferenceSportsCell.swift in Sources */,

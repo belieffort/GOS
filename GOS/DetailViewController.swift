@@ -51,6 +51,7 @@ class DetailViewController: UIViewController {
     var userEmail = Auth.auth().currentUser?.email
     var userImageURL:String?
     
+    
     var keyofview:String?
     var anotherUserUID:String?
     var commentKey:String?
@@ -60,15 +61,15 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         ref = Database.database().reference()
         replyTableView.endUpdates()
+        replyTableView.estimatedRowHeight = replyTableView.rowHeight
+        replyTableView.rowHeight = UITableView.automaticDimension
+        replyTableView.tableFooterView = UIView()
+
         getUserUID()
         configureDatabase()
         getUserImageURL()
         initialButton()
         joinStatus()
-        
-        replyTableView.rowHeight = UITableView.automaticDimension
-        replyTableView.estimatedRowHeight = 80
-        replyTableView.tableFooterView = UIView()
         
         writerUserID.text = userID
         detailTitle.text = titleBox
@@ -95,6 +96,7 @@ class DetailViewController: UIViewController {
     
     func joinStatus() {
         ref = Database.database().reference()
+    
         ref.child("Join").child("\(keyofview!)").child("UserInfo")
             .observeSingleEvent(of: .value, with: { (snapshot) in
 
@@ -145,8 +147,11 @@ class DetailViewController: UIViewController {
             mdata["Position"] = position
             mdata["Detail"] = notice
             mdata["WriterEmail"] = userID
-            
+            mdata["ProfileImage"] = userImageURL
+
             ref.child("Users").child(userUid!).child("Likeit").child("\(keyofview!)").setValue(mdata)
+
+            
         }
         print("Show Favorites")
     }
@@ -156,6 +161,7 @@ class DetailViewController: UIViewController {
         print("Show All Chat Rooms")
     
         ref.child("Users").child(userUid!).child("Likeit").child("\(keyofview!)").removeValue()
+
     }
     
     @IBAction func joinSports(_ sender: Any) {
@@ -163,25 +169,23 @@ class DetailViewController: UIViewController {
         
         if isJoin! == true {
 //            //삭제
-//            ref.child("Recruitment").child("\(keyofview!)").child("Join").child("\(userUid!)").removeValue()
-//            ref.child("Users").child("\(userUid!)").child("Join").child("\(keyofview!)").removeValue()
             ref.child("Join").child("\(keyofview!)").child("UserInfo").child("\(userUid!)").removeValue()
+            ref.child("Users").child("\(userUid!)").child("\(keyofview!)").removeValue()
+
             self.joinStatusText.setTitle("참석하기", for: .normal)
             self.isJoin = false
 
         } else if isJoin! == false {
             //업로드
-//            ref.child("Recruitment").child("\(keyofview!)").child("Join").updateChildValues(["\(userUid!)" : "\(userEmail!)"])
-            
+    
             mdata["Email"] = userEmail
             mdata["ProfileImage"] = userImageURL
             mdata["Title"] = titleBox
             mdata["Time"] = time
             mdata["Location"] = location
             
-//            ref.child("Users").child("\(userUid!)").child("Join").child("\(keyofview!)").setValue(mdata)
-            
             ref.child("Join").child("\(keyofview!)").child("UserInfo").child("\(userUid!)").setValue(mdata)
+            ref.child("Users").child("\(userUid!)").child("Join").child("\(keyofview!)").setValue(mdata)
 
             self.joinStatusText.setTitle("참석 취소하기", for: .normal)
             self.isJoin = true
@@ -299,8 +303,11 @@ class DetailViewController: UIViewController {
             let attendantViewController = segue.destination as! AttendantViewController
             attendantViewController.passedKey = keyofview!
         } else if segue.identifier == "MainToUserProfileDetail" {
+
+            
             let mainToUserProfileDetail = segue.destination as! ProfileUserInfoViewController
             mainToUserProfileDetail.passEmail = userID
+            mainToUserProfileDetail.passUID = anotherUserUID
             ref.child("Recruitment").observeSingleEvent(of: .value, with: { (snapshot) in
                 if let snapDict = snapshot.value as? [String:AnyObject]{
                     for each in snapDict {
@@ -361,7 +368,9 @@ extension DetailViewController:ReplyDeleteDelegate {
         if let indexPath = replyTableView.indexPathForRow(at: btnPosition) {
             let rowIndex =  indexPath.row
             let replierSnapshot: DataSnapshot! = self.comments?[rowIndex]
-            ref.child("Recruitment").child("\(keyofview!)").child("Comment").child("\(commentKey!)").removeValue()
+            commentKey = replierSnapshot.key
+            ref.child("Recruitment").child("\(keyofview!)").child("Comment")
+                .child("\(commentKey!)").removeValue()
             comments.remove(at: rowIndex)
             replyTableView.reloadData()
         } else {

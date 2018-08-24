@@ -24,19 +24,18 @@ class ProfileViewController: UIViewController {
     var _refHandle: DatabaseHandle?
     var userUID = Auth.auth().currentUser?.uid
     var userEmail = Auth.auth().currentUser?.email
-    
+
     var introduceText:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         passIntroduce()
-
         configureDatabase()
         showProfileImage()
 
         profileID.setTitle("\(userEmail!)", for: .normal)
      }
+    
     
     
     func passIntroduce() {

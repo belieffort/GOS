@@ -42,12 +42,12 @@ class FavoriteController: UIViewController {
     func getUserLikeitArray() {
         ref = Database.database().reference()
         _refHandle = self.ref.child("Users").child(self.uid!).child("Likeit")
-//            .queryOrdered(byChild: "writeTime")
+            //TODO - DetailVC에서 버튼으로 likeit이 제거된 Post는 뷰에서 바로 적용이 안된다.
             .observe(.childAdded, with: { [weak self] (snapshot) in
                 guard let strongSelf = self else { return }
                 strongSelf.userLikeit.append(snapshot)
-//                strongSelf.userLikeit.insert(snapshot, at: 0)
                 strongSelf.likeTableView.insertRows(at: [IndexPath(row: strongSelf.userLikeit.count-1, section: 0)], with: .automatic)
+
         })
     }
 
@@ -93,10 +93,11 @@ extension FavoriteController:UITableViewDataSource, UITableViewDelegate {
         let likeitSnapshot: DataSnapshot! = self.userLikeit[indexPath.row]
         guard let userLike = likeitSnapshot.value as? [String:AnyObject] else { return cell }
         
+        
         let time = userLike["Time"] as? String
         let location = userLike["Location"] as? String
         let numberOfPeople = userLike["NumberOfPeople"] as? String
-        
+                
         cell.likeTime.text = time
         cell.likeLocation.text = location
         cell.likePeople.text = numberOfPeople

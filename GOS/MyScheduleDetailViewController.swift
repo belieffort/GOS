@@ -48,18 +48,18 @@ class MyScheduleDetailViewController: UIViewController {
     var joinKey:[String] = []
     var commentKey:String?
 
-
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        getUserImageURL()
+        my_ReplyTableView.estimatedRowHeight = my_ReplyTableView.rowHeight
+        my_ReplyTableView.rowHeight = UITableView.automaticDimension
         my_ReplyTableView.endUpdates()
         my_ReplyTableView.tableFooterView = UIView()
         configureDatabase()
         getUserUID()
         joinStatus()
+        self.hideKeyboardTappedAround()
 
-        
         my_writerUserId.text = my_userID
         my_detailTitle.text = my_titleBox
         my_detailTime.text = my_time
@@ -67,7 +67,6 @@ class MyScheduleDetailViewController: UIViewController {
         my_detailPeople.text = my_people
         my_detailPosition.text = my_position
         my_detailNotice.text = my_notice
-        
         
         let edit = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped))
         let delete = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashTapped))
@@ -176,6 +175,15 @@ class MyScheduleDetailViewController: UIViewController {
             } else {
                 print("nope")
                 self.showProfileImage()
+            }
+        })
+    }
+    func getUserImageURL() {
+        ref = Database.database().reference()
+        ref.child("Users").child(userUid!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
+            if let userInfo = snapshot.value as? String {
+                self.userImageURL = userInfo
+            } else {
             }
         })
     }
@@ -312,4 +320,21 @@ extension MyScheduleDetailViewController:My_ReplyDeleteDelegate {
         }
     }
     
+}
+
+extension MyScheduleDetailViewController {
+    func hideKeyboardTappedAround() {
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(MyScheduleDetailViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
 }

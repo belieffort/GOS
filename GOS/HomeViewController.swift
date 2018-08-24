@@ -29,7 +29,13 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewDidLoad() {
         super.viewDidLoad()
+     
         configureDatabase()
+        
+       
+        
+        
+        
     }
     
     //셀 클릭했을 때, 이동할 수 있게 해준다.
@@ -86,11 +92,9 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         ref = Database.database().reference()
         // Listen for new messages in the Firebase database
                 _refHandle = self.ref.child("Recruitment")
-//                    .queryOrdered(byChild: "writeTime")
                     .observe(.childAdded, with: { [weak self] (snapshot) -> Void in
                     guard let strongSelf = self else { return }
                     strongSelf.recruitment.append(snapshot)
-//                    strongSelf.recruitment.insert(snapshot, at: 0)
                     strongSelf.homeCollectionView.insertItems(at: [IndexPath(row: strongSelf.recruitment.count-1, section: 0)])
                 })
     }
@@ -110,6 +114,7 @@ class HomeViewController: UIViewController, UICollectionViewDelegate, UICollecti
         detailViewController.position = recruit["Position"] as? String
         detailViewController.notice = recruit["Detail"] as? String
         detailViewController.sports = recruit["Sports"] as? String
+        //Post의 Auto Key
         detailViewController.keyofview = recruitmentSnapshot.key
     }
     

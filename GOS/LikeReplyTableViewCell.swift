@@ -16,9 +16,7 @@ protocol Like_ReplyDeleteDelegate {
 class LikeReplyTableViewCell: UITableViewCell {
 
     @IBOutlet weak var like_ReplyUserImage: UIImageView!
-
     @IBOutlet weak var like_ReplyUserEmail: UILabel!
-    
     @IBOutlet weak var like_ReplyUserComment: UILabel!
     @IBOutlet weak var btnDeleteBackGroundView: UIVisualEffectView!
     @IBOutlet weak var btnDelete: UIButton!
