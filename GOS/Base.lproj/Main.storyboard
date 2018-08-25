@@ -575,6 +575,9 @@
                                                         <rect key="frame" x="17" y="110" width="350" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <state key="normal" title="Follow"/>
+                                                        <connections>
+                                                            <action selector="btnfollow:" destination="0HY-Oc-sWh" eventType="touchUpInside" id="1PC-qe-79k"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -708,6 +711,7 @@
                     </view>
                     <size key="freeformSize" width="375" height="1000"/>
                     <connections>
+                        <outlet property="followText" destination="y5a-jD-nz2" id="qq6-ru-aMo"/>
                         <outlet property="interestLbl" destination="qWG-L3-nAB" id="7Jm-4H-5xS"/>
                         <outlet property="userEmail" destination="m5Z-fY-jlm" id="dZH-lg-VxP"/>
                         <outlet property="userImage" destination="vaK-sm-Oh6" id="krO-FQ-GhA"/>

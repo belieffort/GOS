@@ -20,7 +20,8 @@ class ProfileUserInfoViewController: UIViewController, TagListViewDelegate {
     @IBOutlet weak var userEmail:UILabel!
     @IBOutlet weak var interestLbl:UILabel!
     @IBOutlet weak var userInterestSports: TagListView!
-
+    @IBOutlet weak var followText: UIButton!
+    
     var ref: DatabaseReference!
     var plans: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
@@ -33,26 +34,75 @@ class ProfileUserInfoViewController: UIViewController, TagListViewDelegate {
     var userImageURL:String?
     var anotherUserUID:String?
     
+    var friendsUID:[String] = []
+    var friendTF:Bool!
+
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         interestLbl.isHidden = true
         ref = Database.database().reference()
-        getUserPlan()
         getUserUID()
+        getUserPlan()
         getUserImageURL()
         userInterestSports.delegate = self
-        
         userEmail.text = passEmail
     }
     
+    func initialFollow() {
+ 
+        ref.child("Users").child("\(userUid!)").child("friends").observe(.value, with: { (snapshot) in
+            let friend = snapshot.children.allObjects as! [DataSnapshot]
+            //여러개의 Value를 갖고 있다면 결국 T/F는 작동하기 어려운 듯! 왜냐하면 계속 반복하니까
+            //friends + AutoKey + UID:true
+            //Break로 해결!!
+            if (friend != []) {
+                for i in friend {
+                    if (i.value as! Bool == true && i.key == self.anotherUserUID!) {
+                        self.friendTF = true
+                        self.followText.setTitle("Following", for: .normal)
+                        break
+                    } else {
+                        self.friendTF = false
+                        self.followText.setTitle("Follow", for: .normal)
+                    }
+                }
+            } else {
+                self.friendTF = false
+                self.followText.setTitle("Follow", for: .normal)
+            }
+        })
+    }
+
+    @IBAction func btnfollow(_ sender: Any) {
+        
+        if (friendTF == true) {
+            var friendData = [String:Bool]()
+            friendData = ["\(anotherUserUID!)": false]
+            ref.child("Users").child("\(userUid!)").child("friends").updateChildValues(friendData)
+            followText.setTitle("Follow", for: .normal)
+            print("have it")
+            friendTF = false
+
+        } else if (friendTF == false)  {
+            var friendData = [String:Bool]()
+            friendData = ["\(anotherUserUID!)": true]
+            ref.child("Users").child("\(userUid!)").child("friends").updateChildValues(friendData)
+            followText.setTitle("Following", for: .normal)
+            print("Don't have it")
+            friendTF = true
+
+        }
+        
+    }
     deinit {
         if let refHandle = _refHandle {
             self.ref.child("Users").removeObserver(withHandle: refHandle)}
     }
     
     func getUserPlan() {
-
            _refHandle = self.ref.child("Users").child("\(passUID!)").child("Join")
                 .observe(.childAdded, with: { [weak self] (snapshot) in
                     guard let strongSelf = self else { return }
@@ -65,7 +115,6 @@ class ProfileUserInfoViewController: UIViewController, TagListViewDelegate {
         var countBox = [String]()
         if userUid != anotherUserUID {
             _refHandle = ref.child("Users").child("\(anotherUserUID!)").child("PreferenceSports").observe(.childAdded, with: { (snapshot) in
-                  //value 값이 True면 추가
                 let sports = snapshot.value as! String
                 if sports == "true" {
                     self.userInterestSports.addTag("\(snapshot.key)")
@@ -80,7 +129,6 @@ class ProfileUserInfoViewController: UIViewController, TagListViewDelegate {
         } else {
             _refHandle = ref.child("Users").child("\(userUid!)").child("PreferenceSports").observe(.childAdded, with: { (snapshot) in
                 //value 값이 True면 추가
-                print("\(snapshot)")
                 let sports = snapshot.value as! String
                 if sports == "true" {
                     self.userInterestSports.addTag("\(snapshot.key)")
@@ -102,11 +150,14 @@ class ProfileUserInfoViewController: UIViewController, TagListViewDelegate {
                 self.anotherUserUID = writerUID
                 self.showProfileImage()
                 self.getPreferenceSports()
+                self.initialFollow()
 
             } else {
                 print("nope")
                 self.showProfileImage()
                 self.getPreferenceSports()
+                self.initialFollow()
+
             }
         })
     }
@@ -165,15 +216,9 @@ class ProfileUserInfoViewController: UIViewController, TagListViewDelegate {
         if segue.identifier == "ChatRoom" {
             let chatVC = segue.destination as! ChatVC
             chatVC.receiverUID = passUID!
-            
         }
-        
     }
-
 }
-
-
-
 
 extension ProfileUserInfoViewController: UITableViewDelegate, UITableViewDataSource {
     

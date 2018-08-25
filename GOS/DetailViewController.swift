@@ -89,14 +89,15 @@ class DetailViewController: UIViewController {
         
 }
     
+   
+    
+    
     @objc private func imageTapped(_ recognizer: UITapGestureRecognizer) {
-        print("image tapped")
         performSegue(withIdentifier: "MainToUserProfileDetail", sender: self)
     }
     
     func joinStatus() {
         ref = Database.database().reference()
-    
         ref.child("Join").child("\(keyofview!)").child("UserInfo")
             .observeSingleEvent(of: .value, with: { (snapshot) in
 
