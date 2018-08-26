@@ -52,50 +52,51 @@ class ProfileUserInfoViewController: UIViewController, TagListViewDelegate {
     }
     
     func initialFollow() {
- 
-        ref.child("Users").child("\(userUid!)").child("friends").observe(.value, with: { (snapshot) in
-            let friend = snapshot.children.allObjects as! [DataSnapshot]
-            //여러개의 Value를 갖고 있다면 결국 T/F는 작동하기 어려운 듯! 왜냐하면 계속 반복하니까
-            //friends + AutoKey + UID:true
-            //Break로 해결!!
-            if (friend != []) {
-                for i in friend {
-                    if (i.value as! Bool == true && i.key == self.anotherUserUID!) {
-                        self.friendTF = true
-                        self.followText.setTitle("Following", for: .normal)
-                        break
-                    } else {
-                        self.friendTF = false
-                        self.followText.setTitle("Follow", for: .normal)
+        
+        ref.child("Follow").child("Following").child(userUid!).observe(.value, with: { (snapshot) in
+            let following = snapshot.children.allObjects as! [DataSnapshot]
+                if (following != []) {
+                    for i in following {
+                        if (i.value as! Bool == true && i.key == self.anotherUserUID!) {
+                            self.friendTF = true
+                            self.followText.setTitle("Following", for: .normal)
+                            break
+                        } else {
+                            self.friendTF = false
+                            self.followText.setTitle("Follow", for: .normal)
+                        }
                     }
+                } else {
+                    self.friendTF = false
+                    self.followText.setTitle("Follow", for: .normal)
                 }
-            } else {
-                self.friendTF = false
-                self.followText.setTitle("Follow", for: .normal)
-            }
         })
     }
 
     @IBAction func btnfollow(_ sender: Any) {
         
         if (friendTF == true) {
-            var friendData = [String:Bool]()
-            friendData = ["\(anotherUserUID!)": false]
-            ref.child("Users").child("\(userUid!)").child("friends").updateChildValues(friendData)
+            var following = [String:Bool]()
+            following = ["\(anotherUserUID!)" : false]
+            ref.child("Follow").child("Following").child(userUid!).updateChildValues(following)
+            var follower = [String:Bool]()
+            follower = ["\(userUid!)" : false]
+            ref.child("Follow").child("Follower").child(anotherUserUID!).updateChildValues(follower)
             followText.setTitle("Follow", for: .normal)
             print("have it")
             friendTF = false
-
         } else if (friendTF == false)  {
-            var friendData = [String:Bool]()
-            friendData = ["\(anotherUserUID!)": true]
-            ref.child("Users").child("\(userUid!)").child("friends").updateChildValues(friendData)
+            var following = [String:Bool]()
+            following = ["\(anotherUserUID!)" : true]
+            ref.child("Follow").child("Following").child(userUid!).updateChildValues(following)
+            var follower = [String:Bool]()
+            follower = ["\(userUid!)" : true]
+            ref.child("Follow").child("Follower").child(anotherUserUID!).updateChildValues(follower)
             followText.setTitle("Following", for: .normal)
             print("Don't have it")
             friendTF = true
-
         }
-        
+    
     }
     deinit {
         if let refHandle = _refHandle {
