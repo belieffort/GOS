@@ -33,6 +33,12 @@
 		72B8E94C2126CC2300677750 /* ProfilePreferenceSportsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72B8E94A2126CC2300677750 /* ProfilePreferenceSportsCell.xib */; };
 		72C58FB721248BAA00C41246 /* IntroduceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C58FB621248BAA00C41246 /* IntroduceVC.swift */; };
 		72C622962121C5E300BF926B /* ProfileUserPlanTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C622952121C5E300BF926B /* ProfileUserPlanTableViewCell.swift */; };
+		72D611E6213423B2003A1B53 /* ProfileUserInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D611E5213423B2003A1B53 /* ProfileUserInfoVC.swift */; };
+		72D611E8213423C6003A1B53 /* ProfileUserPlanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D611E7213423C6003A1B53 /* ProfileUserPlanVC.swift */; };
+		72D611EA21346B76003A1B53 /* FollowingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D611E921346B75003A1B53 /* FollowingCell.swift */; };
+		72D611EC21346B85003A1B53 /* FollowerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D611EB21346B85003A1B53 /* FollowerCell.swift */; };
+		72D611EE21346C56003A1B53 /* FollowingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D611ED21346C55003A1B53 /* FollowingVC.swift */; };
+		72D611F021346C6D003A1B53 /* FollowerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D611EF21346C6D003A1B53 /* FollowerVC.swift */; };
 		72E83B6F211B0B4C00045AA0 /* MyReplyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E83B6E211B0B4C00045AA0 /* MyReplyTableViewCell.swift */; };
 		72EDBE6920F8A1AB007E1473 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */; };
 		72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */; };
@@ -74,6 +80,12 @@
 		72B8E94A2126CC2300677750 /* ProfilePreferenceSportsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfilePreferenceSportsCell.xib; sourceTree = "<group>"; };
 		72C58FB621248BAA00C41246 /* IntroduceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceVC.swift; sourceTree = "<group>"; };
 		72C622952121C5E300BF926B /* ProfileUserPlanTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserPlanTableViewCell.swift; sourceTree = "<group>"; };
+		72D611E5213423B2003A1B53 /* ProfileUserInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserInfoVC.swift; sourceTree = "<group>"; };
+		72D611E7213423C6003A1B53 /* ProfileUserPlanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserPlanVC.swift; sourceTree = "<group>"; };
+		72D611E921346B75003A1B53 /* FollowingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingCell.swift; sourceTree = "<group>"; };
+		72D611EB21346B85003A1B53 /* FollowerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerCell.swift; sourceTree = "<group>"; };
+		72D611ED21346C55003A1B53 /* FollowingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingVC.swift; sourceTree = "<group>"; };
+		72D611EF21346C6D003A1B53 /* FollowerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerVC.swift; sourceTree = "<group>"; };
 		72E83B6E211B0B4C00045AA0 /* MyReplyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReplyTableViewCell.swift; sourceTree = "<group>"; };
 		72EDBE6820F8A1AB007E1473 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		72EDBE6A20F8A3AD007E1473 /* FavoriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteController.swift; sourceTree = "<group>"; };
@@ -174,6 +186,12 @@
 				72B8E9492126CC2300677750 /* ProfilePreferenceSportsCell.swift */,
 				72B8E94A2126CC2300677750 /* ProfilePreferenceSportsCell.xib */,
 				72836945213034AC004399E7 /* ChatVC.swift */,
+				72D611E5213423B2003A1B53 /* ProfileUserInfoVC.swift */,
+				72D611E7213423C6003A1B53 /* ProfileUserPlanVC.swift */,
+				72D611E921346B75003A1B53 /* FollowingCell.swift */,
+				72D611EB21346B85003A1B53 /* FollowerCell.swift */,
+				72D611ED21346C55003A1B53 /* FollowingVC.swift */,
+				72D611EF21346C6D003A1B53 /* FollowerVC.swift */,
 			);
 			path = GOS;
 			sourceTree = "<group>";
@@ -312,16 +330,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72D611EE21346C56003A1B53 /* FollowingVC.swift in Sources */,
 				720CFDDB21021791002ABF5C /* DetailViewController.swift in Sources */,
+				72D611E6213423B2003A1B53 /* ProfileUserInfoVC.swift in Sources */,
 				7260A6A6210F842F00399FC0 /* MyProfileDetailViewController.swift in Sources */,
 				723F6565212697DF00E5C1D0 /* ProfilePreferenceSportsVC.swift in Sources */,
 				72B75BAF212099DC00827CB2 /* ProfileInterestViewController.swift in Sources */,
 				72478B532113421000E92378 /* AttendantCell.swift in Sources */,
 				7286BD2720F88A19005622CE /* RecruitCellCollectionViewCell.swift in Sources */,
+				72D611EC21346B85003A1B53 /* FollowerCell.swift in Sources */,
 				72B75BB1212099EC00827CB2 /* ProfilePlanViewController.swift in Sources */,
 				72EDBE7520FB8391007E1473 /* ProfileTableViewCell.swift in Sources */,
 				72C622962121C5E300BF926B /* ProfileUserPlanTableViewCell.swift in Sources */,
 				72EDBE6F20FA57F8007E1473 /* FavoriteTableViewCell.swift in Sources */,
+				72D611E8213423C6003A1B53 /* ProfileUserPlanVC.swift in Sources */,
+				72D611F021346C6D003A1B53 /* FollowerVC.swift in Sources */,
 				721217E2210F04C800BFFC54 /* LikeDetailViewController.swift in Sources */,
 				72C58FB721248BAA00C41246 /* IntroduceVC.swift in Sources */,
 				72EDBE7120FA5CC1007E1473 /* AddViewController.swift in Sources */,
@@ -337,6 +360,7 @@
 				72B8E94B2126CC2300677750 /* ProfilePreferenceSportsCell.swift in Sources */,
 				72EDBE7720FB99C9007E1473 /* AuthViewController.swift in Sources */,
 				7293721E211982F300C5A372 /* ReplyTableViewCell.swift in Sources */,
+				72D611EA21346B76003A1B53 /* FollowingCell.swift in Sources */,
 				723F65692126BF8100E5C1D0 /* SSRadioButton.swift in Sources */,
 				72EDBE7920FB99E5007E1473 /* JoinViewController.swift in Sources */,
 				72EDBE6B20F8A3AD007E1473 /* FavoriteController.swift in Sources */,

@@ -25,29 +25,15 @@ class ProfileViewController: UIViewController {
     var userUID = Auth.auth().currentUser?.uid
     var userEmail = Auth.auth().currentUser?.email
 
-    var introduceText:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        passIntroduce()
         configureDatabase()
         showProfileImage()
 
         profileID.setTitle("\(userEmail!)", for: .normal)
      }
     
-    
-    
-    func passIntroduce() {
-        ref = Database.database().reference()
-        // Listen for new messages in the Firebase database
-        _refHandle = self.ref.child("Users").child(userUID!)
-            .child("Introduce")
-            .observe(.childAdded, with: { [weak self] (snapshot) -> Void in
-                self?.introduceText = snapshot.value! as! String
-            })
-        }
-
     
     @IBAction func btnLogout(_ sender: Any) {
         //TODO - 회원가입을 한 유저가 로그아웃을 누르면, 회원가입 화면으로 돌아간다. 또한 아이디와 비밀번호가 그대로 있기 때문에, 초기화를 시켜주어야 한다.
@@ -61,7 +47,6 @@ class ProfileViewController: UIViewController {
         }
     }
     
-
     deinit {
         if let refHandle = _refHandle {
             self.ref.child("Recruitment").removeObserver(withHandle: refHandle)
@@ -109,15 +94,7 @@ class ProfileViewController: UIViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if  segue.identifier == "MyProfileDetail" {
-            let myProfileDetailViewController = segue.destination as! MyProfileDetailViewController
-            if introduceText != nil {
-            myProfileDetailViewController.throughPath = introduceText
-            } else {
-                print("User가 Introduce를 입력하지 않았습니다.")
-            }
-            
-        } else {
+        if  segue.identifier == "MyWriteDetail" {
             let myWriteDetail: DataSnapshot! = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
             guard let writeDetail = myWriteDetail.value as? [String:AnyObject] else { return }
             
@@ -132,7 +109,6 @@ class ProfileViewController: UIViewController {
             myScheduleDetailViewController.my_sports = writeDetail["Sports"] as? String
             myScheduleDetailViewController.passedSelectedIndexpath = self.myRecruitment[profileTableView.indexPathForSelectedRow!.row]
             myScheduleDetailViewController.my_PostKey = myWriteDetail.key
-
         }
     }
 }
@@ -140,13 +116,10 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        performSegue(withIdentifier: "MyWriteDetail", sender: self)
         
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //        print("What's the matter!!!!!!!!!!!\(myRecruitment.count)")
-        
         return myRecruitment.count
     }
     

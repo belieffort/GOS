@@ -51,11 +51,9 @@ class DetailViewController: UIViewController {
     var userEmail = Auth.auth().currentUser?.email
     var userImageURL:String?
     
-    
     var keyofview:String?
     var anotherUserUID:String?
     var commentKey:String?
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,7 +169,7 @@ class DetailViewController: UIViewController {
         if isJoin! == true {
 //            //삭제
             ref.child("Join").child("\(keyofview!)").child("UserInfo").child("\(userUid!)").removeValue()
-            ref.child("Users").child("\(userUid!)").child("\(keyofview!)").removeValue()
+//            ref.child("Users").child("\(userUid!)").child("\(keyofview!)").removeValue()
 
             self.joinStatusText.setTitle("참석하기", for: .normal)
             self.isJoin = false
@@ -186,7 +184,7 @@ class DetailViewController: UIViewController {
             mdata["Location"] = location
             
             ref.child("Join").child("\(keyofview!)").child("UserInfo").child("\(userUid!)").setValue(mdata)
-            ref.child("Users").child("\(userUid!)").child("Join").child("\(keyofview!)").setValue(mdata)
+//            ref.child("Users").child("\(userUid!)").child("Join").child("\(keyofview!)").setValue(mdata)
 
             self.joinStatusText.setTitle("참석 취소하기", for: .normal)
             self.isJoin = true
@@ -305,7 +303,6 @@ class DetailViewController: UIViewController {
             attendantViewController.passedKey = keyofview!
         } else if segue.identifier == "MainToUserProfileDetail" {
 
-            
             let mainToUserProfileDetail = segue.destination as! ProfileUserInfoViewController
             mainToUserProfileDetail.passEmail = userID
             mainToUserProfileDetail.passUID = anotherUserUID

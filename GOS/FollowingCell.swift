@@ -1,19 +1,17 @@
 //
-//  ProfileUserPlanTableViewCell.swift
+//  FollowingCell.swift
 //  GOS
 //
-//  Created by 한병두 on 2018. 8. 13..
+//  Created by 한병두 on 2018. 8. 28..
 //  Copyright © 2018년 Byungdoo Han. All rights reserved.
 //
 
 import UIKit
 
-class ProfileUserPlanTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var userPlanTitle: UILabel!
-    @IBOutlet weak var userPlanLocation: UILabel!
-    
+class FollowingCell: UITableViewCell {
 
+    @IBOutlet weak var followingImage: UIImageView!
+    @IBOutlet weak var followingEmail: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

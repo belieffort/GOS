@@ -14,6 +14,9 @@ import FirebaseStorage
 import FirebaseDatabase
 
 class ProfileUserInfoViewController: UIViewController, TagListViewDelegate {
+    
+    @IBOutlet weak var userInfoView:UIView!
+    @IBOutlet weak var userScheduleView:UIView!
 
     @IBOutlet weak var userPlainTableView:UITableView!
     @IBOutlet weak var userImage:UIImageView!
@@ -38,210 +41,64 @@ class ProfileUserInfoViewController: UIViewController, TagListViewDelegate {
     var friendTF:Bool!
 
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        interestLbl.isHidden = true
-        ref = Database.database().reference()
-        getUserUID()
-        getUserPlan()
-        getUserImageURL()
-        userInterestSports.delegate = self
-        userEmail.text = passEmail
+//        interestLbl.isHidden = true
+//        ref = Database.database().reference()
+//        getUserUID()
+//        getUserPlan()
+//        getUserImageURL()
+//        userInterestSports.delegate = self
+//        userEmail.text = passEmail
     }
     
-    func initialFollow() {
-        
-        ref.child("Follow").child("Following").child(userUid!).observe(.value, with: { (snapshot) in
-            let following = snapshot.children.allObjects as! [DataSnapshot]
-                if (following != []) {
-                    for i in following {
-                        if (i.value as! Bool == true && i.key == self.anotherUserUID!) {
-                            self.friendTF = true
-                            self.followText.setTitle("Following", for: .normal)
-                            break
-                        } else {
-                            self.friendTF = false
-                            self.followText.setTitle("Follow", for: .normal)
-                        }
-                    }
-                } else {
-                    self.friendTF = false
-                    self.followText.setTitle("Follow", for: .normal)
-                }
-        })
-    }
+    
+    @IBAction func switchViews(_ sender:UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            userInfoView.alpha = 1
+            userScheduleView.alpha = 0
+        }else {
+            userInfoView.alpha = 0
+            userScheduleView.alpha = 1
 
-    @IBAction func btnfollow(_ sender: Any) {
+        }
         
-        if (friendTF == true) {
-            var following = [String:Bool]()
-            following = ["\(anotherUserUID!)" : false]
-            ref.child("Follow").child("Following").child(userUid!).updateChildValues(following)
-            var follower = [String:Bool]()
-            follower = ["\(userUid!)" : false]
-            ref.child("Follow").child("Follower").child(anotherUserUID!).updateChildValues(follower)
-            followText.setTitle("Follow", for: .normal)
-            print("have it")
-            friendTF = false
-        } else if (friendTF == false)  {
-            var following = [String:Bool]()
-            following = ["\(anotherUserUID!)" : true]
-            ref.child("Follow").child("Following").child(userUid!).updateChildValues(following)
-            var follower = [String:Bool]()
-            follower = ["\(userUid!)" : true]
-            ref.child("Follow").child("Follower").child(anotherUserUID!).updateChildValues(follower)
-            followText.setTitle("Following", for: .normal)
-            print("Don't have it")
-            friendTF = true
-        }
-    
-    }
-    deinit {
-        if let refHandle = _refHandle {
-            self.ref.child("Users").removeObserver(withHandle: refHandle)}
     }
     
-    func getUserPlan() {
-           _refHandle = self.ref.child("Users").child("\(passUID!)").child("Join")
-                .observe(.childAdded, with: { [weak self] (snapshot) in
-                    guard let strongSelf = self else { return }
-                    strongSelf.plans.append(snapshot)
-                    strongSelf.userPlainTableView.insertRows(at: [IndexPath(row: strongSelf.plans.count-1, section: 0)], with: .automatic)
-            })
-    }
-    
-    func getPreferenceSports() {
-        var countBox = [String]()
-        if userUid != anotherUserUID {
-            _refHandle = ref.child("Users").child("\(anotherUserUID!)").child("PreferenceSports").observe(.childAdded, with: { (snapshot) in
-                let sports = snapshot.value as! String
-                if sports == "true" {
-                    self.userInterestSports.addTag("\(snapshot.key)")
-                } else if sports == "false" {
-                    countBox.append(sports)
-                    if countBox.count == 8 {
-                        self.interestLbl.isHidden = false
-                    }
-                }
-            })
-            
-        } else {
-            _refHandle = ref.child("Users").child("\(userUid!)").child("PreferenceSports").observe(.childAdded, with: { (snapshot) in
-                //value 값이 True면 추가
-                let sports = snapshot.value as! String
-                if sports == "true" {
-                    self.userInterestSports.addTag("\(snapshot.key)")
-                } else if sports == "false" {
-                    countBox.append(sports)
-                    if countBox.count == 8 {
-                        self.interestLbl.isHidden = false
-                        }
-                    }
-                })
-        }
-    }
-    
-    func getUserUID() {
-        ref = Database.database().reference()
-        ref.child("Users").queryOrdered(byChild: "email").queryEqual(toValue: passEmail!).observe(.childAdded, with: {snapshot in
-            let writerUID = snapshot.key
-            if writerUID != self.passEmail! {
-                self.anotherUserUID = writerUID
-                self.showProfileImage()
-                self.getPreferenceSports()
-                self.initialFollow()
 
-            } else {
-                print("nope")
-                self.showProfileImage()
-                self.getPreferenceSports()
-                self.initialFollow()
+//    func getUserPlan() {
+//           _refHandle = self.ref.child("Users").child("\(passUID!)").child("Join")
+//                .observe(.childAdded, with: { [weak self] (snapshot) in
+//                    guard let strongSelf = self else { return }
+//                    strongSelf.plans.append(snapshot)
+//                    strongSelf.userPlainTableView.insertRows(at: [IndexPath(row: strongSelf.plans.count-1, section: 0)], with: .automatic)
+//            })
+//    }
 
-            }
-        })
-    }
-    
-    func getUserImageURL() {
-        
-        ref.child("Users").child(userUid!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
-            if let userInfo = snapshot.value as? String {
-                self.userImageURL = userInfo
-            } else {
-            }
-        })
-    }
-    
-    func showProfileImage() {
-        if userUid != anotherUserUID {
-            Database.database().reference().child("Users").child(anotherUserUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
-                if let url = snapshot.value as? String {
-                    URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-                        
-                        if error != nil {
-                            print(error as Any)
-                            return
-                        }
-                        DispatchQueue.main.async {
-                            let image = UIImage(data: data!)
-                            self.userImage.image = image
-                        }
-                        }.resume()
-                    }
-                })
-        } else {
-            Database.database().reference().child("Users").child(self.userUid!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
-                if let url = snapshot.value as? String {
-                    URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-                        
-                        if error != nil {
-                            print(error as Any)
-                            return
-                        }
-                        DispatchQueue.main.async {
-                            let image = UIImage(data: data!)
-                            self.userImage.image = image
-                            
-                        }
-                        }.resume()
-                    }
-                })
-            }
-        }
-    
     // MARK: - Navigation
-    
+
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ChatRoom" {
-            let chatVC = segue.destination as! ChatVC
-            chatVC.receiverUID = passUID!
+        if segue.identifier == "UserInfo" {
+            let userInfoVC = segue.destination as! ProfileUserInfoVC
+            userInfoVC.passedEmail = passEmail
+        } else if segue.identifier == "UserPlan" {
+            let userPlanVC = segue.destination as! ProfileUserPlanVC
+            userPlanVC.passUID = passUID
         }
     }
 }
 
-extension ProfileUserInfoViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return plans.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = userPlainTableView.dequeueReusableCell(withIdentifier: "UserPlanCell", for: indexPath) as! ProfileUserPlanTableViewCell
-        
-        let userSnapshot: DataSnapshot! = self.plans[indexPath.row]
-        guard let plan = userSnapshot.value as? [String:AnyObject] else { return cell }
-        
-        let title = plan["Title"] as? String
-        let location = plan["Location"] as? String
-        let time = plan["Time"] as? String
-        
-        cell.userPlan_Title.text = title
-        cell.userPlan_Location.text = location
-        cell.userPlan_Time.text = time
-        
-        return cell
-    }
-}
+
+
+
+//내 프로필 이미지 URL
+//        func getUserImageURL() {
+//
+//            ref.child("Users").child(userUID!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
+//                if let userInfo = snapshot.value as? String {
+//                    self.userImageURL = userInfo
+//                } else {
+//                }
+//            })
+//        }

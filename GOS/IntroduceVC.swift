@@ -26,7 +26,6 @@ class IntroduceVC: UIViewController, UIImagePickerControllerDelegate, UINavigati
     let userUID = Auth.auth().currentUser?.uid
     let storageRef = Storage.storage().reference()
     var uploadSign:Bool?
-    var introduceText:String?
     
     let save = Notification.Name(rawValue: notificationKey)
 
@@ -34,10 +33,9 @@ class IntroduceVC: UIViewController, UIImagePickerControllerDelegate, UINavigati
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = Database.database().reference()
-
+        getUserData()
         creatObservers()
         userProfileEmail.text = userEmail!
-        userIntroduceText.text = introduceText
 
         view.addSubview(userProfileImage)
         userProfileImage.layer.cornerRadius = 90
@@ -72,58 +70,65 @@ class IntroduceVC: UIViewController, UIImagePickerControllerDelegate, UINavigati
             self.present(imagePickerController, animated: true, completion: nil)
         }
     
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-                userProfileImage.image = image
-                dismiss(animated: true, completion: nil)
+    func getUserData() {
+        ref.child("Users").child(userUID!).child("Introduce").observe(.value, with: { (snapshot) in
+            let following = snapshot.children.allObjects as! [DataSnapshot]
+            for i in following {
+                self.userIntroduceText.text = i.value as! String
+            }
+        })
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            userProfileImage.image = image
+            dismiss(animated: true, completion: nil)
 //                if selected segmented index == 0
-                uploading(img: userProfileImage!) { (url) in
-                    print(url)
-                    //TODO - 만약 버튼을 누른다면, 올리고 아니면 놉
-                    //TODO - error 발생!!
-                    self.ref.child("Users").child(self.userUID!).updateChildValues(["profileImage":url])
-                    print(self.userUID!)
-//                        self.uploadSign = false
-//                    } else if selected segmented index == 0
-                }
+            uploading(img: userProfileImage!) { (url) in
+                print(url)
+                //TODO - 만약 버튼을 누른다면, 올리고 아니면 놉
+                //TODO - error 발생!!
+                self.ref.child("Users").child(self.userUID!).updateChildValues(["profileImage":url])
+                print(self.userUID!)
             }
         }
-    
-        func uploading(img : UIImageView, completion: @escaping ((String) -> Void)) {
-            var strURL = ""
-            let imageName = NSUUID().uuidString
-            let storeImage = self.storageRef.child(imageName)
-    
-            if let uploadImageData = (img.image)!.pngData(){
-                storeImage.putData(uploadImageData, metadata: nil, completion: { (metaData, error) in
-                    storeImage.downloadURL(completion: { (url, error) in
-                        if let urlText = url?.absoluteString {
-                            strURL = urlText
-                            completion(strURL)
-                        }
-                    })
+    }
+
+    func uploading(img : UIImageView, completion: @escaping ((String) -> Void)) {
+        var strURL = ""
+        let imageName = NSUUID().uuidString
+        let storeImage = self.storageRef.child(imageName)
+
+        if let uploadImageData = (img.image)!.pngData(){
+            storeImage.putData(uploadImageData, metadata: nil, completion: { (metaData, error) in
+                storeImage.downloadURL(completion: { (url, error) in
+                    if let urlText = url?.absoluteString {
+                        strURL = urlText
+                        completion(strURL)
+                    }
                 })
-            }
-        }
-    
-        func showImage() {
-            Database.database().reference().child("Users").child(self.userUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
-                if let url = snapshot.value as? String {
-                    URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-    
-                        if error != nil {
-                            print(error as Any)
-                            return
-                        }
-                        DispatchQueue.main.async {
-                            let image = UIImage(data: data!)
-                            self.userProfileImage.image = image
-                        }
-                    }.resume()
-                }
             })
         }
-    
+    }
+
+    func showImage() {
+        Database.database().reference().child("Users").child(self.userUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
+            if let url = snapshot.value as? String {
+                URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
+
+                    if error != nil {
+                        print(error as Any)
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        let image = UIImage(data: data!)
+                        self.userProfileImage.image = image
+                    }
+                }.resume()
+            }
+        })
+    }
+
 
     /*
     // MARK: - Navigation

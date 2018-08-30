@@ -23,23 +23,14 @@ class MyProfileDetailViewController: UIViewController {
     var ref: DatabaseReference!
     var myIntroduce: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
-    
     let userUID = Auth.auth().currentUser?.uid
     let storageRef = Storage.storage().reference()
-    
     var btnStore:UIBarButtonItem!
-    var throughPath:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         btnStore = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(addTapped))
         self.navigationItem.rightBarButtonItem = self.btnStore
-//        myID.text = Auth.auth().currentUser?.email
-//        showImage()
-//        view.addSubview(myImage)
-//        myImage.layer.cornerRadius = 90
-//        myImage.layer.masksToBounds = true
-//        btnOne.isMultipleSelectionEnabled = true
     }
     
     
@@ -69,14 +60,6 @@ class MyProfileDetailViewController: UIViewController {
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if  segue.identifier == "IntroduceVC" {
-            let introduceVC = segue.destination as! IntroduceVC
-            if throughPath != nil {
-            introduceVC.introduceText = throughPath!
-            } else {
-                print("User가 Introduce를 입력하지 않았습니다.")
-            }
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//    }
 }

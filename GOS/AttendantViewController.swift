@@ -30,6 +30,7 @@ class AttendantViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        attendantTableView.tableFooterView = UIView()
         configureDatabase()
     }
   
