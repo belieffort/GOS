@@ -26,7 +26,6 @@ class ReplyTableViewCell: UITableViewCell {
         delegate?.didTapDelete(btnDelete)
         //ref.child("Recruitment").child("AutoKey").child("Comment").child("AutoKey")
         //ref.romoValue()
-
     }
     override func awakeFromNib() {
         super.awakeFromNib()

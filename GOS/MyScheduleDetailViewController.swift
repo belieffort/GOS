@@ -12,6 +12,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
+
 class MyScheduleDetailViewController: UIViewController {
 
     @IBOutlet weak var my_ReplyTextField: UITextField!
@@ -25,7 +26,7 @@ class MyScheduleDetailViewController: UIViewController {
     @IBOutlet weak var my_detailPosition: UILabel!
     @IBOutlet weak var my_detailNotice: UITextView!
     @IBOutlet weak var my_btnJoinText: UIButton!
-    
+
     var my_userID:String!
     var my_titleBox:String!
     var my_time:String!
@@ -34,30 +35,35 @@ class MyScheduleDetailViewController: UIViewController {
     var my_position:String!
     var my_notice:String!
     var my_sports:String!
-    var my_PostKey:String?
+    var postAutokey:String?
     var passedSelectedIndexpath:DataSnapshot!
     
     var ref: DatabaseReference!
     var comments: [DataSnapshot]! = []
+    var profile_attendPeopleSnapshot:[DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
-    var userUid = Auth.auth().currentUser?.uid
+    var userUID = Auth.auth().currentUser?.uid
     var userEmail = Auth.auth().currentUser?.email
     var userImageURL:String?
     var anotherUserUID:String?
     var isJoin:Bool?
     var joinKey:[String] = []
     var commentKey:String?
+    
+    var attendUIDArr = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        ref = Database.database().reference()
         getUserImageURL()
+        my_ReplyTableView.endUpdates()
         my_ReplyTableView.estimatedRowHeight = my_ReplyTableView.rowHeight
         my_ReplyTableView.rowHeight = UITableView.automaticDimension
-        my_ReplyTableView.endUpdates()
         my_ReplyTableView.tableFooterView = UIView()
         configureDatabase()
         getUserUID()
         joinStatus()
+        getAttendUID()
         self.hideKeyboardTappedAround()
 
         my_writerUserId.text = my_userID
@@ -70,38 +76,43 @@ class MyScheduleDetailViewController: UIViewController {
         
         let edit = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped))
         let delete = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashTapped))
-//        my_writerImage.isUserInteractionEnabled = true
-//        my_writerImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapped)))
-
         navigationItem.rightBarButtonItems = [delete, edit]
+
     }
     
-//    @objc private func imageTapped(_ recognizer: UITapGestureRecognizer) {
-//        print("image tapped")
-//        performSegue(withIdentifier: "MyToUserProfileDetail", sender: self)
-//    }
-    
+
     @objc func editTapped() {
         self.performSegue(withIdentifier: "EditPageSegue", sender: self)
     }
     
-    @objc func trashTapped() {
+    @objc func trashTapped(_ sender: UIButton) {
+        //ProfileVC
+        let deleteAction = Notification.Name(rawValue: deleteNotificationKey)
+        NotificationCenter.default.post(name: deleteAction, object: nil)
+        ref.child("Recruitment").child(postAutokey!).removeValue()
+
         
+        let deleteActionAtHome = Notification.Name(rawValue: deleteAtHomeKey)
+        NotificationCenter.default.post(name: deleteActionAtHome, object: nil)
+
+        //휴지통 버튼을 누르면, 게시글이 삭제되면서 이전화면으로 이동하기.
+        self.navigationController?.popViewController(animated: true)
+
     }
     
     func joinStatus() {
-        ref = Database.database().reference()
-        ref.child("Join").child("\(my_PostKey!)").child("UserInfo")
-            .observeSingleEvent(of: .value, with: { (snapshot) in
-
+        ref.child("Join").child(userUID!).observeSingleEvent(of: .value, with: { (snapshot) in
             if let snapDict = snapshot.value as? [String:AnyObject]{
                 for each in snapDict {
-                    self.joinKey.append(each.key)
+                    if each.key == self.postAutokey! && each.value as! Bool == true {
+                        self.my_btnJoinText.setTitle("참석 취소하기", for: .normal)
+                        self.isJoin = true
+                        break
+                    } else {
+                        self.my_btnJoinText.setTitle("참석하기", for: .normal)
+                        self.isJoin = false
+                    }
                 }
-            }
-            if self.joinKey.contains(self.userUid!) {
-                self.my_btnJoinText.setTitle("참석 취소하기", for: .normal)
-                self.isJoin = true
             } else {
                 self.my_btnJoinText.setTitle("참석하기", for: .normal)
                 self.isJoin = false
@@ -111,29 +122,21 @@ class MyScheduleDetailViewController: UIViewController {
     
     
     @IBAction func my_JoinSports(_ sender: Any) {
-        var mdata = [String:String]()
+        var mdata = [String:Bool]()
 
         if isJoin! == true {
             //삭제
+            mdata["\(postAutokey!)"] = false
+            ref.child("Join").child(userUID!).updateChildValues(mdata)
             
-            ref.child("Join").child("\(my_PostKey!)").child("UserInfo").child("\(userUid!)").removeValue()
             self.my_btnJoinText.setTitle("참석하기", for: .normal)
             self.isJoin = false
 
             
         } else if isJoin! == false {
             //업로드
-            ref.child("Recruitment").child("\(my_PostKey!)").child("Join").updateChildValues(["\(userUid!)" : "\(userEmail!)"])
-            self.my_btnJoinText.setTitle("참석 취소하기", for: .normal)
-            self.isJoin = true
-            
-            mdata["Email"] = userEmail
-            mdata["ProfileImage"] = userImageURL
-            mdata["Title"] = my_titleBox
-            mdata["Time"] = my_time
-            mdata["Location"] = my_location
-            
-            ref.child("Join").child("\(my_PostKey!)").child("UserInfo").child("\(userUid!)").setValue(mdata)
+            mdata["\(postAutokey!)"] = true
+            ref.child("Join").child(userUID!).updateChildValues(mdata)
             
             self.my_btnJoinText.setTitle("참석 취소하기", for: .normal)
             self.isJoin = true
@@ -144,16 +147,37 @@ class MyScheduleDetailViewController: UIViewController {
     @IBAction func my_CheckAttendant(_ sender: Any) {
         
     }
+    
+    
+    //TODO: - AttendantVC에 attendUIDArr전달한다.
+    func getAttendUID() {
+        ref.child("Join").queryOrdered(byChild: "\(postAutokey!)").queryEqual(toValue: true).observe(.value, with: { (snapshot) in
+            if let getTestUID = snapshot.value as? [String:AnyObject]{
+                for each in getTestUID {
+                    self.attendUIDArr.append(each.key)
+                }
+            }
+            self.getAttendSnapshot()
+        })
+    }
+    
+    func getAttendSnapshot() {
+        for i in attendUIDArr {
+            ref.child("Users").child(i).observe(.value, with: { (snapshot) in
+                self.profile_attendPeopleSnapshot.append(snapshot)
+            })
+        }
+    }
+    
     @IBAction func my_BtnSendReply(_ sender: Any) {
         
         if my_ReplyTextField.text != nil {
             var mdata = [String:String]()
             mdata["Comment"] = my_ReplyTextField.text
             mdata["Replier"] = userEmail
-            mdata["UserProfileImage"] = userImageURL
             
             // Push data to Firebase Database
-            self.ref.child("Recruitment").child("\(my_PostKey!)").child("Comment").childByAutoId().setValue(mdata)
+            self.ref.child("Recruitment").child("\(postAutokey!)").child("Comment").childByAutoId().setValue(mdata)
             my_ReplyTextField.text = nil
             
         } else {
@@ -164,13 +188,10 @@ class MyScheduleDetailViewController: UIViewController {
     
     
     func getUserUID() {
-        ref = Database.database().reference()
         ref.child("Users").queryOrdered(byChild: "email").queryEqual(toValue: my_userID).observe(.childAdded, with: {snapshot in
             let writerUID = snapshot.key
-//            print("NOW!!! \(writerUID)")
             if writerUID != self.my_userID! {
                 self.anotherUserUID = writerUID
-//                print("configureDatabase \(self.anotherUserUID!)")
                 self.showProfileImage()
             } else {
                 print("nope")
@@ -180,7 +201,7 @@ class MyScheduleDetailViewController: UIViewController {
     }
     func getUserImageURL() {
         ref = Database.database().reference()
-        ref.child("Users").child(userUid!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Users").child(userUID!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
             if let userInfo = snapshot.value as? String {
                 self.userImageURL = userInfo
             } else {
@@ -190,8 +211,7 @@ class MyScheduleDetailViewController: UIViewController {
     
     
     func showProfileImage() {
-//        print("showProfileImage \(self.anotherUserUID!)")
-        if userUid != anotherUserUID {
+        if userUID != anotherUserUID {
             Database.database().reference().child("Users").child(anotherUserUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
                 if let url = snapshot.value as? String {
                     URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
@@ -209,7 +229,7 @@ class MyScheduleDetailViewController: UIViewController {
                 }
             })
         } else {
-            Database.database().reference().child("Users").child(self.userUid!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
+            Database.database().reference().child("Users").child(self.userUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
                 if let url = snapshot.value as? String {
                     URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
                         
@@ -238,9 +258,7 @@ class MyScheduleDetailViewController: UIViewController {
     func configureDatabase() {
         my_ReplyTableView.beginUpdates()
         
-        ref = Database.database().reference()
-        // Listen for new messages in the Firebase database
-        _refHandle = self.ref.child("Recruitment").child("\(my_PostKey!)").child("Comment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
+        _refHandle = self.ref.child("Recruitment").child("\(postAutokey!)").child("Comment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
             guard let strongSelf = self else { return }
             
             strongSelf.comments.append(snapshot)
@@ -254,7 +272,7 @@ class MyScheduleDetailViewController: UIViewController {
         
         if segue.identifier == "AttendantSegue" {
             let attendantViewController = segue.destination as! AttendantViewController
-            attendantViewController.passedKey = my_PostKey!
+            attendantViewController.attendPeople = profile_attendPeopleSnapshot!
         } else if segue.identifier == "EditPageSegue" {
         let myWriteEdit: DataSnapshot! = passedSelectedIndexpath
         guard let writeEdit = myWriteEdit.value as? [String:String] else { return }
@@ -283,19 +301,19 @@ extension MyScheduleDetailViewController:UITableViewDataSource, UITableViewDeleg
             cell.btnDeleteBackGroundView.isHidden = true
         }
         cell.my_ReplyUserComment.sizeToFit()
-        if let url = comment["UserProfileImage"] {
-            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
-                
-                if error != nil {
-                    print(error as Any)
-                    return
-                }
-                DispatchQueue.main.async {
-                    let image = UIImage(data: data!)
-                    cell.my_ReplyUserImge.image = image
-                }
-                }.resume()
-        }
+//        if let url = comment["UserProfileImage"] {
+//            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
+//
+//                if error != nil {
+//                    print(error as Any)
+//                    return
+//                }
+//                DispatchQueue.main.async {
+//                    let image = UIImage(data: data!)
+//                    cell.my_ReplyUserImge.image = image
+//                }
+//                }.resume()
+//        }
         return cell
         
     }
@@ -305,14 +323,13 @@ extension MyScheduleDetailViewController:UITableViewDataSource, UITableViewDeleg
 extension MyScheduleDetailViewController:My_ReplyDeleteDelegate {
     
     func didTapDelete(_ sender: UIButton) {
-        ref = Database.database().reference()
         
         let btnPosition = sender.convert(sender.bounds.origin, to: my_ReplyTableView)
         if let indexPath = my_ReplyTableView.indexPathForRow(at: btnPosition) {
             let rowIndex =  indexPath.row
             let replierSnapshot: DataSnapshot! = self.comments?[rowIndex]
             commentKey = replierSnapshot.key
-            ref.child("Recruitment").child("\(my_PostKey!)").child("Comment").child("\(commentKey!)").removeValue()
+            ref.child("Recruitment").child("\(postAutokey!)").child("Comment").child("\(commentKey!)").removeValue()
             comments.remove(at: rowIndex)
             my_ReplyTableView.reloadData()
         } else {

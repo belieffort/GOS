@@ -32,7 +32,8 @@ class ChatVC: UIViewController {
         super.viewDidLoad()
         ref = Database.database().reference()
         configureDatabase()
-        self.chatTableView.separatorStyle = UITableViewCell.SeparatorStyle.none         //tableview line 제거해준다.
+        self.chatTableView.separatorStyle = UITableViewCell.SeparatorStyle.none
+        //tableview line 제거해준다.
         self.tabBarController?.tabBar.isHidden = true
         
         let tap :UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))

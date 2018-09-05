@@ -20,7 +20,6 @@ class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         ref = Database.database().reference()
         self.hideKeyboardTappedAround()
         NotificationCenter.default.addObserver(self, selector: #selector(AuthViewController.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -50,28 +49,16 @@ class AuthViewController: UIViewController {
     
     @IBAction func btnLogin(_ sender: Any) {
         Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!, completion: { (_, error) in
-            if error == nil {
-                self.performSegue(withIdentifier: "ToMainThroughLogin", sender: sender)
-                self.emailTextField.text = nil
-                self.passwordTextField.text = nil
-            } else {
-                self.showToast(message: "로그인 정보가 일치하지 않습니다.")
-            }
+                if error == nil {
+                    self.performSegue(withIdentifier: "ToMainThroughLogin", sender: sender)
+                    self.emailTextField.text = nil
+                    self.passwordTextField.text = nil
+                } else {
+                    self.showToast(message: "로그인 정보가 일치하지 않습니다.")
+                }
             })
         }
     }
-
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 
 extension AuthViewController {
@@ -89,8 +76,6 @@ extension AuthViewController {
         self.view.endEditing(true)
         return true
     }
-    
-    
 }
 
 extension AuthViewController {

@@ -34,29 +34,36 @@ class LikeDetailViewController: UIViewController {
     var like_position:String!
     var like_notice:String!
     var like_sports:String!
-    var keyOfUserLike:String!
+    var postAutokey:String?
 
     var ref: DatabaseReference!
     var comments: [DataSnapshot]! = []
     var _refHandle: DatabaseHandle?
     var userEmail = Auth.auth().currentUser?.email
-    var userUid = Auth.auth().currentUser?.uid
+    var userUID = Auth.auth().currentUser?.uid
     var anotherUserUID:String?
     var isJoin:Bool?
     var userImageURL:String?
     var joinKey:[String] = []
     var commentKey:String?
+    
+    var like_attendUIDArr = [String]()
+    var like_attendPeopleSnapshot:[DataSnapshot]! = []
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        ref = Database.database().reference()
         like_ReplyTableView.endUpdates()
         like_ReplyTableView.tableFooterView = UIView()
         like_ReplyTableView.estimatedRowHeight = like_ReplyTableView.rowHeight
         like_ReplyTableView.rowHeight = UITableView.automaticDimension
+        
         getUserImageURL()
         configureDatabase()
         getUserUID()
         joinStatus()
+        getAttendUID()
         
         like_writerUserId.text = like_userId
         like_detailTitle.text = like_titleBox
@@ -78,53 +85,81 @@ class LikeDetailViewController: UIViewController {
     }
     
     func joinStatus() {
-        ref = Database.database().reference()
-
-        ref.child("Join").child("\(keyOfUserLike!)").child("UserInfo")
-            .observeSingleEvent(of: .value, with: { (snapshot) in
-            
+        
+        ref.child("Join").child(userUID!).observeSingleEvent(of: .value, with: { (snapshot) in
             if let snapDict = snapshot.value as? [String:AnyObject]{
                 for each in snapDict {
-                    self.joinKey.append(each.key)
+                    if each.key == self.postAutokey! && each.value as! Bool == true {
+                        self.like_BtnJoinText.setTitle("참석 취소하기", for: .normal)
+                        self.isJoin = true
+                        break
+                    } else {
+                        self.like_BtnJoinText.setTitle("참석하기", for: .normal)
+                        self.isJoin = false
+                    }
                 }
-            }
-            if self.joinKey.contains(self.userUid!) {
-                self.like_BtnJoinText.setTitle("참석 취소하기", for: .normal)
-                self.isJoin = true
             } else {
                 self.like_BtnJoinText.setTitle("참석하기", for: .normal)
                 self.isJoin = false
             }
         })
+
+//        ref.child("Join").child("\(keyOfUserLike!)").child("UserInfo")
+//            .observeSingleEvent(of: .value, with: { (snapshot) in
+//
+//            if let snapDict = snapshot.value as? [String:AnyObject]{
+//                for each in snapDict {
+//                    self.joinKey.append(each.key)
+//                }
+//            }
+//            if self.joinKey.contains(self.userUid!) {
+//                self.like_BtnJoinText.setTitle("참석 취소하기", for: .normal)
+//                self.isJoin = true
+//            } else {
+//                self.like_BtnJoinText.setTitle("참석하기", for: .normal)
+//                self.isJoin = false
+//            }
+//        })
     }
     
+    func getAttendUID() {
+        ref.child("Join").queryOrdered(byChild: "\(postAutokey!)").queryEqual(toValue: true).observe(.value, with: { (snapshot) in
+            if let getTestUID = snapshot.value as? [String:AnyObject]{
+                for each in getTestUID {
+                    self.like_attendUIDArr.append(each.key)
+                }
+            }
+            self.getAttendSnapshot()
+        })
+    }
+    
+    func getAttendSnapshot() {
+        for i in like_attendUIDArr {
+            ref.child("Users").child(i).observe(.value, with: { (snapshot) in
+                self.like_attendPeopleSnapshot.append(snapshot)
+            })
+        }
+        
+    }
     
     @IBAction func like_JoinSports(_ sender: Any) {
-        var mdata = [String:String]()
+        var mdata = [String:Bool]()
 
         if isJoin! == true {
             //삭제
-            ref.child("Join").child("\(keyOfUserLike!)").child("UserInfo").child("\(userUid!)").removeValue()
-            ref.child("Users").child("\(userUid!)").child("\(keyOfUserLike!)").removeValue()
-
+            mdata["\(postAutokey!)"] = false
+            ref.child("Join").child(userUID!).updateChildValues(mdata)
+            
             self.like_BtnJoinText.setTitle("참석하기", for: .normal)
             self.isJoin = false
             
         } else if isJoin! == false {
             //업로드
-      
-            mdata["Email"] = userEmail
-            mdata["ProfileImage"] = userImageURL
-            mdata["Title"] = like_titleBox
-            mdata["Time"] = like_time
-            mdata["Location"] = like_location
+            mdata["\(postAutokey!)"] = true
+            ref.child("Join").child(userUID!).updateChildValues(mdata)
             
-            ref.child("Join").child("\(keyOfUserLike!)").child("UserInfo").child("\(userUid!)").setValue(mdata)
-            ref.child("Users").child("\(userUid!)").child("Join").child("\(keyOfUserLike!)").setValue(mdata)
-
             self.like_BtnJoinText.setTitle("참석 취소하기", for: .normal)
             self.isJoin = true
- 
         }
     }
     
@@ -138,10 +173,9 @@ class LikeDetailViewController: UIViewController {
             var mdata = [String:String]()
             mdata["Comment"] = like_ReplyTextField.text
             mdata["Replier"] = userEmail
-            mdata["UserProfileImage"] = userImageURL
             
             // Push data to Firebase Database
-            self.ref.child("Recruitment").child("\(keyOfUserLike!)").child("Comment").childByAutoId().setValue(mdata)
+            self.ref.child("Recruitment").child("\(postAutokey!)").child("Comment").childByAutoId().setValue(mdata)
             like_ReplyTextField.text = nil
             
         } else {
@@ -151,8 +185,7 @@ class LikeDetailViewController: UIViewController {
     }
     
     func getUserImageURL() {
-        ref = Database.database().reference()
-        ref.child("Users").child(userUid!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Users").child(userUID!).child("profileImage").observeSingleEvent(of: .value, with: { (snapshot) in
             if let userInfo = snapshot.value as? String {
                 self.userImageURL = userInfo
             } else {
@@ -161,13 +194,10 @@ class LikeDetailViewController: UIViewController {
     }
     
     func getUserUID() {
-        ref = Database.database().reference()
         ref.child("Users").queryOrdered(byChild:"email").queryEqual(toValue: like_userId).observe(.childAdded, with: {snapshot in
             let writerUID = snapshot.key
-//            print("NOW!!! \(writerUID)")
             if writerUID != self.like_userId! {
                 self.anotherUserUID = writerUID
-//                print("configureDatabase \(self.anotherUserUID!)")
                 self.showProfileImage()
             } else {
                 print("nope")
@@ -178,8 +208,7 @@ class LikeDetailViewController: UIViewController {
     
     
     func showProfileImage() {
-//        print("showProfileImage \(self.anotherUserUID!)")
-        if userUid != anotherUserUID {
+        if userUID != anotherUserUID {
             Database.database().reference().child("Users").child(anotherUserUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
                 if let url = snapshot.value as? String {
                     URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
@@ -197,7 +226,7 @@ class LikeDetailViewController: UIViewController {
                 }
             })
         } else {
-            Database.database().reference().child("Users").child(self.userUid!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
+            Database.database().reference().child("Users").child(self.userUID!).child("profileImage").observeSingleEvent(of: .value, with: { snapshot in
                 if let url = snapshot.value as? String {
                     URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
                         
@@ -224,10 +253,9 @@ class LikeDetailViewController: UIViewController {
     
     func configureDatabase() {
         like_ReplyTableView.beginUpdates()
-        
-        ref = Database.database().reference()
+
         // Listen for new messages in the Firebase database
-        _refHandle = self.ref.child("Recruitment").child("\(keyOfUserLike!)").child("Comment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
+        _refHandle = self.ref.child("Recruitment").child("\(postAutokey!)").child("Comment").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
             guard let strongSelf = self else { return }
             
             strongSelf.comments.append(snapshot)
@@ -235,18 +263,16 @@ class LikeDetailViewController: UIViewController {
         })
     }
     
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "AttendantSegue" {
             let attendantViewController = segue.destination as! AttendantViewController
-            attendantViewController.passedKey = keyOfUserLike!
+            attendantViewController.attendPeople = like_attendPeopleSnapshot
         } else if segue.identifier == "LikeToUserProfileDetail" {
             let likeToUserProfileDetailVC = segue.destination as! ProfileUserInfoViewController
             likeToUserProfileDetailVC.passEmail = like_userId
             likeToUserProfileDetailVC.passUID = anotherUserUID
         }
-        
     }
 }
 
@@ -272,19 +298,19 @@ extension LikeDetailViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         cell.like_ReplyUserComment.sizeToFit()
-        if let url = comment["UserProfileImage"] {
-            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
-                
-                if error != nil {
-                    print(error as Any)
-                    return
-                }
-                DispatchQueue.main.async {
-                    let image = UIImage(data: data!)
-                    cell.like_ReplyUserImage.image = image
-                }
-                }.resume()
-        }
+//        if let url = comment["UserProfileImage"] {
+//            URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
+//
+//                if error != nil {
+//                    print(error as Any)
+//                    return
+//                }
+//                DispatchQueue.main.async {
+//                    let image = UIImage(data: data!)
+//                    cell.like_ReplyUserImage.image = image
+//                }
+//                }.resume()
+//        }
         return cell
     }
 }
@@ -299,7 +325,7 @@ extension LikeDetailViewController:Like_ReplyDeleteDelegate {
             let rowIndex =  indexPath.row
             let replierSnapshot: DataSnapshot! = self.comments?[rowIndex]
             commentKey = replierSnapshot.key
-            ref.child("Recruitment").child("\(keyOfUserLike!)")
+            ref.child("Recruitment").child("\(postAutokey!)")
                 .child("Comment").child("\(commentKey!)").removeValue()
             comments.remove(at: rowIndex)
             like_ReplyTableView.reloadData()

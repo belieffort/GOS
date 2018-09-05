@@ -26,6 +26,8 @@ class AttendantViewController: UIViewController, UITableViewDelegate, UITableVie
     var passedKey:String?
     var usersUID:String?
     
+    var attendPeople: [DataSnapshot]! = []
+    
     var tempUID = Auth.auth().currentUser?.uid
     
     override func viewDidLoad() {
@@ -35,20 +37,20 @@ class AttendantViewController: UIViewController, UITableViewDelegate, UITableVie
     }
   
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return attendants.count
+        return attendPeople.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AttendantCell", for: indexPath) as! AttendantCell
 
-        let attendantSnapshot: DataSnapshot! = self.attendants[indexPath.row]
+        let attendantSnapshot: DataSnapshot! = self.attendPeople[indexPath.row]
         guard let attendant = attendantSnapshot.value as? [String:AnyObject] else { return cell }
-        
-        cell.attendantEmail.text = attendant["Email"] as! String
-        
-        if let url = attendant["ProfileImage"] {
+
+        cell.attendantEmail.text = attendant["email"] as! String
+
+        if let url = attendant["profileImage"] {
             URLSession.shared.dataTask(with: URL(string: url as! String)!) { data, response, error in
-            
+
             if error != nil {
                 print(error as Any)
                 return
@@ -59,7 +61,7 @@ class AttendantViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             }.resume()
         }
-        
+
         return cell
     }
     
@@ -70,13 +72,13 @@ class AttendantViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func configureDatabase() {
         
-        ref = Database.database().reference()
-        _refHandle = self.ref.child("Join").child("\(passedKey!)").child("UserInfo")
-            .observe(.childAdded, with: { [weak self] (snapshot) in
-                    guard let strongSelf = self else { return }
-                    strongSelf.attendants.append(snapshot)
-                    strongSelf.attendantTableView.insertRows(at: [IndexPath(row: strongSelf.attendants.count-1, section: 0)], with: .automatic)
-            })
+//        ref = Database.database().reference()
+//        _refHandle = self.ref.child("Join").child("\(passedKey!)").child("UserInfo")
+//            .observe(.childAdded, with: { [weak self] (snapshot) in
+//                    guard let strongSelf = self else { return }
+//                    strongSelf.attendants.append(snapshot)
+//                    strongSelf.attendantTableView.insertRows(at: [IndexPath(row: strongSelf.attendants.count-1, section: 0)], with: .automatic)
+//            })
     }
     
   

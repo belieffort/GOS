@@ -88,7 +88,7 @@ class ProfileUserInfoVC: UIViewController, TagListViewDelegate {
         })
     }
     
-    //TODO - Follow버튼을 눌렀을 때, 바로 숫자가 적용되지 않는다. 또한 구성원 뷰로 넘어갔을 떄에도!
+    //TODO - Follow버튼을 눌렀을 때, 레이블에 있는 숫자가 예를 들어 1개에서 3개로 늘어난다.
     func numberOfFollowing() {
         var followingCount = 0
         if userUID != anotherUserUID {
@@ -300,6 +300,7 @@ class ProfileUserInfoVC: UIViewController, TagListViewDelegate {
             })
         }
     }
+    
     func getFollowingUID() {
         if userUID != anotherUserUID {
             

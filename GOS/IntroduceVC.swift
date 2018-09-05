@@ -55,6 +55,7 @@ class IntroduceVC: UIViewController, UIImagePickerControllerDelegate, UINavigati
     }
     
     @objc func inputTextField(notification: Notification) {
+        print("Hello")
         var mdata = [String:String]()
         mdata["IntroduceText"] = userIntroduceText.text
         print(mdata)
